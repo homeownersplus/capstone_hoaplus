@@ -15,7 +15,7 @@ $model = new Model();
 //     echo "<script>alert ('Post Successfully Deleted!');</script>";
 //     echo "<script>window.location.href='adminposts.php'</script>";
 
-
+//secondchange
 // }
 
 ?>
