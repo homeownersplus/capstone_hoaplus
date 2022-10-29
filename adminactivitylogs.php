@@ -188,7 +188,7 @@ if (isset($_REQUEST['del'])){
                                     Profile
                                 </a>
                              
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="adminactivitylogs.php">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
                                 </a>
@@ -214,7 +214,7 @@ if (isset($_REQUEST['del'])){
           <div class="card-tools"> -->
                     <!-- Page Heading -->
 
-                    <h1 class="h3 mb-4 text-gray-800">Admin Profile</h1>
+                    <h1 class="h3 mb-4 text-gray-800">Admin Activity Log</h1>
                   
                     
 
