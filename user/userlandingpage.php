@@ -61,7 +61,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="userlandingpage.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Anouncements</span></a>
+                    <span>Announcements</span></a>
             </li>
            
             <li class="nav-item">
@@ -72,7 +72,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="userreservations.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Reservations</span></a>
+                    <span>Reserve Amenity</span></a>
             </li>
            
             <li class="nav-item">

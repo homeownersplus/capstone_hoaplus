@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> HOA+ Admin </title>
+    <title> HOA+ Member </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
    
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
      <!-- Custom fonts for this template-->
-     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -22,6 +22,8 @@
 
 
     <!-- <link href="style_postboard.css" rel="stylesheet"> -->
+
+   
   </head>
   
 <!--------------------------- left navigation  ----------------------------->
@@ -39,7 +41,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fa fa-home" aria-hidden="true"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">HOA+ Admin <sup></sup></div>
+                <div class="sidebar-brand-text mx-3">HOA+Member <sup></sup></div>
             </a>
 
             <!-- Divider -->
@@ -49,7 +51,7 @@
              <li class="nav-item">
                 <a class="nav-link" href="userlandingpage.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Anouncements</span></a>
+                    <span>Announcements</span></a>
             </li>
            
             <li class="nav-item">
@@ -60,7 +62,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="userreservations.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Reservations</span></a>
+                    <span>Reserve Amenity</span></a>
             </li>
            
             <li class="nav-item">
@@ -188,20 +190,49 @@
                           <div class="table-responsive">
                               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
-    <form>
-  <fieldset disabled>
+    <form name="reserveamenityusr" method="POST">
+  <!-- <fieldset disabled> -->
    
     <div class="mb-3" style="width:100%;">
       <label for="disabledTextInput" class="form-label">Member Email</label>
-      <input type="text" id="disabledTextInput" class="form-control" placeholder="fetch logged in user email here">
+      <input type="text" id="disabledTextInput" class="form-control" placeholder="fetch logged in user email here"disabled>
     </div>
 
     <div class="mb-3" style="width:100%;">
       <label for="disabledTextInput" class="form-label">Member Fullname</label>
-      <input type="text" id="disabledTextInput" class="form-control" placeholder="fetch logged in full name here">
+      <input type="text" id="disabledTextInput" class="form-control" placeholder="fetch logged in full name here" disabled>
     </div>
 <div>
 
+<select class="form-select" aria-label="Default select example" name = "userselectamenity" id="userselectamenity" >
+
+  <option selected>Fetch the added amenity by admin here in the options</option>
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+</select>
+</div>
+
+
+<div id ="reservedateuser"  style="margin-top:2%;">
+<label for="reservedateuser" class="form-label">Reservation Date</label>
+<input type="date" class="form-control" name="datereserveuser"  required>
+</div>
+
+
+<div id ="reservestarttimeuser"  style="margin-top:2%;">
+<label for="reservedateuser" class="form-label">Reservation Time Start</label>
+<input type="time" class="form-control" name="startreservetimeuser" class="inputfieldtime"  placeholder="Time-start" required>
+</div>
+
+<div id ="reserveendtimeuser"  style="margin-top:2%;">
+<label for="reservedateuser" class="form-label">Reservation Time End</label>
+<input type="time" class="form-control" name="reserveendtimeuser" class="inputfieldtime"  placeholder="Time-start" required>
+</div>
+
+<div  style="margin-top:5%">
+<input class="btn btn-primary" type="submit" value="Generate E-Pass" name="reserveamenityusr" >
+<a href="userlandingpage.php" class="btn btn-secondary">Back</a>
 
 </div>
                 <!-- /.container-fluid -->
@@ -266,6 +297,7 @@
 
     <!-- Page level custom scripts -->
     <script src="../js/demo/datatables-demo.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    
 </body>
     
