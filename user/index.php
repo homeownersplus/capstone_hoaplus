@@ -22,7 +22,7 @@ try {
             if($count > 0){
                 foreach($userrow as $result);
                 $_SESSION['userid'] = $result['id'];
-                header('location: userdashboard.php');
+                header('location: userlandingpage.php');
             }else{
                 $message ="Wrong username or password";
             }
