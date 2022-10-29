@@ -69,42 +69,43 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
+   <!-- Nav Item - Dashboard -->
+   <li class="nav-item">
                 <a class="nav-link" href="adminlandingpage.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Manage Posts</span></a>
             </li>
-    <li class="nav-item">
-        <a class="nav-link" href="manageposts.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Members</span></a>
-    </li>
-    <li class="nav-item">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Members</span></a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Manage Admins</span></a>
             </li>
-    <li class="nav-item">
-        <a class="nav-link" href="manageposts.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Payments</span></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="manageposts.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Reservations</span></a>
-    </li>
-    <li class="nav-item">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Payments</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="adminreservationstable.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Reservations</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="admin_addamenities.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Add an Amenity </span></a>
             </li>
-    <li class="nav-item">
-        <a class="nav-link" href="manageposts.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Inbox </span></a>
-    </li>
+            <li class="nav-item">
+                <a class="nav-link" href="admininboxforconcerns.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Inbox </span></a>
+            </li>
 
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
