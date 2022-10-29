@@ -1,21 +1,9 @@
-<!--------------------------- config here  ----------------------------->
-<?php
-
-
-    require_once '../dbconfig.php';
-    $start_from = 0; 
-    include('../global/model.php');
-    $model = new Model();
-
-  
-
-?>
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> HOA+ Member </title>
+    <title> HOA+ Admin </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
    
 
@@ -47,18 +35,18 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fa fa-home" aria-hidden="true"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">HOA+Member <sup></sup></div>
+                <div class="sidebar-brand-text mx-3">HOA+ Admin <sup></sup></div>
             </a>
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
+             <!-- Nav Item - Dashboard -->
+             <li class="nav-item">
                 <a class="nav-link" href="userlandingpage.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Anouncements</span></a>
@@ -81,6 +69,7 @@
                     <span>Send a Message </span></a>
             </li>
         
+        
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
@@ -96,10 +85,9 @@
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
-
             <!-- Main Content -->
             <div id="content">
-         
+
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -155,19 +143,19 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Userlee Ipsum</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Userlee Santos</span>
                                 <img class="img-profile rounded-circle"
                                     src="../photos/profile.png">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="admineditprofile.php">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Member Profile
+                                    Profile
                                 </a>
                              
-                              
+                               
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -190,87 +178,32 @@
           <div class="card-tools"> -->
                     <!-- Page Heading -->
 
-                    <h1 class="h3 mb-4 text-gray-800">HOA Announcements</h1>
-                  
-    <div class="container">
-
-
-    <div class="card">
-          <div class="card-body">
-          <div class="row">
-          <?php
-      
-      
-    
-
-      $rows = $model->displayUsers();
-
-				$cnt=1;
-				if (!empty($rows)) {
-          foreach ($rows as $row) {
-			?>
-
-          <!-- User Information -->
-          <div class="card shadow mb-8" style="width:33%;">
-              <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary" style="text-align: center;"><?php echo $row['ptitle'];?></h6>
-              </div>
-              <div class="card-body">
-                  <div class="text-center">
-                  <a href="../assets/images/<?php echo $row['Photo']; ?>.jpg" target="_blank"><img src="../assets/images/<?php echo $row['Photo']; ?>.jpg" style="width: 250px;height: 150px; object-fit: cover;"></a>
-                  </div>
-                  <p><h6 class = "card-title"><?php echo $row['PostingDate'];?></h6></p>
-                  <h6 class = "card-title"><?php echo $row['pcontent'];?></h6>
-
-                  <button type="button" class="btn btn-primary">Read More</button>
-              </div>
-          </div>
-                               
-          <?php 
-				$cnt++;
-			   }}
-			?>
-  
-      
- <!---alert messages--->
- <?php 
-                
-                if(isset($_SESSION['messageusr'])){
-                    ?>
-                    <div class="alert alert-warning alert-dismissible fade show text-center" role="alert" style="margin-top:20px;">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                 
                     
-                        <?php echo $_SESSION['messageusr']; ?>
-                    </div>
-                    <?php
- 
-                    unset($_SESSION['messageusr']);
-                }
-            ?>
-         
-        
+                    <h1 class="h3 mb-4 text-gray-800">Reserve an Amenity</h1>
+
+                      <!-- DataTales Example -->
+   <div class="card shadow mb-4" style="margin-top:2%;">
+                      
+                      <div class="card-body">
+                          <div class="table-responsive">
+                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+    <form>
+  <fieldset disabled>
+   
+    <div class="mb-3" style="width:100%;">
+      <label for="disabledTextInput" class="form-label">Member Email</label>
+      <input type="text" id="disabledTextInput" class="form-control" placeholder="fetch logged in user email here">
+    </div>
+
+    <div class="mb-3" style="width:100%;">
+      <label for="disabledTextInput" class="form-label">Member Fullname</label>
+      <input type="text" id="disabledTextInput" class="form-control" placeholder="fetch logged in full name here">
+    </div>
+<div>
 
 
-        
-          </div>
-        </div>
-             
-     
-          <!-- <div class="row-cols-1 row-cols-md-2 g-4"style="text-align: center;"> -->
-         
-			
-
-
-          </div>
-        </div>
-
-
-
-
-                    
-
-                </div>
+</div>
                 <!-- /.container-fluid -->
 
             </div>
@@ -311,7 +244,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../login.php">Logout</a>
+                    <a class="btn btn-primary" href="login.php">Logout</a>
                 </div>
             </div>
         </div>
@@ -335,6 +268,4 @@
     <script src="../js/demo/datatables-demo.js"></script>
 
 </body>
-
-  
-</html>
+    
