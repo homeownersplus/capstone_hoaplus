@@ -210,7 +210,8 @@
           <th>Last Payment Date</th>
           <th>Reserved Amenity</th>
     <th>Reservation Date</th>
-    <th>Reservation Time</th>
+    <th>Reservation Time Start</th>
+    <th>Reservation Time End</th>
           <th><center>Status</center></th>
       </thead>
       <tbody>
