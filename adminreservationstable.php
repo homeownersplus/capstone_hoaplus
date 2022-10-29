@@ -68,7 +68,7 @@
                     <span>Payments</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="adminreservationstable.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Reservations</span></a>
             </li>
@@ -78,7 +78,7 @@
                     <span>Add an Amenity </span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="admininboxforconcerns.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Inbox </span></a>
             </li>
@@ -168,7 +168,7 @@
                                     Profile
                                 </a>
                              
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="adminactivitylogs.php">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
                                 </a>

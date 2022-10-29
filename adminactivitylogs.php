@@ -1,24 +1,3 @@
-<!--------------------------- config here  ----------------------------->
-<?php
-require_once 'dbconfig.php';
-include('./global/model.php');
-$model = new Model();
-
-if (isset($_REQUEST['del'])){
-    $uid =intval($_GET['del']);
-    $sql = "DELETE FROM tblusers WHERE id=:id";
-    $query=$dbh->prepare($sql);
-
-    $query->bindParam(':id', $uid, PDO::PARAM_STR);
-    $query->execute();
-
-    echo "<script>alert ('Post Successfully Deleted!');</script>";
-    echo "<script>window.location.href='adminlandingpage.php'</script>";
-
-
-}
-
-?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -67,7 +46,7 @@ if (isset($_REQUEST['del'])){
             <hr class="sidebar-divider my-0">
 
           <!-- Nav Item - Dashboard -->
-   <li class="nav-item">
+          <li class="nav-item">
                 <a class="nav-link" href="adminlandingpage.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Manage Posts</span></a>
@@ -188,7 +167,7 @@ if (isset($_REQUEST['del'])){
                                     Profile
                                 </a>
                              
-                                <a class="dropdown-item" href="adminactivitylogs.php">
+                                <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
                                 </a>
@@ -214,20 +193,30 @@ if (isset($_REQUEST['del'])){
           <div class="card-tools"> -->
                     <!-- Page Heading -->
 
+                    
                     <h1 class="h3 mb-4 text-gray-800">Admin Activity Log</h1>
-                  
-                    
+
+                      <!-- DataTales Example -->
+   <div class="card shadow mb-4" style="margin-top:2%;">
+                      
+                      <div class="card-body">
+                          <div class="table-responsive">
+                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+       <table class="table" id="example1" style="margin-top:2%;">
+            <thead>
+          <th>Admin ID</th>
+          <th>Activity</th>
+          <th>Date</th>
+  
+      </thead>
+      <tbody>
+  
 
 
- 
+</table>
+<div>
 </div>
-
-</div>
-
-</div>
-                    
-
-                </div>
                 <!-- /.container-fluid -->
 
             </div>
@@ -292,6 +281,4 @@ if (isset($_REQUEST['del'])){
     <script src="js/demo/datatables-demo.js"></script>
 
 </body>
-
-  
-</html>
+    
