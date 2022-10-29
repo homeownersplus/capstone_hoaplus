@@ -212,7 +212,7 @@
     <th>Reservation Date</th>
     <th>Reservation Time Start</th>
     <th>Reservation Time End</th>
-          <th><center>Status</center></th>
+          <th>Status</th>
       </thead>
       <tbody>
   
