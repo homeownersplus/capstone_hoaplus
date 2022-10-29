@@ -66,8 +66,8 @@ if (isset($_REQUEST['del'])){
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
+          <!-- Nav Item - Dashboard -->
+   <li class="nav-item">
                 <a class="nav-link" href="adminlandingpage.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Manage Posts</span></a>
@@ -99,11 +99,10 @@ if (isset($_REQUEST['del'])){
                     <span>Add an Amenity </span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="admininboxforconcerns.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Inbox </span></a>
             </li>
-        
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
