@@ -216,6 +216,9 @@ if (isset($_REQUEST['del'])){
 
                     <h1 class="h3 mb-4 text-gray-800">Admin Profile</h1>
                   
+                 
+
+</div>
 
 		</tbody>
 	</table>
