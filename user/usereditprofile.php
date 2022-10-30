@@ -197,7 +197,8 @@
                  <h6 class="card-subtitle mb-2 text-muted" style=" margin-left:19%;">Fetch Next Payment Date</h6>
                  <h6 class="card-subtitle mb-2 text-muted" style=" margin-left:30%;">Fetch User Email</h6>
                  <!-- <input class="btn btn-outline-primary" type="submit" value="Update Profile Photo" name="uploadpicuser" style="margin-left:22%; margin-top:5%;  "> -->
-                 <a class="btn btn-outline-primary" href="usereditdisplayphoto.php" style="margin-left:22%; margin-top:5%; ">Update Profile Photo</a>
+                 <a class="btn btn-outline-primary" href="usereditdisplayphoto.php" style="margin-left:22%; margin-top:5%; ">Update Profile Photo 
+</a>
 </div>
 
 

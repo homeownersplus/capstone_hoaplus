@@ -176,7 +176,7 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+               
                 <!-- <div class="jumbotron">
              -->
             <!-- <div class="card">
@@ -184,7 +184,8 @@
           <div class="card-tools"> -->
                     <!-- Page Heading -->
 
-                    
+                    <div class="container-fluid">
+                        
                     <h1 class="h3 mb-4 text-gray-800">Edit Profile Photo</h1>
                     <div class="card" style="width: 21.5rem; height: 27rem;">
   <div class="card-body">
