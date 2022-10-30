@@ -55,7 +55,7 @@
             </li>
            
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="userpayments.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Payments</span></a>
             </li>
@@ -64,9 +64,13 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Reserve Amenity</span></a>
             </li>
-           
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="userreservationtable.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Reservation History</span></a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="userconcernform.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Send a Message </span></a>
             </li>
@@ -182,6 +186,7 @@
 
                     
                     <h1 class="h3 mb-4 text-gray-800">Reserve an Amenity</h1>
+                    <!-- <input class="btn btn-outline-primary" type="submit" value="Generate E-Pass" name="reserveamenityusr" style="margin-top:-10%; margin-left:85%;"  > -->
 
                       <!-- DataTales Example -->
    <div class="card shadow mb-4" style="margin-top:2%;">

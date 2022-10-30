@@ -55,7 +55,7 @@
             </li>
            
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="serpayments.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Payments</span></a>
             </li>
@@ -64,9 +64,13 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Reserve Amenity</span></a>
             </li>
-           
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="userreservationtable.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Reservation History</span></a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="userconcernform.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Send a Message </span></a>
             </li>

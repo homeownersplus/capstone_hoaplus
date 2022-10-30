@@ -1,22 +1,15 @@
-<!--------------------------- config here  ----------------------------->
-<?php
-    require_once("../session.php");
-    require_once("../dbconfig.php");
-    include('../global/model.php');
-    $model = new Model();
-?>
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> HOA+ Member Reservation </title>
+    <title> HOA+ Member </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
    
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
      <!-- Custom fonts for this template-->
-     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -29,6 +22,8 @@
 
 
     <!-- <link href="style_postboard.css" rel="stylesheet"> -->
+
+   
   </head>
   
 <!--------------------------- left navigation  ----------------------------->
@@ -42,21 +37,21 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fa fa-home" aria-hidden="true"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">HOA+Member<sup></sup></div>
+                <div class="sidebar-brand-text mx-3">HOA+Member <sup></sup></div>
             </a>
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
+             <!-- Nav Item - Dashboard -->
+             <li class="nav-item">
                 <a class="nav-link" href="userlandingpage.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Anouncements</span></a>
+                    <span>Announcements</span></a>
             </li>
            
             <li class="nav-item">
@@ -65,23 +60,28 @@
                     <span>Payments</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="userreserve.php">
+                <a class="nav-link" href="userreservations.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Reservations</span></a>
+                    <span>Reserve Amenity</span></a>
             </li>
-           
             <li class="nav-item">
-                <a class="nav-link" href="reportaconcern.php">
+                <a class="nav-link" href="userreservationtable.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Reservation History</span></a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="userconcernform.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Send a Message </span></a>
             </li>
+        
         
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
 
             <?php 
-//    require_once('session.php');
+   require_once('session.php');
   //require_once('search.php');
   
   ?>
@@ -91,10 +91,9 @@
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
-
             <!-- Main Content -->
             <div id="content">
-         
+
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -150,19 +149,19 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Userlee Ipsum</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Userlee Santos</span>
                                 <img class="img-profile rounded-circle"
                                     src="../photos/profile.png">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="usereditprofile.php">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Member Profile
+                                    Profile
                                 </a>
                              
-                              
+                               
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -181,69 +180,32 @@
                 <!-- <div class="jumbotron">
              -->
             <!-- <div class="card">
-                <div class="card-body">
-          <div class="card-tools"> -->
+                <div class="card-body"> -->
+          <!-- <div class="card-tools">  -->
                     <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">Payment History</h1>
+                                 <!-- DataTales Example -->
+   <div class="card shadow mb-4" style="margin-top:2%;">
+                      
+                      <div class="card-body">
+                          <div class="table-responsive">
+                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
-                    <h1 class="h3 mb-4 text-gray-800">Amenity Reservation</h1>
-                  
-                    <div class="container">
-
-                    <div class="card">
-                            <div class="card-body">
-                                <div class="card-tools">
-                                    <form name="insertrecord" method="POST">
-
-
-                            <select class="form-select" aria-label="Default select example" name=selectamenity>
-                         
-                            <option selected>Select an Amenity you want to reserve</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                            </select>
-
-                          
-
-                              <!---reserve date calendar to--->
+       <table class="table" id="example1" style="margin-top:2%;">
+            <thead>
+          <th>Payment ID</th>
+          <th>Last Payment Date Time</th>
+          <th></th>
+      </thead>
+      <tbody>
+  
 
 
-                              <!---reserve time clock--->
-                   
-                           
-                              <!---reserve button--->
+</table>
+<div>
+                     
 
-
-
-                            <!---Generate QR Code for EPASS containing MEMBER NAME, LAST PAYMENT
-                            RESERVATION TIME AND DATE AND AMENITY TYPE--->
-      
-                <!---alert messages--->
-                <?php 
-                
-                if(isset($_SESSION['messageusr'])){
-                    ?>
-                    <div class="alert alert-warning alert-dismissible fade show text-center" role="alert" style="margin-top:20px;">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                 
-                    
-                        <?php echo $_SESSION['messageusr']; ?>
-                    </div>
-                    <?php
- 
-                    unset($_SESSION['messageusr']);
-                }
-                ?>
-         
-        
-
-
-        
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
+</div>
                 <!-- /.container-fluid -->
 
             </div>
@@ -284,7 +246,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../login.php">Logout</a>
+                    <a class="btn btn-primary" href="login.php">Logout</a>
                 </div>
             </div>
         </div>
@@ -306,8 +268,7 @@
 
     <!-- Page level custom scripts -->
     <script src="../js/demo/datatables-demo.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    
 </body>
-
-  
-</html>
+    
