@@ -185,19 +185,25 @@
                     <!-- Page Heading -->
 
                     
-                    <h1 class="h3 mb-4 text-gray-800">Member Profile</h1>
+                    <h1 class="h3 mb-4 text-gray-800">Edit Profile Photo</h1>
                     <div class="card" style="width: 21.5rem; height: 27rem;">
   <div class="card-body">
    <div class="userprofpic">
-  
+   <form name="updateuserprofilepic" method="POST" enctype="multipart/form-data">
+   <label class="form-label">Profile Photo</label>
     		<img src="../photos/profile.png"
     		     class="img-fluid rounded-circle" style="width: 150px;height: 150px; margin-left: 25%; margin-top:10%;">
-                 <h5 class="card-title" style="margin-top:7%; margin-left:20%">Fetch Userfullname</h5>
-                 <h6 class="card-subtitle mb-2 text-muted" style=" margin-left:29.5%;">Fetch Member ID</h6>
-                 <h6 class="card-subtitle mb-2 text-muted" style=" margin-left:19%;">Fetch Next Payment Date</h6>
-                 <h6 class="card-subtitle mb-2 text-muted" style=" margin-left:30%;">Fetch User Email</h6>
-                 <!-- <input class="btn btn-outline-primary" type="submit" value="Update Profile Photo" name="uploadpicuser" style="margin-left:22%; margin-top:5%;  "> -->
-                 <a class="btn btn-outline-primary" href="usereditdisplayphoto.php" style="margin-left:22%; margin-top:5%; ">Update Profile Photo</a>
+                 <input class="form-control" type="file" name="image" accept="image/*" onchange="readURL(this, '')" style="border: 0px; padding: 3px; margin-top:3%; margin-top:10%; margin-left:2%;" 
+                 required>
+              
+
+                <div class="mb-3" style="margin-top:10%;">
+            <input class="btn btn-outline-primary" type="submit" value="Update Photo" name="updateuserprofilepic"  
+            style="margin-left:20%;" >
+            <a href="usereditprofile.php" class="btn btn-secondary">Back</a>
+                    </div>
+                
+                
 </div>
 
 
