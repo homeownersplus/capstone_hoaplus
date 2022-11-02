@@ -51,6 +51,17 @@
 			}
 			return $data;
 		}
+		public function displayActiveUsers() {
+			$data = null;
+			$query = "SELECT * FROM tblusers WHERE status = 0 ORDER BY PostingDate DESC";
+			if ($sql = $this->conn->query($query)) {
+				while ($row = mysqli_fetch_assoc($sql)) {
+					$data[] = $row;
+				}
+			}
+			return $data;
+		}
+
 
         public function displayAment() {
 			$data = null;
@@ -67,6 +78,23 @@
 		public function displaySingleUser($uid) {
 			$data = null;
 			$query = "SELECT * FROM tblusers WHERE id = ?";
+			if($stmt = $this->conn->prepare($query)) {
+				$stmt->bind_param("i", $uid);
+				$stmt->execute();
+				$result = $stmt->get_result();
+				$num_of_rows = $stmt->num_rows;
+				while ($row = $result->fetch_assoc()) {
+					$data[] = $row;
+				}
+				$stmt->close();
+			}
+			return $data;
+		}
+
+		
+		public function displaySingleAdmin($uid) {
+			$data = null;
+			$query = "SELECT * FROM tbladmin WHERE id = ?";
 			if($stmt = $this->conn->prepare($query)) {
 				$stmt->bind_param("i", $uid);
 				$stmt->execute();
