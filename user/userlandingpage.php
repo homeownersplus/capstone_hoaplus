@@ -1,7 +1,7 @@
 <!--------------------------- config here  ----------------------------->
 <?php
 
-
+session_start();
     require_once '../dbconfig.php';
     $start_from = 0; 
     include('../global/model.php');
@@ -37,6 +37,7 @@
   </head>
   
 <!--------------------------- left navigation  ----------------------------->
+
 
 <body id="page-top">
 
@@ -90,7 +91,7 @@
             </div>
 
             <?php 
-   require_once('session.php');
+//    require_once('session.php');
   //require_once('search.php');
   
   ?>
@@ -207,7 +208,7 @@
       
     
 
-      $rows = $model->displayUsers();
+      $rows = $model->displayActiveUsers();
 
 				$cnt=1;
 				if (!empty($rows)) {
