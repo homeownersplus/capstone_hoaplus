@@ -1,19 +1,36 @@
 <!--------------------------- config here  ----------------------------->
 <?php
+session_start();
 require_once 'dbconfig.php';
 include('./global/model.php');
 $model = new Model();
 
+
+//inactiveposts
 if (isset($_REQUEST['del'])){
     $uid =intval($_GET['del']);
-    $sql = "DELETE FROM tblusers WHERE id=:id";
+    $sql = "UPDATE tblusers SET status = 1 WHERE id=:id";
     $query=$dbh->prepare($sql);
 
     $query->bindParam(':id', $uid, PDO::PARAM_STR);
     $query->execute();
 
-    echo "<script>alert ('Post Successfully Deleted!');</script>";
+    echo "<script>alert ('Post Successfully InActive!');</script>";
     echo "<script>window.location.href='adminlandingpage.php'</script>";
+
+
+}
+
+if (isset($_REQUEST['active'])){
+  $uid =intval($_GET['active']);
+  $sql = "UPDATE tblusers SET status = 0 WHERE id=:id";
+  $query=$dbh->prepare($sql);
+
+  $query->bindParam(':id', $uid, PDO::PARAM_STR);
+  $query->execute();
+
+  echo "<script>alert ('Post Successfully Active!');</script>";
+  echo "<script>window.location.href='adminlandingpage.php'</script>";
 
 
 }
@@ -108,7 +125,7 @@ if (isset($_REQUEST['del'])){
             </div>
 
             <?php 
-   require_once('session.php');
+//    require_once('session.php');
   //require_once('search.php');
   
   ?>
@@ -173,6 +190,13 @@ if (isset($_REQUEST['del'])){
                    
 
                         <!-- Nav Item - User Information -->
+
+
+                        <!---adminlogin fetch--->
+
+
+
+                        
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -211,6 +235,8 @@ if (isset($_REQUEST['del'])){
              -->
             <!-- <div class="card">
                 <div class="card-body">
+
+                
           <div class="card-tools"> -->
                     <!-- Page Heading -->
 
@@ -235,10 +261,14 @@ if (isset($_REQUEST['del'])){
                 }
             ?>
             
+
+
+
    <!-- DataTales Example -->
    <div class="card shadow mb-4" style="margin-top:2%;">
                       
                         <div class="card-body">
+                            
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
@@ -266,17 +296,39 @@ if (isset($_REQUEST['del'])){
 					<td><?php echo htmlentities($cnt);?></td>
 					<td><img src="./assets/images/<?php echo $row['Photo']; ?>.jpg" style="width: 150px;height: 100px; object-fit: cover;"></td>
 					<td><?php echo $row['ptitle']; ?></td>
+                    
                     <td><?php echo $row['PostingDate']; ?></td>
          
-					
-         
-					
 					<td>
             <center>
 						
 						<a href="adminupdateposts.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm"><span class="fas fa-edit"></span></a>
-						<a href="adminlandingpage.php?del=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onClick="return confirm('Do you really want to delete?')"><span class="fas fa-trash"></span></a>
+						
+                      
+
+                        <?php 
+
+            if($row['status'] == 0 ){
+              ?>
+              <a href="adminlandingpage.php?del=<?php echo $row['id']; ?>" class="btn btn-success btn-sm" onClick="return confirm('Do you really want to make this post Inactive?')"><span class="fas fa-pause"></span></a>
+              <?php 
+
+            }else {
+              ?>
+              <a href="adminlandingpage.php?active=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onClick="return confirm('Do you really want to make this post Active?')"><span class="fas fa-play"></span></a>
+                            <?php 
+
+            }
+            
+            ?>
 					
+
+
+
+
+
+
+
           </center>
           </td>
 				</tr>
