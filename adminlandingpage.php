@@ -90,7 +90,7 @@ if (isset($_REQUEST['active'])){
                     <span>Manage Posts</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="admin_managemembers.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Members</span></a>
             </li>
@@ -101,7 +101,7 @@ if (isset($_REQUEST['active'])){
                     <span>Manage Admins</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="admin_managepayments.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Payments</span></a>
             </li>
@@ -137,7 +137,7 @@ if (isset($_REQUEST['active'])){
 
             <!-- Main Content -->
             <div id="content">
-
+                    
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
