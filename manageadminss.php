@@ -48,43 +48,41 @@ session_start();
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
-        <a class="nav-link" href="adminlandingpage.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Manage Posts</span></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Members</span></a>
-    </li>
+                <a class="nav-link" href="adminlandingpage.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Manage Posts</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="admin_managemembers.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Members</span></a>
+            </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="ManageMember.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Manage Admins</span></a>
-    </li>
-
-
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Payments</span></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Reservations</span></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="admin_addamenities.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Add an Amenity </span></a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Inbox </span></a>
-    </li>
+            <li class="nav-item">
+                <a class="nav-link" href="manageadminss.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Manage Admins</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="admin_managepayments.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Payments</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="adminreservationstable.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Reservations</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="admin_addamenities.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Add an Amenity </span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="admininboxforconcerns.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Inbox </span></a>
+            </li>
 
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -160,7 +158,7 @@ session_start();
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="admineditprofile.php">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>
@@ -241,7 +239,7 @@ session_start();
 
                   <!----------config---------->
                     <?php
-                        include_once('connection.php');
+                        include_once('dbconfig.php');
  
                         $database = new Connection();
                         $db = $database->open();

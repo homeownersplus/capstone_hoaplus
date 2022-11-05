@@ -73,23 +73,23 @@ if (isset($_REQUEST['del'])){
                     <span>Manage Posts</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="admin_managemembers.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Members</span></a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="manageadminss.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Manage Admins</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="admin_managepayments.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Payments</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="adminreservationstable.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Reservations</span></a>
             </li>

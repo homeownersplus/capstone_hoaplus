@@ -136,11 +136,13 @@
 											<div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0"> <img src="../photos/profile.png" class="img-fluid rounded-circle" style="width: 150px;height: 150px; margin-left: 25%; margin-top:10%;">
                                             <input class="form-control" type="file" name="image" accept="image/*" onchange="readURL(this, '')" style="border: 0px; padding: 3px; margin-top:3%; margin-top:10%; margin-left:5%; width:90%;" required>
 												<div class="mb-3" style="margin-top:10%;">
-													<input class="btn btn-outline-primary" type="submit" value="Update Photo" name="updateuserprofilepic" style="margin-left:20%;"> <a href="adminlandingpage.php" class="btn btn-secondary">Back</a> </div>
+													<input class="btn btn-outline-primary" type="submit" value="Update Photo" name="updateuserprofilepic" style="margin-left:23%;>  </div>
 											
-                                            <hr class="horizontal dark">
-</div>
-</div>
+                                            <hr class="horizontal dark mt-0">
+											</div>
+											</div>
+											</div>
+											
 											<div class="row">
 
 												<div class="col-md-6">
@@ -160,8 +162,8 @@
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">
-														<label for="example-text-input" class="form-control-label">Fetch When Member is added</label>
-														<input class="form-control" type="text" value="Fetch when is the Member added" disabled> </div>
+														<label for="example-text-input" class="form-control-label">Member ID</label>
+														<input class="form-control" type="text" value="Fetch Member ID" disabled> </div>
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">
@@ -178,34 +180,38 @@
                                             <hr class="horizontal dark">
                                             <p class="text-uppercase text-sm">Member Information</p>
 											<div class="row">
-												<div class="col-md-12">
+
+											<div class="col-md-12">
 													<div class="form-group"> </div>
-                                                    <label for="example-text-input" class="form-control-label">Address</label>
-                                                    <input class="form-control" type="text" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
+                                                    <label for="example-text-input" class="form-control-label">Email Address</label>
+                    <input class="form-control" type="email" value="Fetchusermail@gmail.com" disabled>
 												</div>
 												<div class="col-md-4">
 													<div class="form-group"> </div>
-                                                    <label for="example-text-input" class="form-control-label">Address</label>
-                    <input class="form-control" type="text" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
+                                                    <label for="example-text-input" class="form-control-label">Contact Number</label>
+                                                    <input class="form-control" type="text" value="0956654849948" disabled>
 												</div>
+												
 												<div class="col-md-4">
 													<div class="form-group"> </div>
-                                                    <label for="example-text-input" class="form-control-label">Address</label>
-                    <input class="form-control" type="text" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
+                                                    <label for="example-text-input" class="form-control-label">Phase Lot Block</label>
+                    <input class="form-control" type="text" value="Fetch Whole Phase Lot Block" disabled>
 												</div>
+
 												<div class="col-md-4">
 													<div class="form-group"> </div>
-                                                    <label for="example-text-input" class="form-control-label">Address</label>
-                    <input class="form-control" type="text" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
+                                                    <label for="example-text-input" class="form-control-label">Barangay</label>
+                    <input class="form-control" type="text" value="Fetch brgy" disabled>
 												</div>
+												
 											</div>
 </div>
 </div>
-											<div class="row"> </div>
+										
 										</div>
 									</div>
 								</div>
-</div>
+</div></div>
 								
 													
 											</div>

@@ -17,7 +17,7 @@
 		}	
 
      
-		public function addEquipment($unique, $amename, $pcontent) {
+		public function addEquipment($unique, $ptitle, $pcontent) {
 			$query = "INSERT INTO tblusers (Photo, ptitle, pcontent) VALUES (?, ?, ?)";
 
 			if ($stmt = $this->conn->prepare($query)) {

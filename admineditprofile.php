@@ -34,26 +34,46 @@
 				<hr class="sidebar-divider my-0">
 				<!-- Nav Item - Dashboard -->
 				<li class="nav-item">
-					<a class="nav-link" href="adminlandingpage.php"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Manage Posts</span></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Members</span></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Manage Admins</span></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Payments</span></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="adminreservationstable.php"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Reservations</span></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="admin_addamenities.php"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Add an Amenity </span></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="admininboxforconcerns.php"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Inbox </span></a>
-				</li>
+                <a class="nav-link" href="adminlandingpage.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Manage Posts</span></a>
+            </li>
+			<li class="nav-item">
+                <a class="nav-link" href="adminlandingpage.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Manage Posts</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="admin_managemembers.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Members</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="manageadminss.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Manage Admins</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="admin_managepayments.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Payments</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="adminreservationstable.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Reservations</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="admin_addamenities.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Add an Amenity </span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="admininboxforconcerns.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Inbox </span></a>
+            </li>
 				<div class="text-center d-none d-md-inline">
 					<button class="rounded-circle border-0" id="sidebarToggle"></button>
 				</div>
@@ -196,7 +216,7 @@
 												<h5 class="card-title" style="margin-top:7%; margin-left:20%">Fetch Adminfullname</h5>
 												<input class="form-control" type="file" name="image" accept="image/*" onchange="readURL(this, '')" style="border: 0px; padding: 3px; margin-top:3%; margin-top:10%; margin-left:5%; width:90%;" required>
 												<div class="mb-3" style="margin-top:10%;">
-													<input class="btn btn-outline-primary" type="submit" value="Update Photo" name="updateuserprofilepic" style="margin-left:20%;"> <a href="adminlandingpage.php" class="btn btn-secondary">Back</a> </div>
+													<input class="btn btn-outline-primary" type="submit" value="Update Photo" name="updateuserprofilepic" style="margin-left:30%;"> </div>
 											</div>
 										</div>
 									</div>

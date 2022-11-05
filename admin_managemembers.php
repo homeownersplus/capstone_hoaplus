@@ -96,7 +96,7 @@ if (isset($_REQUEST['active'])){
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="manageadminss.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Manage Admins</span></a>
             </li>
@@ -240,7 +240,12 @@ if (isset($_REQUEST['active'])){
           <div class="card-tools"> -->
                     <!-- Page Heading -->
 
-                    <h1 class="h3 mb-4 text-gray-800">Manage Members</h1>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Manage Members</h1>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                    </div>
+                    
                   
 
                      <!--------------------------------------- Add Modal ------------------------------------->
@@ -359,8 +364,8 @@ if (isset($_REQUEST['active'])){
                     <label class="form-label"> Full Name: </label>
                     <input type="text" class="form-control" name="fullname" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"  id="txtinput" disabled="disabled"/>
                       <br>
-                      <button type="button" onclick="remove()"  class="btn btn-outline-secondary"  >remove</button>
-                      <button type="button" onclick="add() "  class="btn btn-outline-success">Add</button> 
+                      <button type="button" onclick="remove()"  class="btn btn-outline-secondary"  >Remove</button>
+                      <button type="button" onclick="add() "  class="btn btn-outline-primary">Add</button> 
                       <div id="new_chq"></div>
                       <input type="hidden" value="1" id="total_chq">
                   </div>

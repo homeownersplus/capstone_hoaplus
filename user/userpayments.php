@@ -195,6 +195,7 @@
             <thead>
           <th>Payment ID</th>
           <th>Last Payment Date Time</th>
+          <th>Next Payment Date</th>
           <th></th>
       </thead>
       <tbody>
