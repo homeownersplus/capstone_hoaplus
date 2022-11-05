@@ -73,23 +73,23 @@ if (isset($_REQUEST['del'])){
                     <span>Manage Posts</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="admin_managemembers.php">
+                <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Members</span></a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="manageadminss.php">
+                <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Manage Admins</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="admin_managepayments.php">
+                <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Payments</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="adminreservationstable.php">
+                <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Reservations</span></a>
             </li>
@@ -184,12 +184,12 @@ if (isset($_REQUEST['del'])){
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="admineditprofile.php">
+                                <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
                              
-                                <a class="dropdown-item" href="adminactivitylogs.php">
+                                <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
                                 </a>
@@ -215,7 +215,7 @@ if (isset($_REQUEST['del'])){
           <div class="card-tools"> -->
                     <!-- Page Heading -->
 
-                    <h1 class="h3 mb-4 text-gray-800">Admin Inbox</h1>
+                    <h1 class="h3 mb-4 text-gray-800">INBOX</h1>
                     
 
                            <!---alert messages--->
@@ -311,13 +311,13 @@ if (isset($_REQUEST['del'])){
       <input type="text" class="form-control" id="reply-message-id" hidden="" />
       <br>
       <div class="mb-3">
-        <input type="email" class="form-control" id="reply-to"  required />
+        <input type="email" class="form-control" id="reply-to"  required disabled />
       </div>
       <div class="mb-3">
-        <input type="text" class="form-control" id="subject" required />
+        <input type="text" class="form-control" id="subject" required  disabled/>
       </div>
       <div class="mb-3">
-        <textarea class="form-control" placeholder="Message" id="reply-message" style="height: 100px"></textarea>
+        <textarea class="form-control" placeholder="Compose Reply Message" id="reply-message" style="height: 100px"></textarea>
       </div>
 
       </div>
@@ -717,69 +717,7 @@ if (isset($_REQUEST['del'])){
 
 
     </script>
- </div>
-                <!-- /.container-fluid -->
 
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Capstone 2022</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.php">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-     <!-- Bootstrap core JavaScript-->
-     <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
     <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
     <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 

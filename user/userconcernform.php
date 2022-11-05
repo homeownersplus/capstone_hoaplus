@@ -208,16 +208,16 @@
     </div>
 
 
-    <div >
+    <!-- <div >
                 <label class="col-form-label"><b>Attach Report Image</b></label>
 										<input class="form-control" type="file" name="image" accept="image/*" onchange="readURL(this, '')" >
-                </div>
+                </div> -->
 
 
     <div class="form-floating" style="margin-top:3%;"  >
                 <textarea class="form-control"  name="pconcern"  required></textarea>
                 <label for="pconcern">Write your concern here...</label>
-                <div id="emailHelp" class="form-text">Compose your concern clear and exact.</div>
+                <div id="emailHelp" class="form-text">Compose your concern short but precise.</div>
                 </div>
                    
 <div>
