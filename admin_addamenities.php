@@ -253,7 +253,7 @@ $model = new Model();
 			<th>Amenity Photo</th>
 			<th>Amenity Name</th>
             <th>Adding Date</th>
-			<th><center>Perform Actions</center></th>
+			<!-- <th><center>Perform Actions</center></th> -->
 		</thead>
 		<tbody>
     <?php
@@ -279,8 +279,8 @@ $model = new Model();
 					<td>
             <center>
 						
-						<a href="adminupdateposts.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm"><span class="fas fa-edit"></span></a>
-						<a href="adminposts.php?del=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onClick="return confirm('Do you really want to delete?')"><span class="fas fa-trash"></span></a>
+						<!-- <a href="adminupdateposts.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm"><span class="fas fa-edit"></span></a>
+						<a href="adminposts.php?del=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onClick="return confirm('Do you really want to delete?')"><span class="fas fa-trash"></span></a> -->
 					
           </center>
           </td>
