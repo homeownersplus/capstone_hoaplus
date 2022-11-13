@@ -4,11 +4,11 @@ $model = new Model();
 
 $amenetyList = [];
 foreach ($model->displayAment() as $amt) {
-    $amenety = [
-        "id" => $amt["id"],
-        "name" => $amt["amename"],
-    ];
-    array_push($amenetyList, $amenety);
+	$amenety = [
+		"id" => $amt["id"],
+		"name" => $amt["amename"],
+	];
+	array_push($amenetyList, $amenety);
 }
 ?>
 <!doctype html>
@@ -98,10 +98,10 @@ foreach ($model->displayAment() as $amt) {
 			</div>
 
 			<?php
-            require_once('session.php');
-            //require_once('search.php');
+			require_once('session.php');
+			//require_once('search.php');
 
-            ?>
+			?>
 		</ul>
 		<!-- End of Sidebar -->
 
@@ -165,7 +165,8 @@ foreach ($model->displayAment() as $amt) {
 						<li class="nav-item dropdown no-arrow">
 							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
 								aria-haspopup="true" aria-expanded="false">
-								<span class="mr-2 d-none d-lg-inline text-gray-600 small">Userlee Santos</span>
+								<span
+									class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION["logged_user"]["username"] ?></span>
 								<img class="img-profile rounded-circle" src="../photos/profile.png">
 							</a>
 							<!-- Dropdown - User Information -->
@@ -326,10 +327,10 @@ foreach ($model->displayAment() as $amt) {
 					const dateChecker = () => {
 						const today = new Date();
 						const formatDate = (date) => {
-							let d = new Date(date),
-								month = "" + (d.getMonth() + 1),
-								day = "" + d.getDate(),
-								year = d.getFullYear();
+							let d = new Date(date)
+							let month = String(d.getMonth() + 1);
+							let day = String(d.getDate());
+							let year = d.getFullYear()
 							if (month.length < 2) month = "0" + month;
 							if (day.length < 2) day = "0" + day;
 							return [year, month, day].join("-");
@@ -341,8 +342,8 @@ foreach ($model->displayAment() as $amt) {
 						const today = new Date();
 						const formatTime = (date) => {
 							let d = new Date(date);
-							let hours = "" + d.getHours();
-							let minutes = d.getMinutes();
+							let hours = String(d.getHours());
+							let minutes = String(d.getMinutes());
 							if (hours.length < 2) hours = "0" + hours;
 							if (minutes.length < 2) minutes = "0" + minutes;
 							return [hours, minutes].join(":");

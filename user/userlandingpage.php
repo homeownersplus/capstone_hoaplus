@@ -95,10 +95,10 @@ $model = new Model();
 			</div>
 
 			<?php
-            //    require_once('session.php');
-            //require_once('search.php');
+			//    require_once('session.php');
+			//require_once('search.php');
 
-            ?>
+			?>
 		</ul>
 		<!-- End of Sidebar -->
 
@@ -206,11 +206,11 @@ $model = new Model();
 							<div class="card-body">
 								<div class="row">
 									<?php
-                                    $rows = $model->displayActiveUsers();
-                                    $cnt = 1;
-                                    if (!empty($rows)) {
-                                        foreach ($rows as $row) {
-                                    ?>
+									$rows = $model->displayActiveUsers();
+									$cnt = 1;
+									if (!empty($rows)) {
+										foreach ($rows as $row) {
+									?>
 
 									<!-- User Information -->
 									<div class="card shadow mb-8" style="width:33%;">
@@ -227,15 +227,15 @@ $model = new Model();
 											<p>
 											<h6 class="card-title">
 												<?php
-                                                        echo date('M d, Y', strtotime($row['PostingDate']))
-                                                        ?>
+														echo date('M d, Y', strtotime($row['PostingDate']))
+														?>
 											</h6>
 											</p>
 											<h6 class="card-title">
 												<?php
-                                                        $out = strlen($row['pcontent']) > 30 ? substr($row['pcontent'], 0, 30) . "..." : $row['pcontent'];
-                                                        echo $out;
-                                                        ?>
+														$out = strlen($row['pcontent']) > 30 ? substr($row['pcontent'], 0, 30) . "..." : $row['pcontent'];
+														echo $out;
+														?>
 											</h6>
 
 											<button type="button" onclick="loadPost(<?php echo $row['id'] ?>)" data-toggle="modal"
@@ -244,17 +244,17 @@ $model = new Model();
 									</div>
 
 									<?php
-                                            $cnt++;
-                                        }
-                                    }
-                                    ?>
+											$cnt++;
+										}
+									}
+									?>
 
 
 									<!---alert messages--->
 									<?php
 
-                                    if (isset($_SESSION['messageusr'])) {
-                                    ?>
+									if (isset($_SESSION['messageusr'])) {
+									?>
 									<div class="alert alert-warning alert-dismissible fade show text-center" role="alert"
 										style="margin-top:20px;">
 										<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -264,9 +264,9 @@ $model = new Model();
 									</div>
 									<?php
 
-                                        unset($_SESSION['messageusr']);
-                                    }
-                                    ?>
+										unset($_SESSION['messageusr']);
+									}
+									?>
 
 									<!-- Post Modal -->
 									<div class="modal fade" id="post-modal" tabindex="-1" aria-hidden="true">
@@ -386,7 +386,7 @@ $model = new Model();
 			const res = await fetch(`../api/getPost.php?post_id=${id}`);
 			const data = await res.json();
 			const post = data.data;
-
+			console.log(post)
 			postTitle.innerText = post.ptitle;
 
 			const dateFormat = new Date(post.PostingDate).toDateString().split(" ");

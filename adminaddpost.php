@@ -6,49 +6,49 @@ $model = new Model();
 
 
 if (isset($_POST['confirmPwd'])) {
-    // Check default admin
-    $sql = "SELECT * FROM tbladmin WHERE username =:username AND password=:password";
-    $userrow = $dbh->prepare($sql);
-    $userrow->execute(
-        array(
-            'username' => $_SESSION['logged_user']["username"],
-            'password' => $_POST['confirmPwd']
-        )
-    );
-    $count = $userrow->rowCount();
-    if ($count == 0) {
-        // Check regular admin
-        $sql2 = "SELECT * FROM admins WHERE username =:username AND password=:password";
-        $userrow2 = $dbh->prepare($sql2);
-        $userrow2->execute(
-            array(
-                'username' => $_SESSION['logged_user']["username"],
-                'password' => $_POST['confirmPwd']
-            )
-        );
-        $count2 = $userrow2->rowCount();
-        if ($count2 == 0) {
-            echo "<script>window.location.href='adminaddpost.php?err=invalidCredentials'</script>";
-            die();
-        }
-    }
+	// Check default admin
+	$sql = "SELECT * FROM tbladmin WHERE username =:username AND password=:password";
+	$userrow = $dbh->prepare($sql);
+	$userrow->execute(
+		array(
+			'username' => $_SESSION['logged_user']["username"],
+			'password' => $_POST['confirmPwd']
+		)
+	);
+	$count = $userrow->rowCount();
+	if ($count == 0) {
+		// Check regular admin
+		$sql2 = "SELECT * FROM admins WHERE username =:username AND password=:password";
+		$userrow2 = $dbh->prepare($sql2);
+		$userrow2->execute(
+			array(
+				'username' => $_SESSION['logged_user']["username"],
+				'password' => $_POST['confirmPwd']
+			)
+		);
+		$count2 = $userrow2->rowCount();
+		if ($count2 == 0) {
+			echo "<script>window.location.href='adminaddpost.php?err=invalidCredentials'</script>";
+			die();
+		}
+	}
 
-    $filename = $_FILES['image']['name'];
-    $file = basename($filename);
+	$filename = $_FILES['image']['name'];
+	$file = basename($filename);
 
-    $ptitle = $_POST['ptitle'];
-    $pcontent = $_POST['pcontent'];
+	$ptitle = $_POST['ptitle'];
+	$pcontent = $_POST['pcontent'];
 
-    $path = './assets/images/';
-    $unique = time() . uniqid(rand());
-    $destination = $path . $unique . '.jpg';
-    $base = basename($_FILES["image"]["name"]);
-    $image = $_FILES["image"]["tmp_name"];
-    move_uploaded_file($image, $destination);
+	$path = './assets/images/';
+	$unique = time() . uniqid(rand());
+	$destination = $path . $unique . '.jpg';
+	$base = basename($_FILES["image"]["name"]);
+	$image = $_FILES["image"]["tmp_name"];
+	move_uploaded_file($image, $destination);
 
-    $model->addEquipment($unique, $ptitle, $pcontent);
-    $_SESSION['message'] = 'Cheers! Post added successfully';
-    echo "<script>window.location.href='adminlandingpage.php?postadded'</script>";
+	$model->addEquipment($unique, $ptitle, $pcontent);
+	$_SESSION['message'] = 'Cheers! Post added successfully';
+	echo "<script>window.location.href='adminlandingpage.php?postadded'</script>";
 }
 ?>
 
@@ -188,7 +188,8 @@ if (isset($_POST['confirmPwd'])) {
 						<li class="nav-item dropdown no-arrow">
 							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
 								aria-haspopup="true" aria-expanded="false">
-								<span class="mr-2 d-none d-lg-inline text-gray-600 small">President Aikka</span>
+								<span
+									class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION["logged_user"]["username"] ?></span>
 								<img class="img-profile rounded-circle" src="photos/profile.png">
 							</a>
 							<!-- Dropdown - User Information -->

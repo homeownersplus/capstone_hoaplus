@@ -27,6 +27,7 @@ if (isset($_POST["login"])) {
 		$_SESSION['userid'] = $result['id'];
 		$_SESSION['logged_user'] = $result;
 		$_SESSION['logged_role'] = "admin";
+		$_SESSION['logged_position'] = "admin";
 		redirect("./adminlandingpage.php?msg=logged");
 	}
 
@@ -47,6 +48,7 @@ if (isset($_POST["login"])) {
 		$_SESSION['userid'] = $result['id'];
 		$_SESSION['logged_user'] = $result;
 		$_SESSION['logged_role'] = "admin";
+		$_SESSION['logged_position'] = strtolower($result['position']);
 		redirect("./adminlandingpage.php?msg=logged");
 	}
 
@@ -67,6 +69,7 @@ if (isset($_POST["login"])) {
 		$_SESSION['userid'] = $result['id'];
 		$_SESSION['logged_user'] = $result;
 		$_SESSION['logged_role'] = "user";
+		$_SESSION['logged_position'] = "user";
 		redirect("./user/userlandingpage.php?msg=logged");
 	}
 
