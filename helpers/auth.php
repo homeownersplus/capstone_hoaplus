@@ -33,20 +33,20 @@ function authOnlyMiddleware()
 	}
 }
 
-function adminOnlyMiddleware()
+function adminOnlyMiddleware($redirect_url = "index.php")
 {
 	// redirect to index not admin
 	if ($_SESSION["logged_role"] != "admin") {
-		header('location: ../index.php');
+		header("location: $redirect_url");
 		exit();
 	}
 }
 
-function userOnlyMiddleware()
+function userOnlyMiddleware($redirect_url = "index.php")
 {
 	// redirect to index not user
 	if ($_SESSION["logged_role"] != "user") {
-		header('location: ../index.php');
+		header("location: $redirect_url");
 		exit();
 	}
 }

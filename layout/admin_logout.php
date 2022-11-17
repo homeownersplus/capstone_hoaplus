@@ -6,7 +6,7 @@
 <!-- Logout Modal-->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModal" aria-hidden="true">
 	<div class="modal-dialog" role="document">
-		<form action="../controllers/AuthController.php" method="POST">
+		<form action="logout.php" method="POST">
 			<input type="hidden" name="auth_action" value="logout">
 			<div class="modal-content">
 				<div class="modal-header">

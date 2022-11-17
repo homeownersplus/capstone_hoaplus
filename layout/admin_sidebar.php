@@ -13,7 +13,7 @@
 
 	<!-- Nav Item - Dashboard -->
 	<li class="nav-item">
-		<a class="nav-link" href="index.php">
+		<a class="nav-link" href="adminlandingpage.php">
 			<i class="fas fa-fw fa-tachometer-alt"></i>
 			<span>Manage Posts</span></a>
 	</li>
@@ -22,12 +22,13 @@
 			<i class="fas fa-fw fa-tachometer-alt"></i>
 			<span>Members</span></a>
 	</li>
-
+	<?php if (in_array($_SESSION["logged_user"]["position"] ?? "admin", ["admin", "president"])) : ?>
 	<li class="nav-item">
 		<a class="nav-link" href="manageadminss.php">
 			<i class="fas fa-fw fa-tachometer-alt"></i>
 			<span>Manage Admins</span></a>
 	</li>
+	<?php endif; ?>
 	<li class="nav-item">
 		<a class="nav-link" href="admin_managepayments.php">
 			<i class="fas fa-fw fa-tachometer-alt"></i>
