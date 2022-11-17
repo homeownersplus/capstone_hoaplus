@@ -1,10 +1,23 @@
 # Notes
 
-## Todo
+## Notes
 
-- [ ] add "email" field in user table
+- Added new fields
+- check the database on `database/nov_pdocrud.sql` for the columns to add
 
 ## Changelog
+
+### Week 2
+
+- fetch user details in user profile
+- user profile pic on the top bar
+- user name on the top bars
+- user can change default profile picture
+- add restriction on manage admins
+- add `avatar`, `created_at`, `contact_number`, `phase_block_lot`, `barangay` on `user` table
+- added role restriction on all pages
+
+### Week 1
 
 - added single login page for all accounts
 - added post password confirmation
