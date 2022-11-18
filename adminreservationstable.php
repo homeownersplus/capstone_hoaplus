@@ -3,6 +3,37 @@ session_start();
 require_once "./helpers/auth.php";
 require_once "./helpers/redirect.php";
 adminOnlyMiddleware();
+
+date_default_timezone_set('Asia/Manila');
+require_once './dbconfig.php';
+
+$statusList = [
+	1 => "Cancelled",
+	2 => "Pending",
+	3 => "Paid",
+];
+$rows = [];
+
+$sql = "
+	SELECT
+		reservations.id as id,
+		tblamenities.amename as amenity,
+		reservations.member_id,
+		reservations.start_date,
+		reservations.end_date,
+		reservations.status,
+		reservations.created_at
+	FROM reservations
+	INNER JOIN tblamenities
+	ON reservations.amenity_id = tblamenities.id
+	ORDER BY created_at DESC
+";
+$stmt = $dbh->query($sql);
+$stmt->execute();
+if ($stmt->rowCount() > 0) {
+	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -29,7 +60,10 @@ adminOnlyMiddleware();
 
 	<!-- Custom styles for this page -->
 	<link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+		integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 	<!-- <link href="style_postboard.css" rel="stylesheet"> -->
 </head>
@@ -63,31 +97,50 @@ adminOnlyMiddleware();
 					<!-- Page Heading -->
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h3 mb-0 text-gray-800">Admin Reservations Table</h1>
-						<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-								class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+						<!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+								class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
 					</div>
 
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4" style="margin-top:2%;">
 
 						<div class="card-body">
-							<div class="table-responsive">
-								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+							<div class="form-group input-daterange d-flex justify-content-between align-items-center">
 
-									<table class="table" id="example1" style="margin-top:2%;">
+								<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
+									placeholder="From:">
+
+								<div class="form-group-addon mx-4">To</div>
+
+								<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
+									placeholder="To:">
+
+							</div>
+							<div class="table-responsive">
+								<table class="table table-bordered" width="100%" cellspacing="0">
+									<table class="table" id="table-data" style="margin-top:2%;">
 										<thead>
 											<th>Member ID</th>
 											<th>Last Payment Date</th>
 											<th>Reserved Amenity</th>
-											<th>Reservation Date</th>
 											<th>Reservation Time Start</th>
 											<th>Reservation Time End</th>
+											<th>Date Created</th>
 											<th>Status</th>
 										</thead>
 										<tbody>
-
-
-
+											<?php foreach ($rows as $row) : ?>
+											<tr>
+												<th><?php echo str_pad($row["member_id"], 6, "0", STR_PAD_LEFT); ?></th>
+												<th>?</th>
+												<th><?php echo $row["amenity"] ?></th>
+												<th><?php echo date("M d, Y h:i A", strtotime($row["start_date"])); ?></th>
+												<th><?php echo date("M d, Y h:i A", strtotime($row["end_date"])); ?></th>
+												<th><?php echo date("Y-m-d", strtotime($row["created_at"])); ?></th>
+												<th><?php echo $statusList[$row["status"]]; ?></th>
+											</tr>
+											<?php endforeach; ?>
+										</tbody>
 									</table>
 									<div>
 									</div>
@@ -131,6 +184,59 @@ adminOnlyMiddleware();
 					<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 					<!-- Page level custom scripts -->
-					<script src="js/demo/datatables-demo.js"></script>
+					<!-- <script src="js/demo/datatables-demo.js"></script> -->
+					<script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+					<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+					<!-- <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script> -->
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+					<!-- <script src="https://cdn.datatables.net/datetime/1.2.0/js/dataTables.dateTime.min.js"></script> -->
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
+						integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
+						crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+					<script>
+					$('.input-daterange input').each(function() {
+						$(this).datepicker('clearDates');
+					});
+					var table = $('#table-data').DataTable({
+						// lengthChange: true,
+						dom: 'lBfrtip',
+						// responsive: true,
+						buttons: [{
+							extend: 'excel',
+							text: 'Generate Report',
+						}],
+						'lengthMenu': [
+							[10, 25, 50, -1],
+							[10, 25, 50, "All"]
+						]
+					});
+
+					// Extend dataTables search
+					$.fn.dataTable.ext.search.push(
+						function(settings, data, dataIndex) {
+							var min = $('#min-date').val();
+							var max = $('#max-date').val();
+							var createdAt = data[4] || 0; // Our date column in the table
+
+							if (
+								(min == "" || max == "") ||
+								(moment(createdAt).isSameOrAfter(min) && moment(createdAt).isSameOrBefore(max))
+							) {
+								return true;
+							}
+							return false;
+						}
+					);
+
+					// Re-draw the table when the a date range filter changes
+					$('.date-range-filter').change(function() {
+						table.draw();
+					});
+
+					$('#my-table_filter').hide();
+					</script>
 
 </body>

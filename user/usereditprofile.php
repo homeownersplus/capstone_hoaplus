@@ -310,7 +310,7 @@ if ($action == "update_photo") {
 											<div class="form-group"> </div>
 											<label for="example-text-input" class="form-control-label">Phase Lot Block</label>
 											<input class="form-control" type="text"
-												value="<?php echo $_SESSION["logged_user"]["phase_lot_block"] ?>k" disabled>
+												value="<?php echo $_SESSION["logged_user"]["phase_lot_block"] ?>" disabled>
 										</div>
 
 										<div class="col-md-4">

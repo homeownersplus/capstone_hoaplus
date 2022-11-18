@@ -100,8 +100,6 @@ if (isset($_REQUEST['active'])) {
 								class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 					</div>
 
-
-
 					<!--------------------------------------- Add Modal ------------------------------------->
 					<!-- Button trigger modal -->
 					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registermember"

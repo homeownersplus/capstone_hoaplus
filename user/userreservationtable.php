@@ -1,3 +1,41 @@
+<?php
+session_start();
+require_once "../helpers/auth.php";
+require_once "../helpers/redirect.php";
+userOnlyMiddleware("../index.php");
+
+require_once '../dbconfig.php';
+date_default_timezone_set('Asia/Manila');
+
+$statusList = [
+	1 => "Cancelled",
+	2 => "Pending",
+	3 => "Paid",
+];
+$rows = [];
+
+$sql = "
+	SELECT
+		reservations.id as id,
+		tblamenities.amename as amenity,
+		reservations.member_id,
+		reservations.start_date,
+		reservations.end_date,
+		reservations.status,
+		reservations.created_at
+	FROM reservations
+	INNER JOIN tblamenities
+	ON reservations.amenity_id = tblamenities.id
+	WHERE member_id = :member_id
+";
+$stmt = $dbh->prepare($sql);
+$stmt->bindValue(':member_id', $_SESSION["logged_user"]["id"], PDO::PARAM_STR);
+$stmt->execute();
+if ($stmt->rowCount() > 0) {
+	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -85,9 +123,6 @@
 			</div>
 
 			<?php
-			require_once('session.php');
-			//require_once('search.php');
-
 			?>
 		</ul>
 		<!-- End of Sidebar -->
@@ -106,29 +141,9 @@
 						<i class="fa fa-bars"></i>
 					</button>
 
-					<!-- Topbar Search
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form> -->
-
 					<!-- Topbar Navbar -->
 					<ul class="navbar-nav ml-auto">
 
-						<!-- Nav Item - Search Dropdown (Visible Only XS)
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a> -->
 						<!-- Dropdown - Messages -->
 						<div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
 							aria-labelledby="searchDropdown">
@@ -180,37 +195,38 @@
 
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
-					<!-- <div class="jumbotron">
-             -->
-					<!-- <div class="card">
-                <div class="card-body">
-          <div class="card-tools"> -->
 					<!-- Page Heading -->
-
-
 					<h1 class="h3 mb-4 text-gray-800">Reservations History</h1>
-
 
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4" style="margin-top:2%;">
-
 						<div class="card-body">
 							<div class="table-responsive">
-								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								<table class="table table-bordered" width="100%" cellspacing="0">
 
-									<table class="table" id="example1" style="margin-top:2%;">
+									<table class="table" id="table-data" style="margin-top:2%;">
 										<thead>
 											<th>Member ID</th>
 											<th>Last Payment Date</th>
 											<th>Reserved Amenity</th>
-											<th>Reservation Date</th>
 											<th>Reservation Time Start</th>
 											<th>Reservation Time End</th>
+											<th>Date Created</th>
 											<th>Status</th>
 										</thead>
 										<tbody>
-
-
+											<?php foreach ($rows as $row) : ?>
+											<tr>
+												<th><?php echo str_pad($row["member_id"], 6, "0", STR_PAD_LEFT); ?></th>
+												<th>?</th>
+												<th><?php echo $row["amenity"] ?></th>
+												<th><?php echo date("M d, Y h:i A", strtotime($row["start_date"])); ?></th>
+												<th><?php echo date("M d, Y h:i A", strtotime($row["end_date"])); ?></th>
+												<th><?php echo date("M d, Y h:i A", strtotime($row["created_at"])); ?></th>
+												<th><?php echo $statusList[$row["status"]]; ?></th>
+											</tr>
+											<?php endforeach; ?>
+										<tbody>
 
 									</table>
 									<div>
@@ -256,7 +272,7 @@
 								<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
 								<div class="modal-footer">
 									<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-									<a class="btn btn-primary" href="login.php">Logout</a>
+									<a class="btn btn-primary" href="../logout.php">Logout</a>
 								</div>
 							</div>
 						</div>
@@ -280,5 +296,11 @@
 					<script src="../js/demo/datatables-demo.js"></script>
 					<link rel="stylesheet"
 						href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+					<script>
+					$(document).ready(function() {
+						$('#table-data').DataTable();
+					});
+					</script>
 
 </body>
