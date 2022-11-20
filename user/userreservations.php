@@ -1,4 +1,10 @@
 <?php
+session_start();
+require_once "../helpers/auth.php";
+require_once "../helpers/redirect.php";
+userOnlyMiddleware("../index.php");
+
+require_once '../dbconfig.php';
 require_once "../global/model.php";
 $model = new Model();
 
@@ -9,6 +15,67 @@ foreach ($model->displayAment() as $amt) {
 		"name" => $amt["amename"],
 	];
 	array_push($amenetyList, $amenety);
+}
+
+if (isset($_POST["amenity"])) {
+
+	$data = [
+		'member_id' => $_SESSION["logged_user"]["id"],
+		'amenity_id' => $_POST["amenity"],
+		'start_date' => $_POST["date"] . " " . $_POST["time-start"],
+		'end_date' => $_POST["date"] . " " . $_POST["time-end"],
+		'status' => 2,
+	];
+
+	//  TODO: Add check for uppaid payments
+	//  check for similar time
+	$checkSql = "
+		SELECT * 
+		FROM reservations
+		WHERE amenity_id = :amenity_id
+		AND (end_date BETWEEN :from AND :to)
+		AND status = 2
+	";
+	$checkStmt = $dbh->prepare($checkSql);
+	$checkStmt->execute(
+		[
+			'amenity_id' => $data["amenity_id"],
+			'from' => $data["start_date"],
+			'to' => $data["end_date"],
+		]
+	);
+	$count = $checkStmt->rowCount();
+	if ($count > 0) {
+		redirect("./userreservations.php?code=101");
+	}
+
+
+	$sql = "
+	INSERT INTO reservations
+	(
+		member_id,
+		amenity_id,
+		start_date,
+		end_date,
+		status
+	)
+	VALUES
+	(
+		:member_id,
+		:amenity_id,
+		:start_date,
+		:end_date,
+		:status
+	)
+	";
+	$stmt = $dbh->prepare($sql);
+	$stmt->execute($data);
+
+	$count = $stmt->rowCount();
+	if ($count > 0) {
+		redirect("./userreservations.php?code=200");
+	}
+	redirect("./userreservations.php?code=100");
 }
 ?>
 <!doctype html>
@@ -98,7 +165,7 @@ foreach ($model->displayAment() as $amt) {
 			</div>
 
 			<?php
-			require_once('session.php');
+			// require_once('session.php');
 			//require_once('search.php');
 
 			?>
@@ -119,29 +186,9 @@ foreach ($model->displayAment() as $amt) {
 						<i class="fa fa-bars"></i>
 					</button>
 
-					<!-- Topbar Search
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form> -->
-
 					<!-- Topbar Navbar -->
 					<ul class="navbar-nav ml-auto">
 
-						<!-- Nav Item - Search Dropdown (Visible Only XS)
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a> -->
 						<!-- Dropdown - Messages -->
 						<div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
 							aria-labelledby="searchDropdown">
@@ -167,7 +214,8 @@ foreach ($model->displayAment() as $amt) {
 								aria-haspopup="true" aria-expanded="false">
 								<span
 									class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION["logged_user"]["username"] ?></span>
-								<img class="img-profile rounded-circle" src="../photos/profile.png">
+								<img class="img-profile rounded-circle"
+									src="<?php echo $_SESSION["logged_user"]["avatar"] ? "../photos/" . $_SESSION["logged_user"]["avatar"] : '../photos/profile.png' ?>">
 							</a>
 							<!-- Dropdown - User Information -->
 							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -192,13 +240,6 @@ foreach ($model->displayAment() as $amt) {
 
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
-					<!-- <div class="jumbotron">
-             -->
-					<!-- <div class="card">
-                <div class="card-body">
-          <div class="card-tools"> -->
-					<!-- Page Heading -->
-
 
 					<h1 class="h3 mb-4 text-gray-800">Reserve an Amenity</h1>
 					<!-- <input class="btn btn-outline-primary" type="submit" value="Generate E-Pass" name="reserveamenityusr" style="margin-top:-10%; margin-left:85%;"  > -->
@@ -209,10 +250,32 @@ foreach ($model->displayAment() as $amt) {
 						<div class="card-body">
 							<div class="table-responsive">
 								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-
-									<form name="reserveamenityusr" method="POST">
-										<!-- <fieldset disabled> -->
-
+									<?php if (isset($_GET["code"])) : ?>
+									<div class="alert alert-warning mb-2" role="alert">
+										<?php
+											$msg = "";
+											switch ($_GET["code"]) {
+												case "100":
+													$msg = "Error saving reservation";
+													break;
+												case "101":
+													$msg = "Amenety is already reserved for that time";
+													break;
+												case "103":
+													$msg = "You must settle all unpaid items, to continue booking";
+													break;
+												case "200":
+													$msg = "Reservation Saved";
+													break;
+												default:
+													$msg = "Unexpected Error";
+													break;
+											}
+											echo $msg;
+											?>
+									</div>
+									<?php endif; ?>
+									<form method="POST">
 										<div class="mb-3" style="width:100%;">
 											<label for="disabledTextInput" class="form-label">Member Email</label>
 											<input type="text" id="disabledTextInput" class="form-control"
@@ -226,8 +289,8 @@ foreach ($model->displayAment() as $amt) {
 										</div>
 										<div>
 
-											<select class="form-select" aria-label="Default select example" name="userselectamenity"
-												id="userselectamenity">
+											<select class="form-select" aria-label="amenity list" name="amenity" id="userselectamenity"
+												required>
 												<?php foreach ($amenetyList as $amt) : ?>
 												<option value="<?php echo $amt["id"] ?>"><?php echo $amt["name"] ?></option>
 												<?php endforeach ?>
@@ -237,26 +300,25 @@ foreach ($model->displayAment() as $amt) {
 
 										<div id="reservedateuser" style="margin-top:2%;">
 											<label for="reservedateuser" class="form-label">Reservation Date</label>
-											<input id="date-input" type="date" class="form-control" name="datereserveuser" required>
+											<input id="date-input" type="date" class="form-control" name="date" required>
 										</div>
 
 
 										<div id="reservestarttimeuser" style="margin-top:2%;">
 											<label for="reservedateuser" class="form-label">Reservation Time Start</label>
-											<input id="time-start-input" type="time" class="form-control" name="startreservetimeuser"
+											<input id="time-start-input" type="time" class="form-control" name="time-start"
 												class="inputfieldtime" placeholder="Time-start" required>
 										</div>
 
 										<div id="reserveendtimeuser" style="margin-top:2%;">
 											<label for="reservedateuser" class="form-label">Reservation Time End</label>
-											<input id="time-end-input" type="time" class="form-control" name="reserveendtimeuser"
-												class="inputfieldtime" placeholder="Time-start" required>
+											<input id="time-end-input" type="time" class="form-control" name="time-end" class="inputfieldtime"
+												placeholder="Time-start" required>
 										</div>
 
 										<div style="margin-top:5%">
-											<input class="btn btn-primary" type="submit" value="Generate E-Pass" name="reserveamenityusr">
+											<button class="btn btn-primary" type="submit">Generate E-Pass</button>
 											<a href="userlandingpage.php" class="btn btn-secondary">Back</a>
-
 										</div>
 										<!-- /.container-fluid -->
 
@@ -298,7 +360,7 @@ foreach ($model->displayAment() as $amt) {
 								<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
 								<div class="modal-footer">
 									<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-									<a class="btn btn-primary" href="login.php">Logout</a>
+									<a class="btn btn-primary" href="../logout.php">Logout</a>
 								</div>
 							</div>
 						</div>
@@ -339,7 +401,9 @@ foreach ($model->displayAment() as $amt) {
 					}
 
 					const timeChecker = () => {
+						const selectedDate = document.querySelector("#date-input");
 						const today = new Date();
+
 						const formatTime = (date) => {
 							let d = new Date(date);
 							let hours = String(d.getHours());
@@ -348,8 +412,14 @@ foreach ($model->displayAment() as $amt) {
 							if (minutes.length < 2) minutes = "0" + minutes;
 							return [hours, minutes].join(":");
 						}
-						document.querySelector("#time-start-input").min = formatTime(today);
-						const oneHourInAdvance = new Date().setHours(new Date().getHours() + 1);
+
+						// Check if input date is today
+						if (selectedDate.value == today.toLocaleDateString('en-CA')) {
+							document.querySelector("#time-start-input").min = formatTime(today);
+						}
+						const oneHourInAdvance = new Date(`${selectedDate.value} ${document.querySelector("#time-start-input").value}`)
+							.setHours(new Date(`${selectedDate.value} ${document.querySelector("#time-start-input").value}`).getHours() +
+								1);
 						document.querySelector("#time-end-input").min = formatTime(oneHourInAdvance);
 					}
 

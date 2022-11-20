@@ -1,10 +1,32 @@
 # Notes
 
-## Todo
+## Notes
 
-- [ ] add "email" field in user table
+- added new fields on `user` table
+- added new table `reservations`
+- check the database on `database/pdocrud_nov_20.sql` for up to date database schema
 
 ## Changelog
+
+### Week 2
+
+- fetch user details in user profile
+- user profile pic on the top bar
+- user name on the top bars
+- user can change default profile picture
+- add restriction on manage admins
+- add `avatar`, `created_at`, `contact_number`, `phase_block_lot`, `barangay` on `user` table
+- added role restriction on all pages
+- added `reservations` table
+- user can now reserve amenity
+- user can view their reservation history
+- reservation history pagination
+- admin reservation table search
+- admin reservation table filter
+- admin reservation table generate report
+- fix logout routes
+
+### Week 1
 
 - added single login page for all accounts
 - added post password confirmation

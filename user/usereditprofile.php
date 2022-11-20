@@ -1,3 +1,59 @@
+<?php
+session_start();
+require_once '../dbconfig.php';
+require_once "../helpers/auth.php";
+require_once "../helpers/redirect.php";
+userOnlyMiddleware("../index.php");
+
+$action = $_POST["action"] ?? null;
+if ($action == "update_photo") {
+	$target_file = "../photos/" . basename($_FILES["image"]["name"]);
+	$newFileName = uniqid(uniqid(rand()));
+	$file_path = "../photos/" . $newFileName;
+	$imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+	$fileName = $newFileName . "." . $imageFileType;
+
+	$check = getimagesize($_FILES["image"]["tmp_name"]);
+	if ($check == false) {
+		redirect("./usereditprofile.php?errCode=100");
+	}
+
+	if (file_exists($target_file)) {
+		redirect("./usereditprofile.php?errCode=101");
+	}
+
+	if ($_FILES["image"]["size"] > 5000000) {
+		redirect("./usereditprofile.php?errCode=102");
+	}
+
+	if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+		redirect("./usereditprofile.php?errCode=103");
+	}
+
+
+	if (!move_uploaded_file($_FILES["image"]["tmp_name"], $file_path . "." . $imageFileType)) {
+		redirect("./usereditprofile.php?errCode=104");
+	} else {
+		$sql = "
+		UPDATE user
+		SET avatar=?
+		WHERE id=?
+		";
+		$stmt = $dbh->prepare($sql);
+		$stmt->execute([
+			$fileName,
+			$_SESSION["logged_user"]["id"],
+		]);
+
+		$count = $stmt->rowCount();
+		if ($count > 0) {
+			redirect("./usereditprofile.php?errCode=106");
+		}
+		redirect("./usereditprofile.php?errCode=105");
+	}
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -5,11 +61,16 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title> HOA+ Member </title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+		integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<!-- Custom fonts for this template-->
 	<link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+		rel="stylesheet">
 	<!-- Custom styles for this template-->
 	<link href="../css/sb-admin-2.min.css" rel="stylesheet">
 	<!-- Custom styles for this page -->
@@ -32,28 +93,33 @@
 			<hr class="sidebar-divider my-0">
 			<!-- Nav Item - Dashboard -->
 			<li class="nav-item">
-				<a class="nav-link" href="userlandingpage.php"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Announcements</span></a>
+				<a class="nav-link" href="userlandingpage.php"> <i class="fas fa-fw fa-tachometer-alt"></i>
+					<span>Announcements</span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="userpayments.php"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Payments</span></a>
+				<a class="nav-link" href="userpayments.php"> <i class="fas fa-fw fa-tachometer-alt"></i>
+					<span>Payments</span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="userreservations.php"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Reserve Amenity</span></a>
+				<a class="nav-link" href="userreservations.php"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Reserve
+						Amenity</span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="userreservationtable.php"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Reservation History</span></a>
+				<a class="nav-link" href="userreservationtable.php"> <i class="fas fa-fw fa-tachometer-alt"></i>
+					<span>Reservation History</span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="userconcernform.php"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Send a Message </span></a>
+				<a class="nav-link" href="userconcernform.php"> <i class="fas fa-fw fa-tachometer-alt"></i> <span>Send a Message
+					</span></a>
 			</li>
 			<div class="text-center d-none d-md-inline">
 				<button class="rounded-circle border-0" id="sidebarToggle"></button>
 			</div>
-			<?php 
-   require_once('session.php');
-  //require_once('search.php');
-  
-  ?>
+			<?php
+			// require_once('session.php');
+			//require_once('search.php');
+
+			?>
 		</ul>
 		<!-- End of Sidebar -->
 		<!-- Content Wrapper -->
@@ -63,33 +129,17 @@
 				<!-- Topbar -->
 				<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 					<!-- Sidebar Toggle (Topbar) -->
-					<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3"> <i class="fa fa-bars"></i> </button>
-					<!-- Topbar Search
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form> -->
+					<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3"> <i class="fa fa-bars"></i>
+					</button>
 					<!-- Topbar Navbar -->
 					<ul class="navbar-nav ml-auto">
-						<!-- Nav Item - Search Dropdown (Visible Only XS)
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a> -->
 						<!-- Dropdown - Messages -->
-						<div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+						<div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+							aria-labelledby="searchDropdown">
 							<form class="form-inline mr-auto w-100 navbar-search">
 								<div class="input-group">
-									<input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+									<input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+										aria-label="Search" aria-describedby="basic-addon2">
 									<div class="input-group-append">
 										<button class="btn btn-primary" type="button"> <i class="fas fa-search fa-sm"></i> </button>
 									</div>
@@ -99,12 +149,19 @@
 						</li>
 						<!-- Nav Item - User Information -->
 						<li class="nav-item dropdown no-arrow">
-							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="mr-2 d-none d-lg-inline text-gray-600 small">Userlee Santos</span> <img class="img-profile rounded-circle" src="../photos/profile.png"> </a>
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false"> <span
+									class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION["logged_user"]["username"] ?></span>
+								<img class="img-profile rounded-circle"
+									src="<?php echo $_SESSION["logged_user"]["avatar"] ? "../photos/" . $_SESSION["logged_user"]["avatar"] : '../photos/profile.png' ?>">
+							</a>
 							<!-- Dropdown - User Information -->
 							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-								<a class="dropdown-item" href="usereditprofile.php"> <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile </a>
+								<a class="dropdown-item" href="usereditprofile.php"> <i
+										class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile </a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"> <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout </a>
+								<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"> <i
+										class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Logout </a>
 							</div>
 						</li>
 					</ul>
@@ -112,147 +169,210 @@
 				<!-- End of Topbar -->
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
-					<!-- <div class="jumbotron">
-             -->
-					<!-- <div class="card">
-                <div class="card-body">
-          <div class="card-tools"> -->
 					<!-- Page Heading -->
 					<div class="container-fluid py-4">
-							<div class="row">
-								<div class="col-md-8">
-									<div class="card">
-										<div class="card-header pb-0">
-											<div class="d-flex align-items-center">
-												<!-- <p class="mb-0">Edit Profile</p>
-                <button class="btn btn-primary btn-sm ms-auto">Settings</button> -->
-											</div>
-										</div>
-                                        
-										<div class="card-body">
-											<p class="text-uppercase text-sm">HOA Member Information</p>
-                                            <div class="row justify-content-center">
-											<!-- <div class="col-4 col-lg-4 order-lg-2"> -->
-											<div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0"> <img src="../photos/profile.png" class="img-fluid rounded-circle" style="width: 150px;height: 150px; margin-left: 25%; margin-top:10%;">
-                                            <input class="form-control" type="file" name="image" accept="image/*" onchange="readURL(this, '')" style="border: 0px; padding: 3px; margin-top:3%; margin-top:10%; margin-left:5%; width:90%;" required>
-												<div class="mb-3" style="margin-top:10%;">
-													<input class="btn btn-outline-primary" type="submit" value="Update Photo" name="updateuserprofilepic" style="margin-left:23%;>  </div>
-											
-                                            <hr class="horizontal dark mt-0">
-											</div>
-											</div>
-											</div>
-											
-											<div class="row">
-
-												<div class="col-md-6">
-													<div class="form-group">
-														<label for="example-text-input" class="form-control-label">Username</label>
-														<input class="form-control" type="text" value="fetch member username" disabled> </div>
-												</div>
-												<div class="col-md-6">
-													<div class="form-group">
-														<label for="example-text-input" class="form-control-label">Email address</label>
-														<input class="form-control" type="email" value=" fetchmemberemail@example.com" disabled> </div>
-												</div>
-												<div class="col-md-6">
-													<div class="form-group">
-														<label for="example-text-input" class="form-control-label">Full Name</label>
-														<input class="form-control" type="text" value="Member Full Name" disabled> </div>
-												</div>
-												<div class="col-md-6">
-													<div class="form-group">
-														<label for="example-text-input" class="form-control-label">Member ID</label>
-														<input class="form-control" type="text" value="Fetch Member ID" disabled> </div>
-												</div>
-												<div class="col-md-6">
-													<div class="form-group">
-														<label for="example-text-input" class="form-control-label">Last Payment Date</label>
-														<input class="form-control" type="text" value="Member AdminID" disabled> </div>
-												</div>
-												<div class="col-md-6">
-													<div class="form-group">
-														<label for="example-text-input" class="form-control-label">Next Payment Date</label>
-														<input class="form-control" type="text" value="Fetch when is the Member added" disabled> </div>
-												</div>
-											</div>
-
-                                            <hr class="horizontal dark">
-                                            <p class="text-uppercase text-sm">Member Information</p>
-											<div class="row">
-
-											<div class="col-md-12">
-													<div class="form-group"> </div>
-                                                    <label for="example-text-input" class="form-control-label">Email Address</label>
-                    <input class="form-control" type="email" value="Fetchusermail@gmail.com" disabled>
-												</div>
-												<div class="col-md-4">
-													<div class="form-group"> </div>
-                                                    <label for="example-text-input" class="form-control-label">Contact Number</label>
-                                                    <input class="form-control" type="text" value="0956654849948" disabled>
-												</div>
-												
-												<div class="col-md-4">
-													<div class="form-group"> </div>
-                                                    <label for="example-text-input" class="form-control-label">Phase Lot Block</label>
-                    <input class="form-control" type="text" value="Fetch Whole Phase Lot Block" disabled>
-												</div>
-
-												<div class="col-md-4">
-													<div class="form-group"> </div>
-                                                    <label for="example-text-input" class="form-control-label">Barangay</label>
-                    <input class="form-control" type="text" value="Fetch brgy" disabled>
-												</div>
-												
-											</div>
-</div>
-</div>
-										
+						<div class="row">
+							<div class="col-md-8">
+								<div class="card">
+									<div class="card-header pb-0">
+										<div class="d-flex align-items-center">
+											<!-- <p class="mb-0">Edit Profile</p>
+								<button class="btn btn-primary btn-sm ms-auto">Settings</button> -->
 										</div>
 									</div>
-								</div>
-</div></div>
-								
-													
+
+									<div class="card-body">
+										<p class="text-uppercase text-sm">HOA Member Information</p>
+										<div class="row justify-content-center">
+											<!-- <div class="col-4 col-lg-4 order-lg-2"> -->
+											<div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
+												<form method="POST" enctype="multipart/form-data">
+													<?php if (isset($_GET["errCode"])) : ?>
+													<div class="alert alert-warning m-2" role="alert">
+														<?php
+															$errMsg = "";
+															switch ($_GET["errCode"]) {
+																case "100":
+																	$errMsg = "File is not an image";
+																	break;
+																case "101":
+																	$errMsg = "File name already exists";
+																	break;
+																case "102":
+																	$errMsg = "File is too large, over 5MB";
+																	break;
+																case "103":
+																	$errMsg = "Sorry, only JPG, JPEG, and PNG files are allowed.";
+																	break;
+																case "104":
+																	$errMsg = "Error Saving File";
+																	break;
+																case "105":
+																	$errMsg = "Error Updating Database File";
+																	break;
+																case "106":
+																	$errMsg = "Success, you must relogin for the changes to take effect";
+																	break;
+																default:
+																	$errMsg = "Unexpected Error";
+																	break;
+															}
+															echo $errMsg;
+															?>
+													</div>
+													<?php endif; ?>
+													<input type="hidden" name="action" value="update_photo">
+													<img id="img-preview"
+														src="<?php echo $_SESSION["logged_user"]["avatar"] ? "../photos/" . $_SESSION["logged_user"]["avatar"] : '../photos/profile.png' ?>"
+														class="img-fluid rounded-circle"
+														style="width: 150px;height: 150px; margin-left: 25%; margin-top:10%;">
+													<input id="img-input" class="form-control" type="file" name="image" accept=".png, .jpg, .jpeg"
+														onchange="previewFile()"
+														style="border: 0px; padding: 3px; margin-top:3%; margin-top:10%; margin-left:5%; width:90%;"
+														required>
+													<div class="mb-3" style="margin-top:10%;">
+														<button id="img-button" class="btn btn-outline-primary invisible" type="submit"
+															style="margin-left:23%;">
+															Update Photo
+														</button>
+													</div>
+												</form>
+
+												<hr class=" horizontal dark mt-0">
 											</div>
 										</div>
+									</div>
+
+									<div class="row">
+
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="example-text-input" class="form-control-label">Username</label>
+												<input class="form-control" type="text"
+													value="<?php echo $_SESSION["logged_user"]["username"] ?>" disabled>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="example-text-input" class="form-control-label">Email address</label>
+												<input class="form-control" type="email"
+													value=" <?php echo $_SESSION["logged_user"]["email"] ?>" disabled>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="example-text-input" class="form-control-label">Full Name</label>
+												<input class="form-control" type="text"
+													value="<?php echo $_SESSION["logged_user"]["fullname"] ?>" disabled>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="example-text-input" class="form-control-label">Member ID</label>
+												<input class="form-control" type="text"
+													value="<?php echo str_pad($_SESSION["logged_user"]["id"], 6, "0", STR_PAD_LEFT) ?>" disabled>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="example-text-input" class="form-control-label">Last Payment Date</label>
+												<input class="form-control" type="text" value="?" disabled>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="example-text-input" class="form-control-label">Next Payment Date</label>
+												<input class="form-control" type="text" value="<?php // echo date('M d, Y', strtotime($_SESSION["logged_user"]["created_at"]))  
+																								?> ?" disabled>
+											</div>
+										</div>
+									</div>
+
+									<hr class="horizontal dark">
+									<p class="text-uppercase text-sm">Member Information</p>
+									<div class="row">
+
+										<div class="col-md-12">
+											<div class="form-group"> </div>
+											<label for="example-text-input" class="form-control-label">Email Address</label>
+											<input class="form-control" type="email" value="<?php echo $_SESSION["logged_user"]["email"] ?>"
+												disabled>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group"> </div>
+											<label for="example-text-input" class="form-control-label">Contact Number</label>
+											<input class="form-control" type="text"
+												value="<?php echo $_SESSION["logged_user"]["contact_number"] ?>" disabled>
+										</div>
+
+										<div class="col-md-4">
+											<div class="form-group"> </div>
+											<label for="example-text-input" class="form-control-label">Phase Lot Block</label>
+											<input class="form-control" type="text"
+												value="<?php echo $_SESSION["logged_user"]["phase_lot_block"] ?>" disabled>
+										</div>
+
+										<div class="col-md-4">
+											<div class="form-group"> </div>
+											<label for="example-text-input" class="form-control-label">Barangay</label>
+											<input class="form-control" type="text" value="<?php echo $_SESSION["logged_user"]["barangay"] ?>"
+												disabled>
+										</div>
+
 									</div>
 								</div>
 							</div>
+
 						</div>
-                        </div>
-                        </div>
-				<!-- /.container-fluid -->
-			</div>
-            </div>
-            </div>
-			<!-- End of Main Content -->
-			<!-- Footer -->
-			<footer class="sticky-footer bg-white">
-				<div class="container my-auto">
-					<div class="copyright text-center my-auto"> <span>Copyright &copy; Capstone 2022</span> </div>
+					</div>
 				</div>
-			</footer>
-			<!-- End of Footer -->
+			</div>
 		</div>
-        </div>
-		<!-- End of Content Wrapper -->
+
+
 	</div>
-    </div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	<!-- /.container-fluid -->
+	</div>
+	</div>
+	</div>
+	<!-- End of Main Content -->
+	<!-- Footer -->
+	<footer class="sticky-footer bg-white">
+		<div class="container my-auto">
+			<div class="copyright text-center my-auto"> <span>Copyright &copy; Capstone 2022</span> </div>
+		</div>
+	</footer>
+	<!-- End of Footer -->
+	</div>
+	</div>
+	<!-- End of Content Wrapper -->
+	</div>
+	</div>
 	<!-- End of Page Wrapper -->
 	<!-- Scroll to Top Button-->
 	<a class="scroll-to-top rounded" href="#page-top"> <i class="fas fa-angle-up"></i> </a>
 	<!-- Logout Modal-->
-	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-					<button class="close" type="button" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+					</button>
 				</div>
 				<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
 				<div class="modal-footer">
-					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button> <a class="btn btn-primary" href="login.php">Logout</a> </div>
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button> <a
+						class="btn btn-primary" href="../logout.php">Logout</a>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -268,4 +388,22 @@
 	<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 	<!-- Page level custom scripts -->
 	<script src="../js/demo/datatables-demo.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"> </body>
+
+	<script>
+	function previewFile() {
+		const preview = document.querySelector('#img-preview');
+		const btn = document.querySelector('#img-button');
+		const file = document.querySelector('#img-input').files[0];
+		const reader = new FileReader();
+
+		reader.addEventListener("load", () => {
+			preview.src = reader.result;
+		}, false);
+
+		if (file) {
+			reader.readAsDataURL(file);
+			btn.classList.remove("invisible");
+		}
+	}
+	</script>
+</body>

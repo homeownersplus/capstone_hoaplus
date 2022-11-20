@@ -1,7 +1,10 @@
 <!--------------------------- config here  ----------------------------->
 <?php
-
 session_start();
+require_once "../helpers/auth.php";
+require_once "../helpers/redirect.php";
+userOnlyMiddleware("../index.php");
+
 require_once '../dbconfig.php';
 $start_from = 0;
 include('../global/model.php');
@@ -165,7 +168,8 @@ $model = new Model();
 								aria-haspopup="true" aria-expanded="false">
 								<span
 									class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION["logged_user"]["username"] ?></span>
-								<img class="img-profile rounded-circle" src="../photos/profile.png">
+								<img class="img-profile rounded-circle"
+									src="<?php echo $_SESSION["logged_user"]["avatar"] ? "../photos/" . $_SESSION["logged_user"]["avatar"] : '../photos/profile.png' ?>">
 							</a>
 							<!-- Dropdown - User Information -->
 							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
