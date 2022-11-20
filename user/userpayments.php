@@ -1,3 +1,9 @@
+<?php
+session_start();
+require_once "../helpers/auth.php";
+require_once "../helpers/redirect.php";
+userOnlyMiddleware("../index.php");
+?>
 <!doctype html>
 <html lang="en">
 
@@ -85,7 +91,7 @@
 			</div>
 
 			<?php
-			require_once('session.php');
+			// require_once('session.php');
 			//require_once('search.php');
 
 			?>

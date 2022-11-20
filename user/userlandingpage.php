@@ -1,7 +1,10 @@
 <!--------------------------- config here  ----------------------------->
 <?php
-
 session_start();
+require_once "../helpers/auth.php";
+require_once "../helpers/redirect.php";
+userOnlyMiddleware("../index.php");
+
 require_once '../dbconfig.php';
 $start_from = 0;
 include('../global/model.php');

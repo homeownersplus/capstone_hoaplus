@@ -219,7 +219,7 @@ if ($stmt->rowCount() > 0) {
 						function(settings, data, dataIndex) {
 							var min = $('#min-date').val();
 							var max = $('#max-date').val();
-							var createdAt = data[4] || 0; // Our date column in the table
+							var createdAt = data[5] || 0; // Our date column in the table
 
 							if (
 								(min == "" || max == "") ||

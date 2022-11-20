@@ -24,18 +24,23 @@ function guestOnlyMiddleware()
 	}
 }
 
-function authOnlyMiddleware()
+function authOnlyMiddleware($redirect_url = "auth.php")
 {
 	// If not logged redirect to login
 	if (!isLogged()) {
-		header('location: ../auth.php');
+		header("location: $redirect_url");
 		exit();
 	}
 }
 
 function adminOnlyMiddleware($redirect_url = "index.php")
 {
-	// redirect to index not admin
+	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+	header("Cache-Control: no-store, no-cache, must-revalidate");
+	header("Cache-Control: post-check=0, pre-check=0", false);
+	header("Pragma: no-cache");
+
 	if ($_SESSION["logged_role"] != "admin") {
 		header("location: $redirect_url");
 		exit();
@@ -44,7 +49,12 @@ function adminOnlyMiddleware($redirect_url = "index.php")
 
 function userOnlyMiddleware($redirect_url = "index.php")
 {
-	// redirect to index not user
+	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+	header("Cache-Control: no-store, no-cache, must-revalidate");
+	header("Cache-Control: post-check=0, pre-check=0", false);
+	header("Pragma: no-cache");
+
 	if ($_SESSION["logged_role"] != "user") {
 		header("location: $redirect_url");
 		exit();

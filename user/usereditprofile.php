@@ -276,15 +276,14 @@ if ($action == "update_photo") {
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="example-text-input" class="form-control-label">Last Payment Date</label>
-												<input class="form-control" type="text" value="Member AdminID" disabled>
+												<input class="form-control" type="text" value="?" disabled>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="example-text-input" class="form-control-label">Next Payment Date</label>
-												<input class="form-control" type="text"
-													value="<?php echo date('M d, Y', strtotime($_SESSION["logged_user"]["created_at"]))  ?>"
-													disabled>
+												<input class="form-control" type="text" value="<?php // echo date('M d, Y', strtotime($_SESSION["logged_user"]["created_at"]))  
+																								?> ?" disabled>
 											</div>
 										</div>
 									</div>

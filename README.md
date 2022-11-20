@@ -4,7 +4,7 @@
 
 - added new fields on `user` table
 - added new table `reservations`
-- check the database on `database/nov_19_pdocrud.sql` for up to date database schema
+- check the database on `database/pdocrud_nov_20.sql` for up to date database schema
 
 ## Changelog
 
