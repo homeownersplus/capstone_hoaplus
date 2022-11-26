@@ -10,7 +10,7 @@ date_default_timezone_set('Asia/Manila');
 $statusList = [
 	1 => "Cancelled",
 	2 => "Pending",
-	3 => "Paid",
+	3 => "Confirmed",
 ];
 $rows = [];
 
@@ -33,6 +33,37 @@ $stmt->bindValue(':member_id', $_SESSION["logged_user"]["id"], PDO::PARAM_STR);
 $stmt->execute();
 if ($stmt->rowCount() > 0) {
 	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+if (isset($_POST['cancel-reservation-id'])) {
+
+	// prepare data
+	$id = intval($_POST['cancel-reservation-id']);
+	// get payment record
+	$payment = null;
+	foreach ($rows as $row) {
+		if ($row["id"] == $id) {
+			$payment = $row;
+			break;
+		}
+	}
+
+	if ($payment == null) {
+		redirect("./userreservationtable.php?code=404");
+	}
+
+	// update reservation status
+	$sql = "UPDATE reservations SET status = 1 WHERE id=:id";
+	$query = $dbh->prepare($sql);
+
+	$query->bindParam(':id', $id, PDO::PARAM_STR);
+
+	if ($query->execute()) {
+		redirect("./userreservationtable.php?code=200");
+	} else {
+		redirect("./userreservationtable.php?code=400");
+	}
 }
 
 ?>
@@ -145,7 +176,7 @@ if ($stmt->rowCount() > 0) {
 					<ul class="navbar-nav ml-auto">
 
 						<!-- Dropdown - Messages -->
-						<div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+						<!-- <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
 							aria-labelledby="searchDropdown">
 							<form class="form-inline mr-auto w-100 navbar-search">
 								<div class="input-group">
@@ -159,7 +190,7 @@ if ($stmt->rowCount() > 0) {
 								</div>
 							</form>
 						</div>
-						</li>
+						</li> -->
 
 
 
@@ -198,6 +229,34 @@ if ($stmt->rowCount() > 0) {
 					<!-- Page Heading -->
 					<h1 class="h3 mb-4 text-gray-800">Reservations History</h1>
 
+					<?php if (isset($_GET['code'])) : ?>
+					<div class="alert alert-warning alert-dismissible fade show" role="alert">
+						<strong>
+							<i class="fas fa-exclamation-circle"></i>
+						</strong>
+						<?php
+							$errMsg = "";
+							switch ($_GET["code"]) {
+								case "200":
+									$errMsg = "Reservation Cancelled!";
+									break;
+								case "404":
+									$errMsg = "Error finding booking.";
+									break;
+								case "400":
+								default:
+									$errMsg = "Unexpected Error.";
+									break;
+							}
+							echo $errMsg;
+
+							?>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<?php endif; ?>
+
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4" style="margin-top:2%;">
 						<div class="card-body">
@@ -206,24 +265,28 @@ if ($stmt->rowCount() > 0) {
 
 									<table class="table" id="table-data" style="margin-top:2%;">
 										<thead>
-											<th>Member ID</th>
-											<th>Last Payment Date</th>
 											<th>Reserved Amenity</th>
 											<th>Reservation Time Start</th>
 											<th>Reservation Time End</th>
 											<th>Date Created</th>
 											<th>Status</th>
+											<th>Action</th>
 										</thead>
 										<tbody>
 											<?php foreach ($rows as $row) : ?>
 											<tr>
-												<th><?php echo str_pad($row["member_id"], 6, "0", STR_PAD_LEFT); ?></th>
-												<th>?</th>
 												<th><?php echo $row["amenity"] ?></th>
 												<th><?php echo date("M d, Y h:i A", strtotime($row["start_date"])); ?></th>
 												<th><?php echo date("M d, Y h:i A", strtotime($row["end_date"])); ?></th>
 												<th><?php echo date("M d, Y h:i A", strtotime($row["created_at"])); ?></th>
 												<th><?php echo $statusList[$row["status"]]; ?></th>
+												<th>
+													<?php
+														if (in_array($statusList[$row["status"]], ['Pending'])) {
+															echo '<button onclick="loadId(' . $row["id"] . ')" data-toggle="modal" data-target="#cancel-modal" class="btn btn-primary">Cancel</button>';
+														}
+														?>
+												</th>
 											</tr>
 											<?php endforeach; ?>
 										<tbody>
@@ -278,6 +341,35 @@ if ($stmt->rowCount() > 0) {
 						</div>
 					</div>
 
+					<!-- Cancel Modal -->
+					<div class="modal fade" id="cancel-modal" tabindex="-1" role="dialog" aria-labelledby="cancel-modal"
+						aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<form method="POST">
+
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title"><i class="fas fa-exclamation-circle text-danger mr-2"></i>Confirm
+											Action
+										</h5>
+										<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true"></span>&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<input id="cancel-reservation-id" type="hidden" name="cancel-reservation-id">
+										Are you sure you want to cancel this reservation?
+									</div>
+									<div class="modal-footer">
+										<button class="btn btn-secondary" type="button" data-dismiss="modal">Back</button>
+										<button type="submit" class="btn btn-primary">Confirm</button>
+									</div>
+								</div>
+							</form>
+
+						</div>
+					</div>
+
 					<!-- Bootstrap core JavaScript-->
 					<script src="../vendor/jquery/jquery.min.js"></script>
 					<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -301,6 +393,10 @@ if ($stmt->rowCount() > 0) {
 					$(document).ready(function() {
 						$('#table-data').DataTable();
 					});
+
+					const loadId = (id) => {
+						document.querySelector("#cancel-reservation-id").value = id;
+					}
 					</script>
 
 </body>

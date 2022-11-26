@@ -27,7 +27,40 @@ if (isset($_POST["amenity"])) {
 		'status' => 2,
 	];
 
-	//  TODO: Add check for uppaid payments
+	//  Add check for uppaid payments
+	// get latest payment record
+	$paymentSql = "
+		SELECT
+			date_paid,
+			date_due,
+			DATE_ADD(date_due, INTERVAL 1 MONTH) as next_due
+		FROM payments
+		WHERE member_id = :member_id
+		ORDER BY id DESC
+		LIMIT 1
+	";
+	$paymentStmt = $dbh->prepare($paymentSql);
+	$paymentStmt->execute(
+		[
+			'member_id' => $_SESSION["logged_user"]["id"],
+		]
+	);
+	$count = $paymentStmt->rowCount();
+	if ($count <= 0) {
+		redirect("./userreservations.php?code=104");
+	} else {
+		$payment = $paymentStmt->fetch(PDO::FETCH_ASSOC);
+		$currentDate = date("Y-m-d");
+
+		// if due date is already due
+		if ($payment["next_due"] < $currentDate) {
+			// check unpaid paid
+			if ($payment["date_paid"] == null) {
+				redirect("./userreservations.php?code=103");
+			}
+		}
+	}
+
 	//  check for similar time
 	$checkSql = "
 		SELECT * 
@@ -262,7 +295,10 @@ if (isset($_POST["amenity"])) {
 													$msg = "Amenety is already reserved for that time";
 													break;
 												case "103":
-													$msg = "You must settle all unpaid items, to continue booking";
+													$msg = "You must settle all unpaid payments, to continue booking";
+													break;
+												case "104":
+													$msg = "Unable to verify payments status, please contact the admins";
 													break;
 												case "200":
 													$msg = "Reservation Saved";
@@ -285,7 +321,8 @@ if (isset($_POST["amenity"])) {
 										<div class="mb-3" style="width:100%;">
 											<label for="disabledTextInput" class="form-label">Member Fullname</label>
 											<input type="text" id="disabledTextInput" class="form-control"
-												value="<?php echo $_SESSION["logged_user"]["fullname"] ?>" readonly>
+												value="<?php echo $_SESSION["logged_user"]["first_name"] . " " . $_SESSION["logged_user"]["middle_initial"] . " " . $_SESSION["logged_user"]["last_name"] ?>"
+												readonly>
 										</div>
 										<div>
 

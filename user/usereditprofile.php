@@ -5,6 +5,28 @@ require_once "../helpers/auth.php";
 require_once "../helpers/redirect.php";
 userOnlyMiddleware("../index.php");
 
+// Payment History
+$paymentSql = "
+SELECT
+	date_paid,
+	date_due,
+	DATE_ADD(date_due, INTERVAL 1 MONTH) as next_due
+FROM payments
+WHERE member_id = :member_id
+AND date_paid IS NOT NULL
+ORDER BY id DESC
+LIMIT 1
+";
+$paymentStmt = $dbh->prepare($paymentSql);
+$paymentStmt->execute(
+	[
+		'member_id' => $_SESSION["logged_user"]["id"],
+	]
+);
+$payment = $paymentStmt->fetch(PDO::FETCH_ASSOC);
+
+
+
 $action = $_POST["action"] ?? null;
 if ($action == "update_photo") {
 	$target_file = "../photos/" . basename($_FILES["image"]["name"]);
@@ -263,27 +285,28 @@ if ($action == "update_photo") {
 											<div class="form-group">
 												<label for="example-text-input" class="form-control-label">Full Name</label>
 												<input class="form-control" type="text"
-													value="<?php echo $_SESSION["logged_user"]["fullname"] ?>" disabled>
+													value="<?php echo $_SESSION["logged_user"]["first_name"] . " " . $_SESSION["logged_user"]["middle_initial"] . " " . $_SESSION["logged_user"]["last_name"] ?>"
+													disabled>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="example-text-input" class="form-control-label">Member ID</label>
 												<input class="form-control" type="text"
-													value="<?php echo str_pad($_SESSION["logged_user"]["id"], 6, "0", STR_PAD_LEFT) ?>" disabled>
+													value="HOAM<?php echo str_pad($_SESSION["logged_user"]["id"], 4, "0", STR_PAD_LEFT) ?>"
+													disabled>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="example-text-input" class="form-control-label">Last Payment Date</label>
-												<input class="form-control" type="text" value="?" disabled>
+												<input class="form-control" type="text" value="<?php echo $payment["date_due"]; ?>" disabled>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="example-text-input" class="form-control-label">Next Payment Date</label>
-												<input class="form-control" type="text" value="<?php // echo date('M d, Y', strtotime($_SESSION["logged_user"]["created_at"]))  
-																								?> ?" disabled>
+												<input class="form-control" type="text" value="<?php echo $payment["next_due"]; ?>" disabled>
 											</div>
 										</div>
 									</div>
@@ -309,7 +332,8 @@ if ($action == "update_photo") {
 											<div class="form-group"> </div>
 											<label for="example-text-input" class="form-control-label">Phase Lot Block</label>
 											<input class="form-control" type="text"
-												value="<?php echo $_SESSION["logged_user"]["phase_lot_block"] ?>" disabled>
+												value="<?php echo $_SESSION["logged_user"]["phase"] . ", " . $_SESSION["logged_user"]["block"] . ", " . $_SESSION["logged_user"]["lot"] ?>"
+												disabled>
 										</div>
 
 										<div class="col-md-4">

@@ -3,37 +3,132 @@
 session_start();
 require_once "./helpers/auth.php";
 require_once "./helpers/redirect.php";
+require_once "./helpers/logger.php";
 adminOnlyMiddleware();
 
-require_once 'dbconfig.php';
-include('./global/model.php');
-$model = new Model();
+
+date_default_timezone_set('Asia/Manila');
+require_once './dbconfig.php';
 
 
-//inactiveposts
-if (isset($_REQUEST['del'])) {
-	$uid = intval($_GET['del']);
-	$sql = "UPDATE tblusers SET status = 1 WHERE id=:id";
-	$query = $dbh->prepare($sql);
+$rows = [];
 
-	$query->bindParam(':id', $uid, PDO::PARAM_STR);
-	$query->execute();
-
-	echo "<script>alert ('Post Successfully InActive!');</script>";
-	echo "<script>window.location.href='adminlandingpage.php'</script>";
+$sql = "
+	SELECT
+		payments.id as p_id,
+		payments.member_id as m_id,
+		user.first_name as fname,
+		user.middle_initial as mi,
+		user.last_name as lname,
+		payments.date_paid,
+		payments.date_due,
+		DATE_ADD(date_due, INTERVAL 1 MONTH) as next_due
+	FROM payments
+	INNER JOIN user
+	ON payments.member_id = user.id
+	ORDER BY date_due DESC;
+";
+$stmt = $dbh->query($sql);
+$stmt->execute();
+if ($stmt->rowCount() > 0) {
+	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-if (isset($_REQUEST['active'])) {
-	$uid = intval($_GET['active']);
-	$sql = "UPDATE tblusers SET status = 0 WHERE id=:id";
+
+// paypost
+
+if (isset($_POST['confirmPwd'])) {
+	// Check default admin
+	$sql = "SELECT * FROM tbladmin WHERE username =:username AND password=:password";
+	$userrow = $dbh->prepare($sql);
+	$userrow->execute(
+		array(
+			'username' => $_SESSION['logged_user']["username"],
+			'password' => $_POST['confirmPwd']
+		)
+	);
+	$count = $userrow->rowCount();
+	if ($count == 0) {
+		// Check regular admin
+		$sql2 = "SELECT * FROM admins WHERE username =:username AND password=:password";
+		$userrow2 = $dbh->prepare($sql2);
+		$userrow2->execute(
+			array(
+				'username' => $_SESSION['logged_user']["username"],
+				'password' => $_POST['confirmPwd']
+			)
+		);
+		$count2 = $userrow2->rowCount();
+		if ($count2 == 0) {
+			redirect("./admin_managepayments.php?err=invalidCredentials");
+		}
+	}
+	// prepare data
+	$currentDate = date("Y-m-d");
+	$id = intval($_POST['payment_id']);
+
+	// get payment record
+	$payment = null;
+	foreach ($rows as $row) {
+		if ($row["p_id"] == $id) {
+			$payment = $row;
+			break;
+		}
+	}
+
+	if ($payment == null) {
+		redirect("./admin_managepayments.php?code=404");
+	}
+
+	// update payment
+	$sql = "UPDATE payments SET date_paid = :date_paid WHERE id=:id";
 	$query = $dbh->prepare($sql);
 
-	$query->bindParam(':id', $uid, PDO::PARAM_STR);
-	$query->execute();
+	$query->bindParam(':date_paid', $currentDate, PDO::PARAM_STR);
+	$query->bindParam(':id', $id, PDO::PARAM_STR);
 
-	echo "<script>alert ('Post Successfully Active!');</script>";
-	echo "<script>window.location.href='adminlandingpage.php'</script>";
+	$adminId = "Admin_" . $_SESSION["logged_user"]["username"];
+	$memberId = "HOAM" . str_pad($payment["m_id"], 4, "0", STR_PAD_LEFT);
+
+	if ($query->execute()) {
+		// log as paid
+		logAction($dbh, "$adminId marked Member $memberId as paid.");
+
+		// calculate next payment due
+		$newPaymentSql = "
+		INSERT INTO payments
+		(
+			member_id,
+			amount,
+			date_due
+		)
+		VALUES
+		(
+			:member_id,
+			:amount,
+			:due_date
+		)
+		";
+
+		$membershipCost = 300;
+		$newPaymentStmt = $dbh->prepare($newPaymentSql);
+		$newPaymentStmt->execute([
+			':member_id' => $payment["m_id"],
+			':amount' => $membershipCost,
+			':due_date' => $payment["next_due"],
+		]);
+
+		if ($newPaymentStmt->rowCount() == 0) {
+			redirect("./admin_managepayments.php?code=422");
+		}
+
+		// redirect
+		redirect("admin_managepayments.php?code=200");
+	} else {
+		redirect("./admin_managepayments.php?code=400");
+	}
 }
+
 
 ?>
 <!doctype html>
@@ -61,6 +156,10 @@ if (isset($_REQUEST['active'])) {
 
 	<!-- Custom styles for this page -->
 	<link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+		integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
 	<!-- <link href="style_postboard.css" rel="stylesheet"> -->
@@ -96,8 +195,8 @@ if (isset($_REQUEST['active'])) {
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h3 mb-0 text-gray-800">Manage Payments</h1>
 
-						<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-								class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+						<!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+								class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
 
 
 					</div>
@@ -124,27 +223,80 @@ if (isset($_REQUEST['active'])) {
 					}
 					?>
 
+					<?php if (isset($_GET['code'])) : ?>
+					<div class="alert alert-warning alert-dismissible fade show" role="alert">
+						<strong>
+							<i class="fas fa-exclamation-circle"></i>
+						</strong>
+						<?php
+							$errMsg = "";
+							switch ($_GET["code"]) {
+								case "200":
+									$errMsg = "Marked as Paid!";
+									break;
+								case "404":
+									$errMsg = "Error finding payment record.";
+									break;
+								case "422":
+									$errMsg = "Error Calculating Next Due, Please contact the admins.";
+									break;
+								case "400":
+								default:
+									$errMsg = "Unexpected Error.";
+									break;
+							}
+							echo $errMsg;
+
+							?>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<?php endif; ?>
+
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4" style="margin-top:2%;">
 
 						<div class="card-body">
+							<div class="form-group input-daterange d-flex justify-content-between align-items-center">
 
+								<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
+									placeholder="From:">
+
+								<div class="form-group-addon mx-4">To</div>
+
+								<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
+									placeholder="To:">
+
+							</div>
 							<div class="table-responsive">
-								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								<table class="table table-bordered" width="100%" cellspacing="0">
 
-									<table class="table" id="example1" style="margin-top:2%;">
+									<table class="table" id="table-data" style="margin-top:2%;">
 										<thead>
 											<th scope="col">Payment ID</th>
 											<th scope="col">Member Full Name</th>
-
-											<th scope="col">Last Payment Date</th>
-											<th scope="col">Next Payment Due</th>
+											<th scope="col">Payment Due</th>
+											<th scope="col">Date Paid</th>
+											<th scope="col">Next Due</th>
 											<th scope="col">Status</th>
 											<th scope="col">Action</th>
 										</thead>
 										<tbody>
-											</td>
+											<?php foreach ($rows as $row) : ?>
+											<tr>
+												<th><?php echo $row["p_id"] ?></th>
+												<th><?php echo $row["fname"] . " " . $row["mi"] . " " . $row["lname"] ?></th>
+												<th><?php echo date("M d, Y", strtotime($row["date_due"])); ?></th>
+												<th><?php echo $row["date_paid"] != null ? date("M d, Y", strtotime($row["date_paid"])) : ""  ?>
+												</th>
+												<th><?php echo date("M d, Y", strtotime($row["next_due"])); ?></th>
+												<th><?php echo $row["date_paid"] != null ? "Paid" : "Not Paid" ?></th>
+												<th>
+													<?php echo $row["date_paid"] != null ? "" : '<button onclick="loadId(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-primary">Mark as Paid</button>' ?>
+												</th>
 											</tr>
+											<?php endforeach; ?>
 										</tbody>
 									</table>
 							</div>
@@ -153,6 +305,35 @@ if (isset($_REQUEST['active'])) {
 					<!-- /.container-fluid -->
 				</div>
 				<!-- End of Main Content -->
+
+				<div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-modal"
+					aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<form method="POST">
+
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title"><i class="fas fa-exclamation-circle text-danger mr-2"></i>Confirm
+										Identity
+									</h5>
+									<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true"></span>&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<input id="payment-id" type="hidden" name="payment_id">
+									Please type your password to continue.
+									<input class="form-control mt-2" type="password" name="confirmPwd" placeholder="Your password">
+								</div>
+								<div class="modal-footer">
+									<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+									<button type="submit" class="btn btn-primary">Confirm</button>
+								</div>
+							</div>
+						</form>
+
+					</div>
+				</div>
 
 				<!-- Footer -->
 				<footer class="sticky-footer bg-white">
@@ -173,59 +354,7 @@ if (isset($_REQUEST['active'])) {
 		<!-- Scroll to Top Button-->
 		<?php require_once("./layout/admin_logout.php") ?>
 
-		<script>
-		var a = 1;
 
-		function increase() {
-
-			var textBox = document.getElementById("memid");
-			textBox.value = "HOAM000" + a;
-			a++;
-		}
-
-		function genPass() {
-			// define result variable 
-			var password = "";
-			// define allowed characters
-			var characters = "0123456789@#$%!-&*ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
-			// define length of password character
-			var long = "8";
-			for (var i = 0; i < long; i++) {
-				// generate password
-				gen = characters.charAt(Math.floor(Math.random() * characters.length));
-				password += gen;
-			}
-			// send the output to the input
-			document.getElementById('pass').value = password;
-		}
-		</script>
-		<script>
-		function EnableDisableTextBox(chk) {
-			var txtPassportNumber = document.getElementById("txtinput");
-			txtPassportNumber.disabled = chk2.checked ? false : true;
-			if (!txtPassportNumber.disabled) {
-				txtPassportNumber.focus();
-			}
-		}
-
-		function add() {
-			var new_chq_no = parseInt($('#total_chq').val()) + 1;
-			var new_input = "  <div class='input-group mb-3'> <input type='text' id='new_" + new_chq_no +
-				"' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-default' placeholder='Full Name'' </div>";
-
-			$('#new_chq').append(new_input);
-			$('#total_chq').val(new_chq_no)
-		}
-
-		function remove() {
-			var last_chq_no = $('#total_chq').val();
-			if (last_chq_no > 1) {
-				$('#new_' + last_chq_no).remove();
-				$('#total_chq').val(last_chq_no - 1);
-			}
-		}
-		</script>
 		<!-- Bootstrap core JavaScript-->
 		<script src="vendor/jquery/jquery.min.js"></script>
 		<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -249,50 +378,73 @@ if (isset($_REQUEST['active'])) {
 			integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
 		</script>
 
+		<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+		<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+		<!-- Page level custom scripts -->
+		<!-- <script src="js/demo/datatables-demo.js"></script> -->
+		<script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+		<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+		<!-- <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+		<!-- <script src="https://cdn.datatables.net/datetime/1.2.0/js/dataTables.dateTime.min.js"></script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
+			integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
+			crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script>
-		$(document).ready(function() {
-			$('.edtbtn').on('click', function() {
-				$('#editmodal').modal('show');
-
-				$tr = $(this).closest('tr');
-
-				var data = $tr.children("td").map(function() {
-					return $(this).text();
-				}).get();
-
-				console.log(data);
-
-				$('#mem_id').val(data[0]);
-				$('#edit_lname').val(data[1]);
-				$('#edit_fname').val(data[2]);
-				$('#edit_mi').val(data[3]);
-				$('#edit_number').val(data[4]);
-				$('#edit_email').val(data[5]);
-				$('#edit_phase').val(data[6]);
-				$('#edit_block').val(data[7]);
-				$('#edit_lot').val(data[8]);
-				$('#edit_brgy').val(data[9]);
-				$('#edit_ffname').val(data[10]);
-
-			});
+		$('.input-daterange input').each(function() {
+			$(this).datepicker('clearDates');
 		});
+		var table = $('#table-data').DataTable({
+			// lengthChange: true,
+			dom: 'lBfrtip',
+			// responsive: true,
+			buttons: [{
+				extend: 'excel',
+				text: 'Generate Report',
+				className: "btn btn-primary",
+				exportOptions: {
+					columns: 'th:not(:last-child)'
+				}
+			}],
+			'lengthMenu': [
+				[10, 25, 50, -1],
+				[10, 25, 50, "All"]
+			]
+		});
+
+		// Extend dataTables search
+		$.fn.dataTable.ext.search.push(
+			function(settings, data, dataIndex) {
+				var min = $('#min-date').val();
+				var max = $('#max-date').val();
+				var createdAt = data[2] || 0; // due date column in the table
+
+				if (
+					(min == "" || max == "") ||
+					(moment(createdAt).isSameOrAfter(min) && moment(createdAt).isSameOrBefore(max))
+				) {
+					return true;
+				}
+				return false;
+			}
+		);
+
+		// Re-draw the table when the a date range filter changes
+		$('.date-range-filter').change(function() {
+			table.draw();
+		});
+
+		$('#my-table_filter').hide();
 		</script>
+
 		<script>
-		$(document).ready(function() {
-			$('.dltbtn').on('click', function() {
-				$('#dltmodal').modal('show');
-
-				$tr = $(this).closest('tr');
-
-				var data = $tr.children("td").map(function() {
-					return $(this).text();
-				}).get();
-
-				console.log(data);
-				$('#del_id').val(data[0]);
-
-			});
-		});
+		const loadId = (id) => {
+			document.querySelector("#payment-id").value = id;
+		}
 		</script>
 	</div>
 </body>
