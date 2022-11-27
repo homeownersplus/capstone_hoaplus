@@ -2,7 +2,7 @@
 
 ## Notes
 
-- check the database on `database/pdocrud_nov_27.sql` for up to date database schema
+- check the database on `databases/pdocrud_nov_27.sql` for up to date database schema
 
 ## Changelog
 
