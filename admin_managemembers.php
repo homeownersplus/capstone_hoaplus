@@ -117,7 +117,7 @@ if (isset($_REQUEST['active'])) {
 									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								</div>
 
-								<form method="POST" action="">
+								<div>
 									<div class="modal-body">
 										<div class="row">
 											<div class="col">
@@ -143,9 +143,6 @@ if (isset($_REQUEST['active'])) {
 														<input type="text" name="mi" class="form-control" placeholder="M.I">
 													</div>
 												</div>
-
-
-
 
 												<div class="mb-3">
 													<label>Contact Number: </label>
@@ -191,9 +188,6 @@ if (isset($_REQUEST['active'])) {
 
 
 											<div class="col">
-
-
-
 												<div class="col">
 													<label class="form-label">Copy of Valid ID</label>
 													<input class="form-control" name="validid" type="file" id="formFile">
@@ -218,13 +212,21 @@ if (isset($_REQUEST['active'])) {
 												<div class="row">
 													<div class="col">
 
-														<label class="form-label"> Full Name: </label>
-														<input type="text" class="form-control" name="fullname" aria-label="Sizing example input"
-															aria-describedby="inputGroup-sizing-default" id="txtinput" disabled="disabled" />
+														<div class="row">
+															<div class="col">
+																<label class="form-label"> Full Name: </label>
+																<input type="text" class="form-control shared-account" id="txtinput" disabled="disabled" />
+															</div>
+															<div class="col">
+																<label class="form-label"> Relationship: </label>
+																<input type="text" class="form-control shared-account-relationship" id="txtinput_rel" disabled="disabled" />
+															</div>
+														</div>
 														<br>
+														<div id="new_chq"></div>
+
 														<button type="button" onclick="remove()" class="btn btn-outline-secondary">Remove</button>
 														<button type="button" onclick="add() " class="btn btn-outline-primary">Add</button>
-														<div id="new_chq"></div>
 														<input type="hidden" value="1" id="total_chq">
 													</div>
 												</div>
@@ -233,8 +235,9 @@ if (isset($_REQUEST['active'])) {
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-										<button type="button" class="btn btn-primary">Register Member</button>
+										<button type="button" class="btn btn-primary" id="register_btn">Register Member</button>
 									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -262,6 +265,10 @@ if (isset($_REQUEST['active'])) {
 					<div class="card shadow mb-4" style="margin-top:2%;">
 
 						<div class="card-body">
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" placeholder="Looking for someone ? " id="search-field">
+							<button class="btn btn-primary" type="button" id="search-btn">Search</button>
+						</div>
 
 							<div class="table-responsive">
 								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -275,10 +282,15 @@ if (isset($_REQUEST['active'])) {
 											<th scope="col">Action</th>
 										</thead>
 										<tbody>
-											</td>
-											</tr>
+
 										</tbody>
 									</table>
+							</div>
+
+							<div class="btn-group" role="group">
+								<button type="button" class="btn btn-outline-primary" id="prev-btn">Prev</button>
+								<button type="button" class="btn btn-outline-primary" id="current-page">1</button>
+								<button type="button" class="btn btn-outline-primary" id="next-btn">Next</button>
 							</div>
 						</div>
 					</div>
@@ -307,6 +319,7 @@ if (isset($_REQUEST['active'])) {
 
 		<script>
 		var a = 1;
+		let total_shared_accounts = 1
 
 		function increase() {
 
@@ -336,26 +349,50 @@ if (isset($_REQUEST['active'])) {
 		function EnableDisableTextBox(chk) {
 			var txtPassportNumber = document.getElementById("txtinput");
 			txtPassportNumber.disabled = chk2.checked ? false : true;
+			document.getElementById('txtinput_rel').disabled = chk2.checked ? false : true;
+
 			if (!txtPassportNumber.disabled) {
 				txtPassportNumber.focus();
+			}
+
+			if(!chk2.checked){
+				document.querySelector('#new_chq').innerHTML = ''
+				total_shared_accounts = 1
 			}
 		}
 
 		function add() {
-			var new_chq_no = parseInt($('#total_chq').val()) + 1;
-			var new_input = "  <div class='input-group mb-3'> <input type='text' id='new_" + new_chq_no +
-				"' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-default' placeholder='Full Name'' </div>";
+			if(!DQ('#chk2').checked || (total_shared_accounts === 3)) return
 
+			var new_chq_no = parseInt($('#total_chq').val()) + 1;
+			var new_input = `
+				<div class='row mb-3'> 
+					<div class="col">
+						<div class='input-group mb-3'> 
+							<input type='text' id='new_${new_chq_no}'
+							class='form-control shared-account' placeholder='Full Name'/>
+						</div>
+					</div>
+					<div class="col">
+						<div class='input-group mb-3'> 
+							<input type='text' id='new_${new_chq_no}_rel'
+							class='form-control shared-account-relationship' placeholder='Relationship'/>
+						</div>
+					</div>
+				</div>
+			`;
+
+			total_shared_accounts++
 			$('#new_chq').append(new_input);
 			$('#total_chq').val(new_chq_no)
 		}
 
 		function remove() {
-			var last_chq_no = $('#total_chq').val();
-			if (last_chq_no > 1) {
-				$('#new_' + last_chq_no).remove();
-				$('#total_chq').val(last_chq_no - 1);
+			console.log(total_shared_accounts)
+			if (total_shared_accounts !== 1) {
+				document.querySelector('#new_chq').removeChild(document.querySelector('#new_chq').lastElementChild);
 			}
+			total_shared_accounts = total_shared_accounts !== 1 ? total_shared_accounts - 1 : total_shared_accounts
 		}
 		</script>
 		<!-- Bootstrap core JavaScript-->
@@ -408,8 +445,6 @@ if (isset($_REQUEST['active'])) {
 
 			});
 		});
-		</script>
-		<script>
 		$(document).ready(function() {
 			$('.dltbtn').on('click', function() {
 				$('#dltmodal').modal('show');
@@ -425,6 +460,142 @@ if (isset($_REQUEST['active'])) {
 
 			});
 		});
+
+		// Add members
+		const registerBtn = document.querySelector('#register_btn')
+		const DQ = (element) => document.querySelector(element)
+
+		const handleRegisterMember = async (e) => {
+			registerBtn.disabled = true
+			registerBtn.value = 'Saving...'
+			try{
+				const form = new FormData()
+
+				form.append('fname',DQ('[name=fname').value)
+				form.append('lname',DQ('[name=lname').value)
+				form.append('mi',DQ('[name=mi').value)
+				form.append('number',DQ('[name=number').value)
+				form.append('email',DQ('[name=email').value)
+				form.append('phase',DQ('[name=phase').value)
+				form.append('block',DQ('[name=block').value)
+				form.append('lot',DQ('[name=lot').value)
+				form.append('brgy',DQ('[name=brgy').value)
+				form.append('password',DQ('[name=password').value)
+				form.append('validid',DQ('[name=validid').files[0])
+				form.append('htitle',DQ('[name=htitle').files[0])
+
+				let allowedImageTypes = ["image/jpeg", "image/png"]
+
+				if(!DQ('[name=htitle')?.files[0] || !DQ('[name=validid')?.files[0]) return alert("Please complete the files needed.")
+
+				if(!allowedImageTypes.includes(DQ('[name=htitle').files[0].type)){
+					throw "Allowed file type's for the copy of land registrations are: [ .jpg .png .jpeg ]"
+				}
+
+				if(!allowedImageTypes.includes(DQ('[name=validid').files[0].type)){
+					throw "Allowed file type's for the copy of valid id are: [ .jpg .png .jpeg ]"
+				}
+
+				if(DQ('#chk2').checked){
+					const shared = []
+					
+					document.querySelectorAll('.shared-account').forEach( (e, i) => {
+						e?.value && shared.push({
+							name : e.value,
+							relation : document.querySelectorAll('.shared-account-relationship')[i]?.value || "N/A"
+						})
+					})
+
+					form.append('shared_accounts', JSON.stringify(shared))
+				}
+
+				const url = await fetch('api/register_member.php',{
+					method : "POST",
+					body : form
+				})
+
+				const toJson = await url.text()
+
+				alert("Saved")
+				location.reload()
+			}
+			catch(error){ 
+				alert(error) 
+			}
+			finally{
+				registerBtn.disabled = false
+				registerBtn.value = 'Register Member'
+			}
+		}
+
+		registerBtn.addEventListener('click', handleRegisterMember)
+
+		let table_data = null
+		const fetchData = async (search, page) => {
+			try{
+				const url = await fetch(`api/fetch_member.php?page=${page ? page : '1'}&${search ? `search=${search}` : ''}`)
+				const toJson = await url.json()
+
+				console.log(toJson)
+				let temp = ''
+
+				table_data = toJson
+				for(const i of toJson?.data){
+					temp += `
+						<tr>
+							<td>${(i.id).padStart(5, '0')}</td>
+							<td>${i.last_name}</td>
+							<td>${i.first_name}</td>
+							<td>${i.middle_initial}</td>
+							<td></td>
+						</tr>
+					`
+				}
+
+				DQ('tbody').innerHTML= temp
+				DQ('#current-page').innerHTML = page || 1
+			}
+			catch(error){
+				console.log(error)
+			}
+		}
+
+		DQ('#search-btn').addEventListener('click', () => {
+			if(DQ('#search-field').value.length == 0) return fetchData()
+			fetchData(DQ('#search-field').value,1)
+		})
+
+		DQ('#next-btn').addEventListener('click' , async () => {
+			if(!table_data) return
+
+			if(Number(table_data.page) === Number(table_data.total_pages)) return
+			DQ('#next-btn').disabled = true
+
+			await fetchData(
+				(
+					(DQ('#search-field').value.length == 0) ? null : DQ('#search-field').value
+				)
+				, Number(table_data.page) + 1)
+
+			DQ('#next-btn').disabled = false
+		})
+
+		DQ('#prev-btn').addEventListener('click' , async () => {
+			if(!table_data) return
+
+			if(Number(table_data.page) === 0) return
+			DQ('#prev-btn').disabled = true
+
+			await fetchData(
+				(
+					(DQ('#search-field').value.length == 0) ? null : DQ('#search-field').value
+				)
+				, Number(table_data.page) - 1)
+
+			DQ('#prev-btn').disabled = false
+		})
+
+		fetchData()
 		</script>
 	</div>
 </body>
