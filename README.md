@@ -2,13 +2,27 @@
 
 ## Notes
 
-- added new fields on `user` table
-- added new table `reservations`
-- check the database on `database/pdocrud_nov_20.sql` for up to date database schema
+- check the database on `databases/pdocrud_nov_27.sql` for up to date database schema
 
 ## Changelog
 
-### Week 2
+### Week 3 2022-11-27
+
+- added more fields in `user` table
+- added `logs` table
+- added `user_family` table
+- added `payments` table
+- show last payment and next due payment in user profile
+- added log when admin adds a member
+- added log when admin confirms member payment
+- auto calculate member due date
+- add reservation restriction when overdue payment is above 300
+- user can cancel reservation
+- admins can view logs
+- admins can confirm payments
+- admins can search, paginate, and generate payment reports
+
+### Week 2 2022-11-20
 
 - fetch user details in user profile
 - user profile pic on the top bar
@@ -26,7 +40,7 @@
 - admin reservation table generate report
 - fix logout routes
 
-### Week 1
+### Week 1 2022-11-13
 
 - added single login page for all accounts
 - added post password confirmation

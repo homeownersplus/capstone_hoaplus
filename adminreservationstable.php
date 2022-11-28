@@ -10,7 +10,7 @@ require_once './dbconfig.php';
 $statusList = [
 	1 => "Cancelled",
 	2 => "Pending",
-	3 => "Paid",
+	3 => "Confirmed",
 ];
 $rows = [];
 
@@ -131,7 +131,7 @@ if ($stmt->rowCount() > 0) {
 										<tbody>
 											<?php foreach ($rows as $row) : ?>
 											<tr>
-												<th><?php echo str_pad($row["member_id"], 6, "0", STR_PAD_LEFT); ?></th>
+												<th>HOAM<?php echo str_pad($row["member_id"], 4, "0", STR_PAD_LEFT); ?></th>
 												<th>?</th>
 												<th><?php echo $row["amenity"] ?></th>
 												<th><?php echo date("M d, Y h:i A", strtotime($row["start_date"])); ?></th>
@@ -207,6 +207,10 @@ if ($stmt->rowCount() > 0) {
 						buttons: [{
 							extend: 'excel',
 							text: 'Generate Report',
+							className: "btn btn-primary",
+							exportOptions: {
+								columns: 'th:not(:last-child)'
+							}
 						}],
 						'lengthMenu': [
 							[10, 25, 50, -1],

@@ -3,6 +3,20 @@ session_start();
 require_once "./helpers/auth.php";
 require_once "./helpers/redirect.php";
 adminOnlyMiddleware();
+
+require_once './dbconfig.php';
+
+$rows = [];
+$sql = "
+		SELECT * 
+		FROM logs
+		ORDER BY id DESC
+	";
+$stmt = $dbh->query($sql);
+$count = $stmt->rowCount();
+if ($count > 0) {
+	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -74,15 +88,17 @@ adminOnlyMiddleware();
 
 									<table class="table" id="example1" style="margin-top:2%;">
 										<thead>
-											<th>Admin ID</th>
 											<th>Activity</th>
 											<th>Date</th>
-
 										</thead>
 										<tbody>
-
-
-
+											<?php foreach ($rows as $row) : ?>
+											<tr>
+												<th><?php echo $row["message"] ?></th>
+												<th><?php echo date("M d, Y h:i A", strtotime($row["created_at"])); ?></th>
+											</tr>
+											<?php endforeach; ?>
+										</tbody>
 									</table>
 									<div>
 									</div>
