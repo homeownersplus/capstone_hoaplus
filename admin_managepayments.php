@@ -285,7 +285,7 @@ if (isset($_POST['confirmPwd'])) {
 										<tbody>
 											<?php foreach ($rows as $row) : ?>
 											<tr>
-												<th><?php echo $row["p_id"] ?></th>
+												<th>PAY<?php echo str_pad($row["p_id"], 4, "0", STR_PAD_LEFT); ?></th>
 												<th><?php echo $row["fname"] . " " . $row["mi"] . " " . $row["lname"] ?></th>
 												<th><?php echo date("M d, Y", strtotime($row["date_due"])); ?></th>
 												<th><?php echo $row["date_paid"] != null ? date("M d, Y", strtotime($row["date_paid"])) : ""  ?>
