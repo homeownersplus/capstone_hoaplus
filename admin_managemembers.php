@@ -215,11 +215,13 @@ if (isset($_REQUEST['active'])) {
 														<div class="row">
 															<div class="col">
 																<label class="form-label"> Full Name: </label>
-																<input type="text" class="form-control shared-account" id="txtinput" disabled="disabled" />
+																<input type="text" class="form-control shared-account" id="txtinput"
+																	disabled="disabled" />
 															</div>
 															<div class="col">
 																<label class="form-label"> Relationship: </label>
-																<input type="text" class="form-control shared-account-relationship" id="txtinput_rel" disabled="disabled" />
+																<input type="text" class="form-control shared-account-relationship" id="txtinput_rel"
+																	disabled="disabled" />
 															</div>
 														</div>
 														<br>
@@ -265,10 +267,10 @@ if (isset($_REQUEST['active'])) {
 					<div class="card shadow mb-4" style="margin-top:2%;">
 
 						<div class="card-body">
-						<div class="input-group mb-3">
-							<input type="text" class="form-control" placeholder="Looking for someone ? " id="search-field">
-							<button class="btn btn-primary" type="button" id="search-btn">Search</button>
-						</div>
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" placeholder="Looking for someone ? " id="search-field">
+								<button class="btn btn-primary" type="button" id="search-btn">Search</button>
+							</div>
 
 							<div class="table-responsive">
 								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -355,14 +357,14 @@ if (isset($_REQUEST['active'])) {
 				txtPassportNumber.focus();
 			}
 
-			if(!chk2.checked){
+			if (!chk2.checked) {
 				document.querySelector('#new_chq').innerHTML = ''
 				total_shared_accounts = 1
 			}
 		}
 
 		function add() {
-			if(!DQ('#chk2').checked || (total_shared_accounts === 3)) return
+			if (!DQ('#chk2').checked || (total_shared_accounts === 3)) return
 
 			var new_chq_no = parseInt($('#total_chq').val()) + 1;
 			var new_input = `
@@ -468,61 +470,61 @@ if (isset($_REQUEST['active'])) {
 		const handleRegisterMember = async (e) => {
 			registerBtn.disabled = true
 			registerBtn.value = 'Saving...'
-			try{
+			try {
 				const form = new FormData()
 
-				form.append('fname',DQ('[name=fname').value)
-				form.append('lname',DQ('[name=lname').value)
-				form.append('mi',DQ('[name=mi').value)
-				form.append('number',DQ('[name=number').value)
-				form.append('email',DQ('[name=email').value)
-				form.append('phase',DQ('[name=phase').value)
-				form.append('block',DQ('[name=block').value)
-				form.append('lot',DQ('[name=lot').value)
-				form.append('brgy',DQ('[name=brgy').value)
-				form.append('password',DQ('[name=password').value)
-				form.append('validid',DQ('[name=validid').files[0])
-				form.append('htitle',DQ('[name=htitle').files[0])
+				form.append('fname', DQ('[name=fname').value)
+				form.append('lname', DQ('[name=lname').value)
+				form.append('mi', DQ('[name=mi').value)
+				form.append('number', DQ('[name=number').value)
+				form.append('email', DQ('[name=email').value)
+				form.append('phase', DQ('[name=phase').value)
+				form.append('block', DQ('[name=block').value)
+				form.append('lot', DQ('[name=lot').value)
+				form.append('brgy', DQ('[name=brgy').value)
+				form.append('password', DQ('[name=password').value)
+				form.append('validid', DQ('[name=validid').files[0])
+				form.append('htitle', DQ('[name=htitle').files[0])
 
 				let allowedImageTypes = ["image/jpeg", "image/png"]
 
-				if(!DQ('[name=htitle')?.files[0] || !DQ('[name=validid')?.files[0]) return alert("Please complete the files needed.")
+				if (!DQ('[name=htitle')?.files[0] || !DQ('[name=validid')?.files[0]) return alert(
+					"Please complete the files needed.")
 
-				if(!allowedImageTypes.includes(DQ('[name=htitle').files[0].type)){
+				if (!allowedImageTypes.includes(DQ('[name=htitle').files[0].type)) {
 					throw "Allowed file type's for the copy of land registrations are: [ .jpg .png .jpeg ]"
 				}
 
-				if(!allowedImageTypes.includes(DQ('[name=validid').files[0].type)){
+				if (!allowedImageTypes.includes(DQ('[name=validid').files[0].type)) {
 					throw "Allowed file type's for the copy of valid id are: [ .jpg .png .jpeg ]"
 				}
 
-				if(DQ('#chk2').checked){
+				if (DQ('#chk2').checked) {
 					const shared = []
-					
-					document.querySelectorAll('.shared-account').forEach( (e, i) => {
+
+					document.querySelectorAll('.shared-account').forEach((e, i) => {
 						e?.value && shared.push({
-							name : e.value,
-							relation : document.querySelectorAll('.shared-account-relationship')[i]?.value || "N/A"
+							name: e.value,
+							relation: document.querySelectorAll('.shared-account-relationship')[i]?.value || "N/A"
 						})
 					})
 
 					form.append('shared_accounts', JSON.stringify(shared))
 				}
 
-				const url = await fetch('api/register_member.php',{
-					method : "POST",
-					body : form
+				const url = await fetch('api/register_member.php', {
+					method: "POST",
+					body: form
 				})
 
 				const toJson = await url.text()
 
 				alert("Saved")
+				console.log(toJson)
 				location.reload()
-			}
-			catch(error){ 
-				alert(error) 
-			}
-			finally{
+			} catch (error) {
+				alert(error)
+			} finally {
 				registerBtn.disabled = false
 				registerBtn.value = 'Register Member'
 			}
@@ -532,7 +534,7 @@ if (isset($_REQUEST['active'])) {
 
 		let table_data = null
 		const fetchData = async (search, page) => {
-			try{
+			try {
 				const url = await fetch(`api/fetch_member.php?page=${page ? page : '1'}&${search ? `search=${search}` : ''}`)
 				const toJson = await url.json()
 
@@ -540,7 +542,7 @@ if (isset($_REQUEST['active'])) {
 				let temp = ''
 
 				table_data = toJson
-				for(const i of toJson?.data){
+				for (const i of toJson?.data) {
 					temp += `
 						<tr>
 							<td>${(i.id).padStart(5, '0')}</td>
@@ -552,45 +554,42 @@ if (isset($_REQUEST['active'])) {
 					`
 				}
 
-				DQ('tbody').innerHTML= temp
+				DQ('tbody').innerHTML = temp
 				DQ('#current-page').innerHTML = page || 1
-			}
-			catch(error){
+			} catch (error) {
 				console.log(error)
 			}
 		}
 
 		DQ('#search-btn').addEventListener('click', () => {
-			if(DQ('#search-field').value.length == 0) return fetchData()
-			fetchData(DQ('#search-field').value,1)
+			if (DQ('#search-field').value.length == 0) return fetchData()
+			fetchData(DQ('#search-field').value, 1)
 		})
 
-		DQ('#next-btn').addEventListener('click' , async () => {
-			if(!table_data) return
+		DQ('#next-btn').addEventListener('click', async () => {
+			if (!table_data) return
 
-			if(Number(table_data.page) === Number(table_data.total_pages)) return
+			if (Number(table_data.page) === Number(table_data.total_pages)) return
 			DQ('#next-btn').disabled = true
 
 			await fetchData(
 				(
 					(DQ('#search-field').value.length == 0) ? null : DQ('#search-field').value
-				)
-				, Number(table_data.page) + 1)
+				), Number(table_data.page) + 1)
 
 			DQ('#next-btn').disabled = false
 		})
 
-		DQ('#prev-btn').addEventListener('click' , async () => {
-			if(!table_data) return
+		DQ('#prev-btn').addEventListener('click', async () => {
+			if (!table_data) return
 
-			if(Number(table_data.page) === 0) return
+			if (Number(table_data.page) === 0) return
 			DQ('#prev-btn').disabled = true
 
 			await fetchData(
 				(
 					(DQ('#search-field').value.length == 0) ? null : DQ('#search-field').value
-				)
-				, Number(table_data.page) - 1)
+				), Number(table_data.page) - 1)
 
 			DQ('#prev-btn').disabled = false
 		})

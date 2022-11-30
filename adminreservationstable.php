@@ -7,10 +7,33 @@ adminOnlyMiddleware();
 date_default_timezone_set('Asia/Manila');
 require_once './dbconfig.php';
 
+if (isset($_POST["delete_id"])) {
+	$id = (int) $_POST["delete_id"];
+	$sql = "DELETE FROM reservations WHERE id=?";
+	$stmt = $dbh->prepare($sql);
+	$stmt->execute([$id]);
+}
+
+if (isset($_POST["complete_id"])) {
+	$id = (int) $_POST["complete_id"];
+	$sql = "UPDATE reservations SET status = 3 WHERE id=:id";
+	$stmt = $dbh->prepare($sql);
+	$stmt->bindParam(':id', $id, PDO::PARAM_STR);
+	$stmt->execute();
+}
+
+if (isset($_POST["cancel_id"])) {
+	$id = (int) $_POST["cancel_id"];
+	$sql = "UPDATE reservations SET status = 1 WHERE id=:id";
+	$stmt = $dbh->prepare($sql);
+	$stmt->bindParam(':id', $id, PDO::PARAM_STR);
+	$stmt->execute();
+}
+
 $statusList = [
 	1 => "Cancelled",
-	2 => "Pending",
-	3 => "Confirmed",
+	2 => "Confirmed",
+	3 => "Completed",
 ];
 $rows = [];
 
@@ -33,6 +56,7 @@ $stmt->execute();
 if ($stmt->rowCount() > 0) {
 	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 ?>
 <!doctype html>
@@ -121,23 +145,40 @@ if ($stmt->rowCount() > 0) {
 									<table class="table" id="table-data" style="margin-top:2%;">
 										<thead>
 											<th>Member ID</th>
-											<th>Last Payment Date</th>
 											<th>Reserved Amenity</th>
 											<th>Reservation Time Start</th>
 											<th>Reservation Time End</th>
 											<th>Date Created</th>
 											<th>Status</th>
+											<th></th>
 										</thead>
 										<tbody>
 											<?php foreach ($rows as $row) : ?>
 											<tr>
 												<th>HOAM<?php echo str_pad($row["member_id"], 4, "0", STR_PAD_LEFT); ?></th>
-												<th>?</th>
 												<th><?php echo $row["amenity"] ?></th>
 												<th><?php echo date("M d, Y h:i A", strtotime($row["start_date"])); ?></th>
 												<th><?php echo date("M d, Y h:i A", strtotime($row["end_date"])); ?></th>
 												<th><?php echo date("Y-m-d", strtotime($row["created_at"])); ?></th>
 												<th><?php echo $statusList[$row["status"]]; ?></th>
+												<th>
+													<?php if ($row["status"] == 1) : ?>
+													<form method="POST">
+														<input type="hidden" name="delete_id" value="<?php echo $row["id"]; ?>">
+														<button type="submit" class="btn btn-danger btn-sm">REMOVE</button>
+													</form>
+													<?php endif; ?>
+													<?php if ($row["status"] == 2) : ?>
+													<form method="POST">
+														<input type="hidden" name="cancel_id" value="<?php echo $row["id"]; ?>">
+														<button type="submit" class="btn btn-warning btn-sm">CANCEL</button>
+													</form>
+													<form method="POST">
+														<input type="hidden" name="complete_id" value="<?php echo $row["id"]; ?>">
+														<button type="submit" class="btn btn-success btn-sm">COMPLETE</button>
+													</form>
+													<?php endif; ?>
+												</th>
 											</tr>
 											<?php endforeach; ?>
 										</tbody>
@@ -205,13 +246,23 @@ if ($stmt->rowCount() > 0) {
 						dom: 'lBfrtip',
 						// responsive: true,
 						buttons: [{
-							extend: 'excel',
-							text: 'Generate Report',
-							className: "btn btn-primary",
-							exportOptions: {
-								columns: 'th:not(:last-child)'
+								extend: 'excel',
+								text: 'Excel Report',
+								className: "btn btn-primary",
+								exportOptions: {
+									columns: 'th:not(:last-child)'
+								}
+							},
+							{
+								extend: 'pdf',
+								text: 'PDF Report',
+								className: "btn btn-primary",
+								exportOptions: {
+									columns: 'th:not(:last-child)',
+									columnGap: 1
+								}
 							}
-						}],
+						],
 						'lengthMenu': [
 							[10, 25, 50, -1],
 							[10, 25, 50, "All"]

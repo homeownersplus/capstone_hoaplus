@@ -22,6 +22,7 @@ $sql = "
 		user.last_name as lname,
 		payments.date_paid,
 		payments.date_due,
+		payments.amount,
 		DATE_ADD(date_due, INTERVAL 1 MONTH) as next_due
 	FROM payments
 	INNER JOIN user
@@ -276,7 +277,8 @@ if (isset($_POST['confirmPwd'])) {
 										<thead>
 											<th scope="col">Payment ID</th>
 											<th scope="col">Member Full Name</th>
-											<th scope="col">Payment Due</th>
+											<th scope="col">Amount Due</th>
+											<th scope="col">Date Due</th>
 											<th scope="col">Date Paid</th>
 											<th scope="col">Next Due</th>
 											<th scope="col">Status</th>
@@ -287,13 +289,34 @@ if (isset($_POST['confirmPwd'])) {
 											<tr>
 												<th>PAY<?php echo str_pad($row["p_id"], 4, "0", STR_PAD_LEFT); ?></th>
 												<th><?php echo $row["fname"] . " " . $row["mi"] . " " . $row["lname"] ?></th>
+												<th><?php
+															// Check if paid
+															// multiply amount for every 30 days overdue
+															$initial = $row["amount"];
+															$multiplier = 1;
+
+															if ($row["date_paid"] == null) {
+																if ($row["date_due"] < date("Y-m-d")) {
+																	$dueDate = new DateTime($row["date_due"]);
+																	$currentDate = new DateTime();
+
+																	$dateDiff = $dueDate->diff($currentDate)->format("%a");
+
+																	if ($dateDiff > 30) {
+																		// echo ("($dateDiff)");
+																		$multiplier = ceil($dateDiff / 30);
+																	}
+																}
+															}
+															echo "&#8369; " . $initial * $multiplier;
+															?></th>
 												<th><?php echo date("M d, Y", strtotime($row["date_due"])); ?></th>
 												<th><?php echo $row["date_paid"] != null ? date("M d, Y", strtotime($row["date_paid"])) : ""  ?>
 												</th>
 												<th><?php echo date("M d, Y", strtotime($row["next_due"])); ?></th>
 												<th><?php echo $row["date_paid"] != null ? "Paid" : "Not Paid" ?></th>
 												<th>
-													<?php echo $row["date_paid"] != null ? "" : '<button onclick="loadId(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-primary">Mark as Paid</button>' ?>
+													<?php echo $row["date_paid"] != null ? "" : '<button onclick="loadId(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-primary btn-sm">Mark as Paid</button>' ?>
 												</th>
 											</tr>
 											<?php endforeach; ?>
@@ -403,13 +426,23 @@ if (isset($_POST['confirmPwd'])) {
 			dom: 'lBfrtip',
 			// responsive: true,
 			buttons: [{
-				extend: 'excel',
-				text: 'Generate Report',
-				className: "btn btn-primary",
-				exportOptions: {
-					columns: 'th:not(:last-child)'
+					extend: 'excel',
+					text: 'Excel Report',
+					className: "btn btn-primary",
+					exportOptions: {
+						columns: 'th:not(:last-child)'
+					}
+				},
+				{
+					extend: 'pdf',
+					text: 'PDF Report',
+					className: "btn btn-primary",
+					exportOptions: {
+						columns: 'th:not(:last-child)',
+						columnGap: 1
+					}
 				}
-			}],
+			],
 			'lengthMenu': [
 				[10, 25, 50, -1],
 				[10, 25, 50, "All"]

@@ -202,124 +202,74 @@ $model = new Model();
 					<!-- Page Heading -->
 
 					<h1 class="h3 mb-4 text-gray-800">HOA Announcements</h1>
+					<!---alert messages--->
+					<?php
 
-					<div class="container">
-
-
-						<div class="card">
-							<div class="card-body">
-								<div class="row">
-									<?php
-									$rows = $model->displayActiveUsers();
-									$cnt = 1;
-									if (!empty($rows)) {
-										foreach ($rows as $row) {
-									?>
-
-									<!-- User Information -->
-									<div class="card shadow mb-8" style="width:33%;">
-										<div class="card-header py-3">
-											<h6 class="m-0 font-weight-bold text-primary" style="text-align: center;">
-												<?php echo $row['ptitle']; ?></h6>
-										</div>
-										<div class="card-body">
-											<div class="text-center">
-												<a href="../assets/images/<?php echo $row['Photo']; ?>.jpg" target="_blank"><img
-														src="../assets/images/<?php echo $row['Photo']; ?>.jpg"
-														style="width: 250px;height: 150px; object-fit: cover;"></a>
-											</div>
-											<p>
-											<h6 class="card-title">
-												<?php
-														echo date('M d, Y', strtotime($row['PostingDate']))
-														?>
-											</h6>
-											</p>
-											<h6 class="card-title">
-												<?php
-														$out = strlen($row['pcontent']) > 30 ? substr($row['pcontent'], 0, 30) . "..." : $row['pcontent'];
-														echo $out;
-														?>
-											</h6>
-
-											<button type="button" onclick="loadPost(<?php echo $row['id'] ?>)" data-toggle="modal"
-												data-target="#post-modal" class="btn btn-primary">Read More</button>
-										</div>
-									</div>
-
-									<?php
-											$cnt++;
-										}
-									}
-									?>
+					if (isset($_SESSION['messageusr'])) {
+					?>
+					<div class="alert alert-warning alert-dismissible fade show text-center" role="alert"
+						style="margin-top:20px;">
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
 
-									<!---alert messages--->
-									<?php
+						<?php echo $_SESSION['messageusr']; ?>
+					</div>
+					<?php
 
-									if (isset($_SESSION['messageusr'])) {
-									?>
-									<div class="alert alert-warning alert-dismissible fade show text-center" role="alert"
-										style="margin-top:20px;">
-										<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						unset($_SESSION['messageusr']);
+					}
+					?>
 
-
-										<?php echo $_SESSION['messageusr']; ?>
-									</div>
-									<?php
-
-										unset($_SESSION['messageusr']);
-									}
-									?>
-
-									<!-- Post Modal -->
-									<div class="modal fade" id="post-modal" tabindex="-1" aria-hidden="true">
-										<div class="modal-dialog modal-lg">
-											<div class="modal-content">
-												<div class="modal-header">
-													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button>
-												</div>
-												<div class="modal-body">
-													<div class="card">
-														<img id="post-modal-img" src="../assets/images/1665062910477404697633ed7fedbb99.jpg"
-															class="card-img-top" alt="post image">
-														<div class="card-body">
-															<h5 id="post-modal-title" class="card-title">Post Title</h5>
-															<h6 id="post-modal-date" class="card-subtitle mb-2 text-muted">Jun 6, 2022</h6>
-															<p id="post-modal-content" class="card-text">Some quick example text to build on the card
-																title and make up the
-																bulk of the card's content.
-															</p>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-
-
-									</div>
+					<!-- Row Start -->
+					<div class="row">
+						<?php
+						$rows = $model->displayActiveUsers();
+						$cnt = 1;
+						if (!empty($rows)) {
+							foreach ($rows as $row) {
+						?>
+						<div class="col-md-4 mt-2">
+							<div class="card shadow mb-8">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary" style="text-align: center;">
+										<?php echo $row['ptitle']; ?></h6>
 								</div>
+								<div class="card-body">
+									<div class="text-center">
+										<a href="../assets/images/<?php echo $row['Photo']; ?>.jpg" target="_blank"><img
+												src="../assets/images/<?php echo $row['Photo']; ?>.jpg"
+												style="width: 250px;height: 150px; object-fit: cover;"></a>
+									</div>
+									<p>
+									<h6 class="card-title">
+										<?php
+												echo date('M d, Y', strtotime($row['PostingDate']))
+												?>
+									</h6>
+									</p>
+									<h6 class="card-title">
+										<?php
+												$out = strlen($row['pcontent']) > 30 ? substr($row['pcontent'], 0, 30) . "..." : $row['pcontent'];
+												echo $out;
+												?>
+									</h6>
 
-
-								<!-- <div class="row-cols-1 row-cols-md-2 g-4"style="text-align: center;"> -->
-
-
-
-
+									<button type="button" onclick="loadPost(<?php echo $row['id'] ?>)" data-toggle="modal"
+										data-target="#post-modal" class="btn btn-primary">Read More</button>
+								</div>
 							</div>
 						</div>
-
-
-
-
-
-
+						<?php
+								$cnt++;
+							}
+						}
+						?>
 					</div>
-					<!-- /.container-fluid -->
-
+					<!-- Row End -->
 				</div>
+				<!-- Container End -->
+				<!-- /.container-fluid -->
+
 				<!-- End of Main Content -->
 
 				<!-- Footer -->
@@ -363,44 +313,74 @@ $model = new Model();
 			</div>
 		</div>
 
-		<!-- Bootstrap core JavaScript-->
-		<script src="../vendor/jquery/jquery.min.js"></script>
-		<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!-- Post Modal -->
+		<div class="modal fade" id="post-modal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="card">
+							<img id="post-modal-img" src="../assets/images/1665062910477404697633ed7fedbb99.jpg" class="card-img-top"
+								alt="post image">
+							<div class="card-body">
+								<h5 id="post-modal-title" class="card-title">Post Title</h5>
+								<h6 id="post-modal-date" class="card-subtitle mb-2 text-muted">Jun 6, 2022</h6>
+								<p id="post-modal-content" class="card-text">Some quick example text to build on the card
+									title and make up the
+									bulk of the card's content.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-		<!-- Core plugin JavaScript-->
-		<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
-		<!-- Custom scripts for all pages-->
-		<script src="../js/sb-admin-2.min.js"></script>
+		</div>
+	</div>
 
-		<!-- Page level plugins -->
-		<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-		<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+	<!-- Bootstrap core JavaScript-->
+	<script src="../vendor/jquery/jquery.min.js"></script>
+	<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-		<!-- Page level custom scripts -->
-		<script src="../js/demo/datatables-demo.js"></script>
+	<!-- Core plugin JavaScript-->
+	<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
-		<script>
-		const loadPost = async (id) => {
-			const postTitle = document.querySelector("#post-modal-title");
-			const postDate = document.querySelector("#post-modal-date");
-			const postImg = document.querySelector("#post-modal-img");
-			const postContent = document.querySelector("#post-modal-content");
+	<!-- Custom scripts for all pages-->
+	<script src="../js/sb-admin-2.min.js"></script>
 
-			const res = await fetch(`../api/getPost.php?post_id=${id}`);
-			const data = await res.json();
-			const post = data.data;
-			console.log(post)
-			postTitle.innerText = post.ptitle;
+	<!-- Page level plugins -->
+	<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+	<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-			const dateFormat = new Date(post.PostingDate).toDateString().split(" ");
-			postDate.innerText = `${dateFormat[1]} ${dateFormat[2]}, ${dateFormat[3]}`;
+	<!-- Page level custom scripts -->
+	<script src="../js/demo/datatables-demo.js"></script>
 
-			postImg.src = `../assets/images/${post.Photo}.jpg`;
-			postContent.innerText = post.pcontent;
-			console.log(data);
-		}
-		</script>
+	<script>
+	const loadPost = async (id) => {
+		const postTitle = document.querySelector("#post-modal-title");
+		const postDate = document.querySelector("#post-modal-date");
+		const postImg = document.querySelector("#post-modal-img");
+		const postContent = document.querySelector("#post-modal-content");
+
+		const res = await fetch(`../api/getPost.php?post_id=${id}`);
+		const data = await res.json();
+		const post = data.data;
+		console.log(post)
+		postTitle.innerText = post.ptitle;
+
+		const dateFormat = new Date(post.PostingDate).toDateString().split(" ");
+		postDate.innerText = `${dateFormat[1]} ${dateFormat[2]}, ${dateFormat[3]}`;
+
+		postImg.src = `../assets/images/${post.Photo}.jpg`;
+		postContent.innerText = post.pcontent;
+		console.log(data);
+	}
+	</script>
 
 </body>
 
