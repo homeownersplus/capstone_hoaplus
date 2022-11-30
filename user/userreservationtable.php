@@ -9,8 +9,8 @@ date_default_timezone_set('Asia/Manila');
 
 $statusList = [
 	1 => "Cancelled",
-	2 => "Pending",
-	3 => "Confirmed",
+	2 => "Confirmed",
+	3 => "Completed",
 ];
 $rows = [];
 

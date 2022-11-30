@@ -42,7 +42,7 @@
 	<li class="nav-item">
 		<a class="nav-link" href="admin_addamenities.php">
 			<i class="fas fa-fw fa-tachometer-alt"></i>
-			<span>Add an Amenity </span></a>
+			<span>Add Amenity </span></a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" href="admininboxforconcerns.php">

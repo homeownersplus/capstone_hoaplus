@@ -22,11 +22,12 @@ if (isset($_POST["amenity"])) {
 	$data = [
 		'member_id' => $_SESSION["logged_user"]["id"],
 		'amenity_id' => $_POST["amenity"],
-		'start_date' => $_POST["date"] . " " . $_POST["time-start"],
-		'end_date' => $_POST["date"] . " " . $_POST["time-end"],
+		'start_date' => $_POST["time-start"],
+		'end_date' => $_POST["time-end"],
 		'status' => 2,
 	];
 
+	// die(var_dump($data));
 	//  Add check for uppaid payments
 	// get latest payment record
 	$paymentSql = "
@@ -66,6 +67,7 @@ if (isset($_POST["amenity"])) {
 		SELECT * 
 		FROM reservations
 		WHERE amenity_id = :amenity_id
+		AND (start_date BETWEEN :from AND :to)
 		AND (end_date BETWEEN :from AND :to)
 		AND status = 2
 	";
@@ -136,7 +138,7 @@ if (isset($_POST["amenity"])) {
 
 	<!-- Custom styles for this page -->
 	<link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 
 	<!-- <link href="style_postboard.css" rel="stylesheet"> -->
 
@@ -292,7 +294,7 @@ if (isset($_POST["amenity"])) {
 													$msg = "Error saving reservation";
 													break;
 												case "101":
-													$msg = "Amenety is already reserved for that time";
+													$msg = "This date is already reserved. Please consider another date.";
 													break;
 												case "103":
 													$msg = "You must settle all unpaid payments, to continue booking";
@@ -343,13 +345,15 @@ if (isset($_POST["amenity"])) {
 
 										<div id="reservestarttimeuser" style="margin-top:2%;">
 											<label for="reservedateuser" class="form-label">Reservation Time Start</label>
-											<input id="time-start-input" type="time" class="form-control" name="time-start"
-												class="inputfieldtime" placeholder="Time-start" required>
+											<input type="hidden" name="time-start" id="time-start-input">
+											<input id="time-start-input-picker" type="input" class="form-control" class="inputfieldtime"
+												placeholder="Time-start" required>
 										</div>
 
 										<div id="reserveendtimeuser" style="margin-top:2%;">
 											<label for="reservedateuser" class="form-label">Reservation Time End</label>
-											<input id="time-end-input" type="time" class="form-control" name="time-end" class="inputfieldtime"
+											<input type="hidden" name="time-end" id="time-end-input">
+											<input id="time-end-input-picker" type="input" class="form-control" class="inputfieldtime"
 												placeholder="Time-start" required>
 										</div>
 
@@ -419,10 +423,13 @@ if (isset($_POST["amenity"])) {
 
 					<!-- Page level custom scripts -->
 					<script src="../js/demo/datatables-demo.js"></script>
+					<script src="../plugins/moment/moment.min.js"></script>
 					<link rel="stylesheet"
 						href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+					<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
 					<script>
+					// Archived
 					const dateChecker = () => {
 						const today = new Date();
 						const formatDate = (date) => {
@@ -436,39 +443,105 @@ if (isset($_POST["amenity"])) {
 						}
 						document.querySelector("#date-input").min = formatDate(today);
 					}
-
-					const timeChecker = () => {
-						const selectedDate = document.querySelector("#date-input");
-						const today = new Date();
-
-						const formatTime = (date) => {
-							let d = new Date(date);
-							let hours = String(d.getHours());
-							let minutes = String(d.getMinutes());
-							if (hours.length < 2) hours = "0" + hours;
-							if (minutes.length < 2) minutes = "0" + minutes;
-							return [hours, minutes].join(":");
-						}
-
-						// Check if input date is today
-						if (selectedDate.value == today.toLocaleDateString('en-CA')) {
-							document.querySelector("#time-start-input").min = formatTime(today);
-						}
-						const oneHourInAdvance = new Date(`${selectedDate.value} ${document.querySelector("#time-start-input").value}`)
-							.setHours(new Date(`${selectedDate.value} ${document.querySelector("#time-start-input").value}`).getHours() +
-								1);
-						document.querySelector("#time-end-input").min = formatTime(oneHourInAdvance);
-					}
-
-					document.querySelector("#time-start-input").addEventListener("change", () => {
-						timeChecker();
-					})
-
-					timeChecker();
-					setInterval(() => {
-						timeChecker()
-					}, 1000 * 10)
 					dateChecker();
+
+					document.querySelector("#date-input").addEventListener("change", () => {
+
+						document.querySelector("#time-end-input-picker").value = ""
+						document.querySelector("#time-start-input-picker").value = ""
+						document.querySelector("#time-end-input").value = ""
+						document.querySelector("#time-start-input").value = ""
+						if (moment(document.querySelector("#date-input").value).isSame(new Date(), "day")) {
+							$('#time-start-input-picker').timepicker('option', 'minTime', `${parseInt(new Date().getHours()) + 1}`);
+						} else {
+							$('#time-start-input-picker').timepicker('option', 'minTime', `1`);
+						}
+					});
+
+					// const timeChecker = () => {
+					// 	const selectedDate = document.querySelector("#date-input");
+					// 	const today = new Date();
+
+					// 	const formatTime = (date) => {
+					// 		let d = new Date(date);
+					// 		let hours = String(d.getHours());
+					// 		let minutes = String(d.getMinutes());
+					// 		if (hours.length < 2) hours = "0" + hours;
+					// 		if (minutes.length < 2) minutes = "0" + minutes;
+					// 		return [hours, minutes].join(":");
+					// 	}
+
+					// 	// Check if input date is today
+					// 	if (selectedDate.value == today.toLocaleDateString('en-CA')) {
+					// 		document.querySelector("#time-start-input").min = formatTime(today);
+					// 	}
+					// 	const oneHourInAdvance = new Date(`${selectedDate.value} ${document.querySelector("#time-start-input").value}`)
+					// 		.setHours(new Date(`${selectedDate.value} ${document.querySelector("#time-start-input").value}`).getHours() +
+					// 			1);
+					// 	document.querySelector("#time-end-input").min = formatTime(oneHourInAdvance);
+					// }
+
+					// document.querySelector("#time-start-input").addEventListener("change", () => {
+					// 	timeChecker();
+					// })
+
+					// timeChecker();
+					// setInterval(() => {
+					// 	timeChecker()
+					// }, 1000 * 10)
+
+					$('#time-start-input-picker').timepicker({
+						timeFormat: 'h p',
+						interval: 60,
+						minTime: `${parseInt(new Date().getHours()) + 1}`,
+						maxTime: '10:00pm',
+						defaultTime: new Date(),
+						startTime: '12:00am',
+						dynamic: false,
+						dropdown: true,
+						scrollbar: true,
+						change: function(time) {
+							// console.log(`DATE TIME DATE ${document.querySelector("#date-input").value}`)
+							const hour = String(new Date(time).getHours()).padStart(2, "0");
+							const selectedDate = new Date(document.querySelector("#date-input").value);
+
+							let addedTime = moment(time).add(1, "h").toDate();
+
+							const year = selectedDate.getFullYear();
+							const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
+							const day = String(selectedDate.getDate()).padStart(2, "0");
+
+							const date = `${year}-${month}-${day} ${hour}:00:00`
+
+							$('#time-end-input-picker').timepicker('option', 'minTime', addedTime);
+
+							document.querySelector("#time-end-input-picker").value = ""
+							document.querySelector("#time-end-input").value = ""
+							document.querySelector("#time-start-input").value = date;
+
+						}
+					});
+
+					$('#time-end-input-picker').timepicker({
+						timeFormat: 'h p',
+						interval: 60,
+						minTime: '1',
+						maxTime: '11:00pm',
+						defaultTime: null,
+						startTime: '1:00am',
+						dynamic: true,
+						dropdown: true,
+						scrollbar: true,
+						change: function(time) {
+							const hour = String(new Date(time).getHours()).padStart(2, "0");
+							const selectedDate = new Date(document.querySelector("#date-input").value);
+							const year = selectedDate.getFullYear();
+							const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
+							const day = String(selectedDate.getDate()).padStart(2, "0");
+							const date = `${year}-${month}-${day} ${hour}:00:00`
+							document.querySelector("#time-end-input").value = date
+						}
+					});
 					</script>
 
 </body>
