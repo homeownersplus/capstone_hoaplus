@@ -95,16 +95,16 @@ if (isset($_REQUEST['active'])) {
 					<!-- Page Heading -->
 
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">Manage Members</h1>
-						<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-								class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+						<h1 class="h3 mb-0 text-gray-800">HOA User Accounts</h1>
+						<button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onClick="generatePDF()"><i
+								class="fas fa-download fa-sm text-white-50"></i> Generate Report</button>
 					</div>
 
 					<!--------------------------------------- Add Modal ------------------------------------->
 					<!-- Button trigger modal -->
 					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registermember"
 						onclick="increase();">
-						Register New Member
+						Register
 					</button>
 
 					<!-- Modal -->
@@ -113,7 +113,7 @@ if (isset($_REQUEST['active'])) {
 						<div class="modal-dialog modal-lg">
 							<div class="modal-content">
 								<div class="modal-header">
-									<h1 class="modal-title fs-5" id="eregistermemberLabel">Register New Member</h1>
+									<h1 class="modal-title fs-5" id="eregistermemberLabel">Register</h1>
 									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								</div>
 
@@ -132,21 +132,21 @@ if (isset($_REQUEST['active'])) {
 												<div class="row">
 													<div class="col">
 														<label>First Name: </label>
-														<input type="text" name="fname" class="form-control">
+														<input type="text" name="fname" class="form-control" onInput="onlyLetters(this)">
 													</div>
 													<div class="col">
 														<label>Last Name: </label>
-														<input type="text" name="lname" class="form-control">
+														<input type="text" name="lname" class="form-control" onInput="onlyLetters(this)">
 													</div>
 													<div class="form-group col-md-2">
 														<label>M.I: </label>
-														<input type="text" name="mi" class="form-control" placeholder="M.I">
+														<input type="text" name="mi" class="form-control" placeholder="M.I" onInput="onlyLetters(this)">
 													</div>
 												</div>
 
 												<div class="mb-3">
 													<label>Contact Number: </label>
-													<input type="ctnumber" class="form-control" name="number">
+													<input type="text" class="form-control" name="number" onInput="onlyNumber(this)">
 												</div>
 
 												<div class="mb-3">
@@ -158,19 +158,19 @@ if (isset($_REQUEST['active'])) {
 												<div class="row">
 													<div class="form-group col-md-2">
 														<label class="col-sm-2 col-form-label">Phase: </label>
-														<input type="text" name="phase" class="form-control">
+														<input type="text" name="phase" class="form-control" onInput="onlyLetters(this)">
 													</div>
 													<div class="form-group col-md-2">
 														<label class="col-sm-2 col-form-label">Block: </label>
-														<input type="text" name="block" class="form-control">
+														<input type="text" name="block" class="form-control" onInput="onlyLetters(this)">
 													</div>
 													<div class="form-group col-md-2">
 														<label class="col-sm-2 col-form-label">Lot: </label>
-														<input type="text" name="lot" class="form-control">
+														<input type="text" name="lot" class="form-control" onInput="onlyLetters(this)">
 													</div>
 													<div class="col">
 														<label class="col-sm-2 col-form-label"> Barangay: </label>
-														<input type="text" name="brgy" class="form-control">
+														<input type="text" name="brgy" class="form-control" onInput="onlyLetters(this)">
 													</div>
 												</div>
 
@@ -237,7 +237,7 @@ if (isset($_REQUEST['active'])) {
 									</div>
 									<div class="modal-footer">
 										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-										<button type="button" class="btn btn-primary" id="register_btn">Register Member</button>
+										<button type="button" class="btn btn-primary" id="register_btn">Register</button>
 									</div>
 								</div>
 							</div>
@@ -289,10 +289,12 @@ if (isset($_REQUEST['active'])) {
 									</table>
 							</div>
 
-							<div class="btn-group" role="group">
-								<button type="button" class="btn btn-outline-primary" id="prev-btn">Prev</button>
-								<button type="button" class="btn btn-outline-primary" id="current-page">1</button>
-								<button type="button" class="btn btn-outline-primary" id="next-btn">Next</button>
+							<div class="d-flex justify-content-end">
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-outline-primary" id="prev-btn">Prev</button>
+									<button type="button" class="btn btn-outline-primary" id="current-page">1</button>
+									<button type="button" class="btn btn-outline-primary" id="next-btn">Next</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -326,7 +328,7 @@ if (isset($_REQUEST['active'])) {
 		function increase() {
 
 			var textBox = document.getElementById("memid");
-			textBox.value = "HOAM000" + a;
+			textBox.value = "-";
 			a++;
 		}
 
@@ -419,8 +421,16 @@ if (isset($_REQUEST['active'])) {
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
 			integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
 		</script>
-
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script>
+		const generatePDF = () => {
+			html2pdf()
+			.set({
+				margin:       1,
+				filename:     'hoa-members.pdf'
+			})
+			.from(document.querySelector('.table-responsive')).save()
+		}
 		$(document).ready(function() {
 			$('.edtbtn').on('click', function() {
 				$('#editmodal').modal('show');
@@ -471,6 +481,9 @@ if (isset($_REQUEST['active'])) {
 			registerBtn.disabled = true
 			registerBtn.value = 'Saving...'
 			try {
+				if(DQ('[name=number').value.length !== 11) throw "Invalid phone format"
+				if(!DQ('[name=email').value.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) throw "Invalid email format"
+
 				const form = new FormData()
 
 				form.append('fname', DQ('[name=fname').value)
@@ -526,7 +539,7 @@ if (isset($_REQUEST['active'])) {
 				alert(error)
 			} finally {
 				registerBtn.disabled = false
-				registerBtn.value = 'Register Member'
+				registerBtn.value = 'Register'
 			}
 		}
 
@@ -545,7 +558,7 @@ if (isset($_REQUEST['active'])) {
 				for (const i of toJson?.data) {
 					temp += `
 						<tr>
-							<td>${(i.id).padStart(5, '0')}</td>
+							<td>HOAM${(i.id).padStart(5, '0')}</td>
 							<td>${i.last_name}</td>
 							<td>${i.first_name}</td>
 							<td>${i.middle_initial}</td>
@@ -595,6 +608,27 @@ if (isset($_REQUEST['active'])) {
 		})
 
 		fetchData()
+
+		const repeatFetchNextId = async () => {
+			try {
+				const url = await fetch(`api/fetch_member.php?page=1`)
+				const toJson = await url.json()
+				DQ('[name=memberid]').value = "HOAM"+(Number(toJson?.data[0].id) + 1).toString().padStart(5, '0')
+			} catch (error) {
+				console.log(error)
+			}
+			finally{
+				setTimeout(() => {
+					repeatFetchNextId()
+				}, 5000);
+			}
+		}
+
+		repeatFetchNextId()
+
+		const onlyLetters = (evt) => evt.value = evt.value.replace(/[^A-Za-z]/ig, '')
+		const onlyNumber = (evt) => evt.value = evt.value.replace(/[^0-9]/ig, '')
+
 		</script>
 	</div>
 </body>

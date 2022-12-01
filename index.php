@@ -70,8 +70,7 @@ switch ($role) {
 				<img src="img/home-1.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption">
 					<h5>Welcome to your virtual HOA space</h5>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime, nulla, tempore. Deserunt excepturi quas
-						vero.</p>
+					<p>A digital space to make the best out of your HOA organization. </p>
 
 				</div>
 			</div>
@@ -79,8 +78,7 @@ switch ($role) {
 				<img src="img/home-2.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption">
 					<h5>Create real value</h5>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime, nulla, tempore. Deserunt excepturi quas
-						vero.</p>
+					<p>Manage your own membership account, get the latest updates upon signing in, reserve your needed amenities and create the real value of your monthly membership. </p>
 
 				</div>
 			</div>
@@ -88,8 +86,7 @@ switch ($role) {
 				<img src="img/home-3.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption">
 					<h5>In property and places</h5>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime, nulla, tempore. Deserunt excepturi quas
-						vero.</p>
+					<p>Maximize time and efficiency in just a click. Visit your HOA admin to sign up for an account now. </p>
 
 				</div>
 			</div>
