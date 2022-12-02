@@ -22,7 +22,7 @@
 			<i class="fas fa-fw fa-tachometer-alt"></i>
 			<span>Members</span></a>
 	</li>
-	<?php if (in_array($_SESSION["logged_user"]["position"] ?? "admin", ["admin", "president"])) : ?>
+	<?php if (in_array(strtolower($_SESSION["logged_position"]), ["admin", "president"])) : ?>
 	<li class="nav-item">
 		<a class="nav-link" href="manageadminss.php">
 			<i class="fas fa-fw fa-tachometer-alt"></i>

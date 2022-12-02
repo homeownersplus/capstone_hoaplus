@@ -282,14 +282,15 @@ if (isset($_POST['cancel-reservation-id'])) {
 												<th><?php echo date("M d, Y h:i A", strtotime($row["created_at"])); ?></th>
 												<th><?php echo $statusList[$row["status"]]; ?></th>
 												<th>
-													<?php
-														if (in_array($statusList[$row["status"]], ['Pending'])) {
-															echo '<button onclick="loadId(' . $row["id"] . ')" data-toggle="modal" data-target="#cancel-modal" class="btn btn-primary m-3">Cancel</button>';
-														}
-													?>
-													<button class="m-3 btn btn-primary" onClick="generateEPass(<?php echo $row['id']; ?>)">
+													<?php if ($row["status"] == 2) : ?>
+													<button onclick="loadId(<?php echo $row['id']; ?>)" data-toggle="modal"
+														data-target="#cancel-modal" class="btn btn-danger m-0">Cancel</button>
+													<?php endif; ?>
+													<?php if ($row["status"] != 1) : ?>
+													<button class="m-0 btn btn-primary" onClick="generateEPass(<?php echo $row['id']; ?>)">
 														E-Pass
 													</button>
+													<?php endif; ?>
 												</th>
 											</tr>
 											<?php endforeach; ?>
@@ -400,7 +401,7 @@ if (isset($_POST['cancel-reservation-id'])) {
 					<script src="../js/demo/datatables-demo.js"></script>
 					<link rel="stylesheet"
 						href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-						
+
 					<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 					<script>
@@ -415,16 +416,15 @@ if (isset($_POST['cancel-reservation-id'])) {
 					const DQ = (el) => document.querySelector(el)
 
 					const generateEPass = async (id) => {
-						try{
-							const url = await fetch('../api/generate_epass.php?id='+id)
+						try {
+							const url = await fetch('../api/generate_epass.php?id=' + id)
 							const res = await url.json()
 							console.log(res)
 							DQ('#qr-con').innerHTML = ''
 							const QR = new QRCode(DQ('#qr-con'), `http://localhost/capstone_hoaplus/api/e_pass.php?id=${res.epass_id}`)
 
 							$('#qrModal').modal('show')
-						}
-						catch(error){
+						} catch (error) {
 							console.log("Error occured while trying to generate E-Pass", error)
 						}
 					}

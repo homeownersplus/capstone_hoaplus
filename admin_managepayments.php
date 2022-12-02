@@ -425,14 +425,15 @@ if (isset($_POST['confirmPwd'])) {
 			// lengthChange: true,
 			dom: 'lBfrtip',
 			// responsive: true,
-			buttons: [{
-					extend: 'excel',
-					text: 'Excel Report',
-					className: "btn btn-primary",
-					exportOptions: {
-						columns: 'th:not(:last-child)'
-					}
-				},
+			buttons: [
+				// {
+				// 	extend: 'excel',
+				// 	text: 'Excel Report',
+				// 	className: "btn btn-primary",
+				// 	exportOptions: {
+				// 		columns: 'th:not(:last-child)'
+				// 	}
+				// },
 				{
 					extend: 'pdf',
 					text: 'PDF Report',
@@ -454,7 +455,7 @@ if (isset($_POST['confirmPwd'])) {
 			function(settings, data, dataIndex) {
 				var min = $('#min-date').val();
 				var max = $('#max-date').val();
-				var createdAt = data[2] || 0; // due date column in the table
+				var createdAt = data[3] || 0; // due date column in the table
 
 				if (
 					(min == "" || max == "") ||

@@ -245,14 +245,15 @@ if ($stmt->rowCount() > 0) {
 						// lengthChange: true,
 						dom: 'lBfrtip',
 						// responsive: true,
-						buttons: [{
-								extend: 'excel',
-								text: 'Excel Report',
-								className: "btn btn-primary",
-								exportOptions: {
-									columns: 'th:not(:last-child)'
-								}
-							},
+						buttons: [
+							// {
+							// 	extend: 'excel',
+							// 	text: 'Excel Report',
+							// 	className: "btn btn-primary",
+							// 	exportOptions: {
+							// 		columns: 'th:not(:last-child)'
+							// 	}
+							// },
 							{
 								extend: 'pdf',
 								text: 'PDF Report',
@@ -274,11 +275,11 @@ if ($stmt->rowCount() > 0) {
 						function(settings, data, dataIndex) {
 							var min = $('#min-date').val();
 							var max = $('#max-date').val();
-							var createdAt = data[5] || 0; // Our date column in the table
+							var createdAt = data[2] || 0; // Our date column in the table
 
 							if (
 								(min == "" || max == "") ||
-								(moment(createdAt).isSameOrAfter(min) && moment(createdAt).isSameOrBefore(max))
+								(moment(createdAt).isSameOrAfter(min, "day") && moment(createdAt).isSameOrBefore(max, "day"))
 							) {
 								return true;
 							}
