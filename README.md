@@ -10,8 +10,9 @@
 
 - president role can now access manage admins
 - remove unused excel reports
-- fixed manage payments date filter to filter by `due date`
-- fixed manage reservations date filter to reservation time start filter by `due date`
+- fixed manage payments date filter to filter by `Date Due`
+- fixed manage reservations date filter to reservation time start filter by `Reservation Start Time`
+- user cancel reservation button now shows up properly
 
 ### Week 3 2022-11-27
 
