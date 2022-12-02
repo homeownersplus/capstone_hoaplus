@@ -227,7 +227,7 @@ if ($stmt->rowCount() > 0) {
 							<div class="table-responsive">
 								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
-									<table class="table" id="example1" style="margin-top:2%;">
+									<table class="table" id="table-data" style="margin-top:2%;">
 										<thead>
 											<th>Payment ID</th>
 											<th>Amount Due</th>
@@ -235,7 +235,6 @@ if ($stmt->rowCount() > 0) {
 											<th>Date Paid</th>
 											<th>Next Payment Date</th>
 											<th>Status</th>
-											<th></th>
 										</thead>
 										<tbody>
 											<?php foreach ($rows as $row) : ?>
@@ -330,14 +329,43 @@ if ($stmt->rowCount() > 0) {
 
 					<!-- Custom scripts for all pages-->
 					<script src="../js/sb-admin-2.min.js"></script>
-
-					<!-- Page level plugins -->
 					<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
 					<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+					<!-- Page level plugins -->
+					<script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+					<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+					<!-- <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
 
-					<!-- Page level custom scripts -->
-					<script src="../js/demo/datatables-demo.js"></script>
-					<link rel="stylesheet"
-						href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+
+					<script>
+					var table = $('#table-data').DataTable({
+						// lengthChange: true,
+						dom: 'lBfrtip',
+						// responsive: true,
+						buttons: [
+							// {
+							// 	extend: 'excel',
+							// 	text: 'Excel Report',
+							// 	className: "btn btn-primary",
+							// 	exportOptions: {
+							// 		columns: 'th:not(:last-child)'
+							// 	}
+							// },
+							{
+								extend: 'pdf',
+								text: 'Generate Report',
+								className: "btn btn-primary",
+							}
+						],
+						'lengthMenu': [
+							[10, 25, 50, -1],
+							[10, 25, 50, "All"]
+						]
+					});
+					</script>
 
 </body>
