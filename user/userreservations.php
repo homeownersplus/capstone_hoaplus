@@ -358,7 +358,7 @@ if (isset($_POST["amenity"])) {
 										</div>
 
 										<div style="margin-top:5%">
-											<button class="btn btn-primary" type="submit">Generate E-Pass</button>
+											<button class="btn btn-primary" type="submit">Save</button>
 											<a href="userlandingpage.php" class="btn btn-secondary">Back</a>
 										</div>
 										<!-- /.container-fluid -->

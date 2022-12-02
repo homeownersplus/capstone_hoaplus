@@ -27,6 +27,7 @@ $sql = "
 	INNER JOIN tblamenities
 	ON reservations.amenity_id = tblamenities.id
 	WHERE member_id = :member_id
+	ORDER BY reservations.created_at DESC
 ";
 $stmt = $dbh->prepare($sql);
 $stmt->bindValue(':member_id', $_SESSION["logged_user"]["id"], PDO::PARAM_STR);
@@ -275,7 +276,7 @@ if (isset($_POST['cancel-reservation-id'])) {
 										<tbody>
 											<?php foreach ($rows as $row) : ?>
 											<tr>
-												<th><?php echo $row["amenity"] ?></th>
+												<th><?php echo $row["amenity"]; ?></th>
 												<th><?php echo date("M d, Y h:i A", strtotime($row["start_date"])); ?></th>
 												<th><?php echo date("M d, Y h:i A", strtotime($row["end_date"])); ?></th>
 												<th><?php echo date("M d, Y h:i A", strtotime($row["created_at"])); ?></th>
@@ -283,9 +284,12 @@ if (isset($_POST['cancel-reservation-id'])) {
 												<th>
 													<?php
 														if (in_array($statusList[$row["status"]], ['Pending'])) {
-															echo '<button onclick="loadId(' . $row["id"] . ')" data-toggle="modal" data-target="#cancel-modal" class="btn btn-primary">Cancel</button>';
+															echo '<button onclick="loadId(' . $row["id"] . ')" data-toggle="modal" data-target="#cancel-modal" class="btn btn-primary m-3">Cancel</button>';
 														}
-														?>
+													?>
+													<button class="m-3 btn btn-primary" onClick="generateEPass(<?php echo $row['id']; ?>)">
+														E-Pass
+													</button>
 												</th>
 											</tr>
 											<?php endforeach; ?>
@@ -369,6 +373,14 @@ if (isset($_POST['cancel-reservation-id'])) {
 
 						</div>
 					</div>
+					<div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-body d-flex justify-content-center" id="qr-con">
+								</div>
+							</div>
+						</div>
+					</div>
 
 					<!-- Bootstrap core JavaScript-->
 					<script src="../vendor/jquery/jquery.min.js"></script>
@@ -388,6 +400,8 @@ if (isset($_POST['cancel-reservation-id'])) {
 					<script src="../js/demo/datatables-demo.js"></script>
 					<link rel="stylesheet"
 						href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+						
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 					<script>
 					$(document).ready(function() {
@@ -396,6 +410,23 @@ if (isset($_POST['cancel-reservation-id'])) {
 
 					const loadId = (id) => {
 						document.querySelector("#cancel-reservation-id").value = id;
+					}
+
+					const DQ = (el) => document.querySelector(el)
+
+					const generateEPass = async (id) => {
+						try{
+							const url = await fetch('../api/generate_epass.php?id='+id)
+							const res = await url.json()
+							console.log(res)
+							DQ('#qr-con').innerHTML = ''
+							const QR = new QRCode(DQ('#qr-con'), `http://localhost/capstone_hoaplus/api/e_pass.php?id=${res.epass_id}`)
+
+							$('#qrModal').modal('show')
+						}
+						catch(error){
+							console.log("Error occured while trying to generate E-Pass", error)
+						}
 					}
 					</script>
 
