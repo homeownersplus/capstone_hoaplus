@@ -6,6 +6,13 @@
 
 ## Changelog
 
+### Bugfix 1 2022-12-02
+
+- president role can now access manage admins
+- remove unused excel reports
+- fixed manage payments date filter to filter by `due date`
+- fixed manage reservations date filter to reservation time start filter by `due date`
+
 ### Week 3 2022-11-27
 
 - added more fields in `user` table
