@@ -436,7 +436,7 @@ if (isset($_POST['confirmPwd'])) {
 				// },
 				{
 					extend: 'pdf',
-					text: 'PDF Report',
+					text: 'Generate Report',
 					className: "btn btn-primary",
 					exportOptions: {
 						columns: 'th:not(:last-child)',

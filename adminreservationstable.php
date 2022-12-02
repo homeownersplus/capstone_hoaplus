@@ -161,7 +161,7 @@ if ($stmt->rowCount() > 0) {
 												<th><?php echo date("M d, Y h:i A", strtotime($row["end_date"])); ?></th>
 												<th><?php echo date("Y-m-d", strtotime($row["created_at"])); ?></th>
 												<th><?php echo $statusList[$row["status"]]; ?></th>
-												<th>
+												<th class="d-flex gap-1">
 													<?php if ($row["status"] == 1) : ?>
 													<form method="POST">
 														<input type="hidden" name="delete_id" value="<?php echo $row["id"]; ?>">
@@ -256,7 +256,7 @@ if ($stmt->rowCount() > 0) {
 							// },
 							{
 								extend: 'pdf',
-								text: 'PDF Report',
+								text: 'Generate Report',
 								className: "btn btn-primary",
 								exportOptions: {
 									columns: 'th:not(:last-child)',
