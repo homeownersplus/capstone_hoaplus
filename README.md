@@ -13,6 +13,7 @@
 - fixed manage payments date filter to filter by `Date Due`
 - fixed manage reservations date filter to reservation time start filter by `Reservation Start Time`
 - user cancel reservation button now shows up properly
+- user can now view their payment history
 
 ### Week 3 2022-11-27
 

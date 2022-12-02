@@ -3,6 +3,33 @@ session_start();
 require_once "../helpers/auth.php";
 require_once "../helpers/redirect.php";
 userOnlyMiddleware("../index.php");
+
+
+date_default_timezone_set('Asia/Manila');
+require_once '../dbconfig.php';
+
+
+$rows = [];
+
+$sql = "
+	SELECT
+		payments.id as p_id,
+		payments.date_paid,
+		payments.date_due,
+		payments.amount,
+		DATE_ADD(date_due, INTERVAL 1 MONTH) as next_due
+	FROM payments
+	WHERE member_id = :user_id
+	ORDER BY date_due DESC;
+";
+$stmt = $dbh->prepare($sql);
+$stmt->bindParam(':user_id', $_SESSION["logged_user"]["id"], PDO::PARAM_STR);
+
+$stmt->execute();
+if ($stmt->rowCount() > 0) {
+	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -203,15 +230,46 @@ userOnlyMiddleware("../index.php");
 									<table class="table" id="example1" style="margin-top:2%;">
 										<thead>
 											<th>Payment ID</th>
-											<th>Last Payment Date Time</th>
-											<th>Next Payment Date</th>
 											<th>Amount Due</th>
+											<th>Date Due</th>
+											<th>Date Paid</th>
+											<th>Next Payment Date</th>
+											<th>Status</th>
 											<th></th>
 										</thead>
 										<tbody>
+											<?php foreach ($rows as $row) : ?>
+											<tr>
+												<th>PAY<?php echo str_pad($row["p_id"], 4, "0", STR_PAD_LEFT); ?></th>
+												<th><?php
+															// Check if paid
+															// multiply amount for every 30 days overdue
+															$initial = $row["amount"];
+															$multiplier = 1;
 
+															if ($row["date_paid"] == null) {
+																if ($row["date_due"] < date("Y-m-d")) {
+																	$dueDate = new DateTime($row["date_due"]);
+																	$currentDate = new DateTime();
 
+																	$dateDiff = $dueDate->diff($currentDate)->format("%a");
 
+																	if ($dateDiff > 30) {
+																		// echo ("($dateDiff)");
+																		$multiplier = ceil($dateDiff / 30);
+																	}
+																}
+															}
+															echo "&#8369; " . $initial * $multiplier;
+															?></th>
+												<th><?php echo date("M d, Y", strtotime($row["date_due"])); ?></th>
+												<th><?php echo $row["date_paid"] != null ? date("M d, Y", strtotime($row["date_paid"])) : ""  ?>
+												</th>
+												<th><?php echo date("M d, Y", strtotime($row["next_due"])); ?></th>
+												<th><?php echo $row["date_paid"] != null ? "Paid" : "Not Paid" ?></th>
+											</tr>
+											<?php endforeach; ?>
+										</tbody>
 									</table>
 									<div>
 
