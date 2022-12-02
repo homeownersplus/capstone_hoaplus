@@ -14,6 +14,9 @@
 - fixed manage reservations date filter to reservation time start filter by `Reservation Start Time`
 - user cancel reservation button now shows up properly
 - user can now view their payment history
+- renamed pdf report buttons to `Generate Report`
+- ajusted magins of admin reservation table action buttons
+- add member payment table generate pdf report
 
 ### Week 3 2022-11-27
 
