@@ -7,9 +7,59 @@ adminOnlyMiddleware();
 
 $con = new mysqli("localhost", "root", "", "pdocrud");
 
-$result = $con->query("SELECT * FROM `admins` WHERE id = ".$_SESSION['userid']);
+$result = $con->query("SELECT * FROM `admins` WHERE id = " . $_SESSION['userid']);
 $row = $result->fetch_assoc();
 
+require_once './dbconfig.php';
+
+
+$action = $_POST["action"] ?? null;
+if ($action == "update_photo") {
+	$target_file = "./photos/" . basename($_FILES["image"]["name"]);
+	$newFileName = uniqid(uniqid(rand()));
+	$file_path = "./photos/" . $newFileName;
+	$imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+	$fileName = $newFileName . "." . $imageFileType;
+
+	$check = getimagesize($_FILES["image"]["tmp_name"]);
+	if ($check == false) {
+		redirect("./admineditprofile.php?errCode=100");
+	}
+
+	if (file_exists($target_file)) {
+		redirect("./admineditprofile.php?errCode=101");
+	}
+
+	if ($_FILES["image"]["size"] > 5000000) {
+		redirect("./admineditprofile.php?errCode=102");
+	}
+
+	if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+		redirect("./admineditprofile.php?errCode=103");
+	}
+
+
+	if (!move_uploaded_file($_FILES["image"]["tmp_name"], $file_path . "." . $imageFileType)) {
+		redirect("./admineditprofile.php?errCode=104");
+	} else {
+		$sql = "
+		UPDATE admins
+		SET avatar=?
+		WHERE id=?
+		";
+		$stmt = $dbh->prepare($sql);
+		$stmt->execute([
+			$fileName,
+			$_SESSION["logged_user"]["id"],
+		]);
+
+		$count = $stmt->rowCount();
+		if ($count > 0) {
+			redirect("./admineditprofile.php?errCode=106");
+		}
+		redirect("./admineditprofile.php?errCode=105");
+	}
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -69,31 +119,31 @@ $row = $result->fetch_assoc();
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Username</label>
-													<input class="form-control" type="text" value="<?php echo $row['username'];?>" disabled>
+													<input class="form-control" type="text" value="<?php echo $row['username']; ?>" disabled>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Email address</label>
-													<input class="form-control" type="email" value="<?php echo $row['email'];?>" disabled>
+													<input class="form-control" type="email" value="<?php echo $row['email']; ?>" disabled>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Full Name</label>
-													<input class="form-control" type="text" value="<?php echo $row['fullname'];?>" disabled>
+													<input class="form-control" type="text" value="<?php echo $row['fullname']; ?>" disabled>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Position</label>
-													<input class="form-control" type="text" value="<?php echo $row['position'];?>" disabled>
+													<input class="form-control" type="text" value="<?php echo $row['position']; ?>" disabled>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Admin ID</label>
-													<input class="form-control" type="text" value="<?php echo $row['id'];?>" disabled>
+													<input class="form-control" type="text" value="<?php echo $row['id']; ?>" disabled>
 												</div>
 											</div>
 										</div>
@@ -120,18 +170,61 @@ $row = $result->fetch_assoc();
 									<!-- <img src="../assets/img/bg-profile.jpg" alt="Image placeholder" class="card-img-top"> -->
 									<div class="row justify-content-center">
 										<!-- <div class="col-4 col-lg-4 order-lg-2"> -->
-										<div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0"> <img src="./photos/profile.png"
-												class="img-fluid rounded-circle"
-												style="width: 150px;height: 150px; margin-left: 25%; margin-top:10%;">
-											<h5 class="card-title" style="margin-top:7%; margin-left:20%"><?php echo $row['fullname'];?></h5>
-											<input class="form-control" type="file" name="image" accept="image/*" onchange="readURL(this, '')"
-												style="border: 0px; padding: 3px; margin-top:3%; margin-top:10%; margin-left:5%; width:90%;"
-												required>
-											<div class="mb-3" style="margin-top:10%;">
-												<input class="btn btn-outline-primary" type="submit" value="Update Photo"
-													name="updateuserprofilepic" style="margin-left:30%;">
+										<form method="POST" enctype="multipart/form-data">
+											<?php if (isset($_GET["errCode"])) : ?>
+											<div class="alert alert-warning m-2" role="alert">
+												<?php
+													$errMsg = "";
+													switch ($_GET["errCode"]) {
+														case "100":
+															$errMsg = "File is not an image";
+															break;
+														case "101":
+															$errMsg = "File name already exists";
+															break;
+														case "102":
+															$errMsg = "File is too large, over 5MB";
+															break;
+														case "103":
+															$errMsg = "Sorry, only JPG, JPEG, and PNG files are allowed.";
+															break;
+														case "104":
+															$errMsg = "Error Saving File";
+															break;
+														case "105":
+															$errMsg = "Error Updating Database File";
+															break;
+														case "106":
+															$errMsg = "Success, you must relogin for the changes to take effect";
+															break;
+														default:
+															$errMsg = "Unexpected Error";
+															break;
+													}
+													echo $errMsg;
+													?>
 											</div>
-										</div>
+											<?php endif; ?>
+											<div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
+												<input type="hidden" name="action" value="update_photo">
+												<img id="img-preview"
+													src='<?php echo $_SESSION["logged_user"]["avatar"] ? "../photos/" . $_SESSION["logged_user"]["avatar"] : "./photos/profile.png" ?>'
+													class="img-fluid rounded-circle"
+													style="width: 150px;height: 150px; margin-left: 25%; margin-top:10%;">
+												<h5 class="card-title" style="margin-top:7%; margin-left:20%"><?php echo $row['fullname']; ?>
+												</h5>
+												<input id="img-input" class="form-control" type="file" name="image" accept=".png, .jpg, .jpeg"
+													onchange="previewFile()"
+													style="border: 0px; padding: 3px; margin-top:3%; margin-top:10%; margin-left:5%; width:90%;"
+													required>
+												<div class="mb-3" style="margin-top:10%;">
+													<button id="img-button" class="btn btn-primary invisible" type="submit"
+														style="margin-left:23%;">
+														Update Photo
+													</button>
+												</div>
+											</div>
+										</form>
 									</div>
 								</div>
 							</div>
@@ -167,6 +260,24 @@ $row = $result->fetch_assoc();
 	<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 	<!-- Page level custom scripts -->
 	<script src="js/demo/datatables-demo.js"></script>
+
+	<script>
+	function previewFile() {
+		const preview = document.querySelector('#img-preview');
+		const btn = document.querySelector('#img-button');
+		const file = document.querySelector('#img-input').files[0];
+		const reader = new FileReader();
+
+		reader.addEventListener("load", () => {
+			preview.src = reader.result;
+		}, false);
+
+		if (file) {
+			reader.readAsDataURL(file);
+			btn.classList.remove("invisible");
+		}
+	}
+	</script>
 </body>
 
 </html>
