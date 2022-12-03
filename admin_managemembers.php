@@ -705,7 +705,7 @@ $user_results = $con->query($user_sql);
 
 		repeatFetchNextId()
 
-		const onlyLetters = (evt) => evt.value = evt.value.replace(/[^A-Za-z]/ig, '')
+		const onlyLetters = (evt) => evt.value = evt.value.replace(/[^A-Z a-z]/ig, '')
 		const onlyNumber = (evt) => evt.value = evt.value.replace(/[^0-9]/ig, '')
 		</script>
 	</div>
