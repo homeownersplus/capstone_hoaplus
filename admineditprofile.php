@@ -119,31 +119,34 @@ if ($action == "update_photo") {
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Username</label>
-													<input class="form-control" type="text" value="<?php echo $row['username']; ?>" disabled>
+													<input class="form-control" type="text" value="<?php echo $row['username'] ?? ''; ?>"
+														disabled>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Email address</label>
-													<input class="form-control" type="email" value="<?php echo $row['email']; ?>" disabled>
+													<input class="form-control" type="email" value="<?php echo $row['email'] ?? ''; ?>" disabled>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Full Name</label>
-													<input class="form-control" type="text" value="<?php echo $row['fullname']; ?>" disabled>
+													<input class="form-control" type="text" value="<?php echo $row['fullname'] ?? ''; ?>"
+														disabled>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Position</label>
-													<input class="form-control" type="text" value="<?php echo $row['position']; ?>" disabled>
+													<input class="form-control" type="text" value="<?php echo $row['position'] ?? ''; ?>"
+														disabled>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Admin ID</label>
-													<input class="form-control" type="text" value="<?php echo $row['id']; ?>" disabled>
+													<input class="form-control" type="text" value="<?php echo $row['id'] ?? ''; ?>" disabled>
 												</div>
 											</div>
 										</div>
@@ -206,6 +209,7 @@ if ($action == "update_photo") {
 											</div>
 											<?php endif; ?>
 											<div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
+												<?php if (isset($_SESSION["logged_user"]["avatar"])) : ?>
 												<input type="hidden" name="action" value="update_photo">
 												<img id="img-preview"
 													src='<?php echo $_SESSION["logged_user"]["avatar"] ? "../photos/" . $_SESSION["logged_user"]["avatar"] : "./photos/profile.png" ?>'
@@ -223,6 +227,7 @@ if ($action == "update_photo") {
 														Update Photo
 													</button>
 												</div>
+												<?php endif; ?>
 											</div>
 										</form>
 									</div>

@@ -69,11 +69,11 @@ $user_results = $con->query($user_sql);
 
 	<!-- <link href="style_postboard.css" rel="stylesheet"> -->
 	<!-- Custom styles for this template-->
-<link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
-	integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw=="
-	crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+		integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <!--------------------------- left navigation  ----------------------------->
@@ -106,8 +106,8 @@ $user_results = $con->query($user_sql);
 
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h3 mb-0 text-gray-800">HOA User Accounts</h1>
-						<button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onClick="generatePDF()"><i
-								class="fas fa-download fa-sm text-white-50"></i> Generate Report</button>
+						<!-- <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onClick="generatePDF()"><i
+								class="fas fa-download fa-sm text-white-50"></i> Generate Report</button> -->
 					</div>
 
 					<!--------------------------------------- Add Modal ------------------------------------->
@@ -150,7 +150,8 @@ $user_results = $con->query($user_sql);
 													</div>
 													<div class="form-group col-md-2">
 														<label>M.I: </label>
-														<input type="text" name="mi" class="form-control" placeholder="M.I" onInput="onlyLetters(this)">
+														<input type="text" name="mi" class="form-control" placeholder="M.I"
+															onInput="onlyLetters(this)">
 													</div>
 												</div>
 
@@ -168,7 +169,7 @@ $user_results = $con->query($user_sql);
 												<div class="row">
 													<div class="form-group col-md-2">
 														<label class="col-sm-2 col-form-label">Phase: </label>
-														<input type="text" name="phase" class="form-control" >
+														<input type="text" name="phase" class="form-control">
 													</div>
 													<div class="form-group col-md-2">
 														<label class="col-sm-2 col-form-label">Block: </label>
@@ -278,39 +279,39 @@ $user_results = $con->query($user_sql);
 
 						<div class="card-body">
 
-						<div class="form-group input-daterange d-flex justify-content-between align-items-center">
-							<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
-								placeholder="From:">
-							<div class="form-group-addon mx-4">To</div>
-							<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
-								placeholder="To:">
-						</div>
+							<div class="form-group input-daterange d-flex justify-content-between align-items-center">
+								<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
+									placeholder="From:">
+								<div class="form-group-addon mx-4">To</div>
+								<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
+									placeholder="To:">
+							</div>
 							<div class="table-responsive">
 								<table class="table table-bordered" width="100%" cellspacing="0">
 
 									<table class="table" id="table-data" style="margin-top:2%;">
-									<thead>
-										<th scope="col">MemberID</th>
-										<th scope="col">Lastname</th>
-										<th scope="col">Firstname</th>
-										<th scope="col">M.I</th>
-										<th scope="col">Date created</th>
-									</thead>
-									<tbody>
-										<?php 
-										while($row = $user_results->fetch_assoc()){
+										<thead>
+											<th scope="col">MemberID</th>
+											<th scope="col">Lastname</th>
+											<th scope="col">Firstname</th>
+											<th scope="col">M.I</th>
+											<th scope="col">Date created</th>
+										</thead>
+										<tbody>
+											<?php
+											while ($row = $user_results->fetch_assoc()) {
 											?>
 											<tr>
-												<td><?php echo str_pad($row['id'], 5,"0", STR_PAD_LEFT); ?></td>
+												<td><?php echo str_pad($row['id'], 5, "0", STR_PAD_LEFT); ?></td>
 												<td><?php echo $row['last_name']; ?></td>
 												<td><?php echo $row['first_name']; ?></td>
 												<td><?php echo $row['middle_initial']; ?></td>
-												<td><?php echo $row['created_at']; ?></td>
+												<th><?php echo date("M d, Y", strtotime($row["created_at"])); ?></th>
 											</tr>
-										<?php }
-										?>
-									</tbody>
-								</table>
+											<?php }
+											?>
+										</tbody>
+									</table>
 							</div>
 						</div>
 					</div>
@@ -437,8 +438,10 @@ $user_results = $con->query($user_sql);
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
 			integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
 		</script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+			integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+			crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 		<script src="vendor/datatables/jquery.dataTables.min.js"></script>
 		<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
@@ -455,7 +458,6 @@ $user_results = $con->query($user_sql);
 			integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
 			crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script>
-
 		$('.input-daterange input').each(function() {
 			$(this).datepicker('clearDates');
 		});
@@ -464,17 +466,11 @@ $user_results = $con->query($user_sql);
 			// lengthChange: true,
 			dom: 'lBfrtip',
 			// responsive: true,
-			buttons: [
-				{
-					extend: 'pdf',
-					text: 'Generate Report',
-					className: "btn btn-primary",
-					exportOptions: {
-						columns: 'th:not(:last-child)',
-						columnGap: 1
-					}
-				}
-			],
+			buttons: [{
+				extend: 'pdf',
+				text: 'Generate Report',
+				className: "btn btn-primary",
+			}],
 			'lengthMenu': [
 				[10, 25, 50, -1],
 				[10, 25, 50, "All"]
@@ -486,7 +482,7 @@ $user_results = $con->query($user_sql);
 			function(settings, data, dataIndex) {
 				var min = $('#min-date').val();
 				var max = $('#max-date').val();
-				var createdAt = data[3] || 0; // due date column in the table
+				var createdAt = data[4] || 0; // due date column in the table
 
 				if (
 					(min == "" || max == "") ||
@@ -508,11 +504,11 @@ $user_results = $con->query($user_sql);
 		<script>
 		const generatePDF = () => {
 			html2pdf()
-			.set({
-				margin:       1,
-				filename:     'hoa-members.pdf'
-			})
-			.from(document.querySelector('.table-responsive')).save()
+				.set({
+					margin: 1,
+					filename: 'hoa-members.pdf'
+				})
+				.from(document.querySelector('.table-responsive')).save()
 		}
 		$(document).ready(function() {
 			$('.edtbtn').on('click', function() {
@@ -564,8 +560,9 @@ $user_results = $con->query($user_sql);
 			registerBtn.disabled = true
 			registerBtn.value = 'Saving...'
 			try {
-				if(DQ('[name=number').value.length !== 11) throw "Invalid phone format"
-				if(!DQ('[name=email').value.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) throw "Invalid email format"
+				if (DQ('[name=number').value.length !== 11) throw "Invalid phone format"
+				if (!DQ('[name=email').value.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/))
+					throw "Invalid email format"
 
 				const form = new FormData()
 
@@ -696,11 +693,10 @@ $user_results = $con->query($user_sql);
 			try {
 				const url = await fetch(`api/fetch_member.php?page=1`)
 				const toJson = await url.json()
-				DQ('[name=memberid]').value = "HOAM"+(Number(toJson?.data[0].id) + 1).toString().padStart(5, '0')
+				DQ('[name=memberid]').value = "HOAM" + (Number(toJson?.data[0].id) + 1).toString().padStart(5, '0')
 			} catch (error) {
 				console.log(error)
-			}
-			finally{
+			} finally {
 				setTimeout(() => {
 					repeatFetchNextId()
 				}, 5000);
@@ -711,7 +707,6 @@ $user_results = $con->query($user_sql);
 
 		const onlyLetters = (evt) => evt.value = evt.value.replace(/[^A-Za-z]/ig, '')
 		const onlyNumber = (evt) => evt.value = evt.value.replace(/[^0-9]/ig, '')
-
 		</script>
 	</div>
 </body>
