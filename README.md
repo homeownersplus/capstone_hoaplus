@@ -6,6 +6,12 @@
 
 ## Changelog
 
+### Week 4 2022-12-03
+
+- added admin profile page
+- show admin profile picture in top bar
+- added new field in user table `avatar` (varchar, 255, nullable)
+
 ### Bugfix 1 2022-12-02
 
 - president role can now access manage admins
