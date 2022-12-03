@@ -375,10 +375,15 @@ if (isset($_POST['cancel-reservation-id'])) {
 						</div>
 					</div>
 					<div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
+						<div class="modal-dialog text-center">
+							<div class="modal-content p-3">
+								<h3>HOA+ ONE TIME E-PASS</h3>
+								<p> Present this before entering the amenity. </p>
 								<div class="modal-body d-flex justify-content-center" id="qr-con">
 								</div>
+								<center>
+									<a id="qrdl" class="btn btn-primary" hidden>Download QR</a>
+								</center>
 							</div>
 						</div>
 					</div>
@@ -423,6 +428,14 @@ if (isset($_POST['cancel-reservation-id'])) {
 							DQ('#qr-con').innerHTML = ''
 							const QR = new QRCode(DQ('#qr-con'), `http://localhost/capstone_hoaplus/api/e_pass.php?id=${res.epass_id}`)
 
+							setTimeout(() => {
+								let qelem = DQ('#qr-con img')
+								let dlink = document.querySelector('#qrdl')
+								let qr = qelem.getAttribute('src');
+								dlink.setAttribute('href', qr);
+								dlink.setAttribute('download', 'filename');
+								dlink.removeAttribute('hidden');
+							}, 500);
 							$('#qrModal').modal('show')
 						} catch (error) {
 							console.log("Error occured while trying to generate E-Pass", error)

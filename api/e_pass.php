@@ -15,14 +15,6 @@ $epass_id = $_GET['id'];
 
 $result = $con->query("SELECT reservations.start_date as start_date, reservations.end_date as end_date, tblamenities.amename as amenity_name, tblamenities.PostingDate as amenity_posted_date, reservations.status as reservation_status, user.first_name, user.middle_initial, user.last_name, user.id as user_id FROM `tbl_epass` , reservations, user, tblamenities WHERE tbl_epass.id = $epass_id AND reservations.id = tbl_epass.reservation_id AND tbl_epass.is_used = 0 AND tblamenities.id = reservations.amenity_id AND user.id = reservations.member_id;");
 $row = $result->fetch_assoc();
-if(!$row) echo "INVALID QRCODE.";
-
-$update_epass = $con->prepare("UPDATE `tbl_epass` SET `is_used`='1' WHERE id = ?");
-$update_epass->bind_param("s", $epass_id);
-$update_epass->execute();
-
-$result1 = $con->query("SELECT `id`, `user_id`, `full_name`, `relationship` FROM `user_family` WHERE `user_id` = ".$row['user_id']);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,6 +28,15 @@ $result1 = $con->query("SELECT `id`, `user_id`, `full_name`, `relationship` FROM
 
 </head>
 <body>
+    <?php
+    if($row){
+
+        $update_epass = $con->prepare("UPDATE `tbl_epass` SET `is_used`='1' WHERE id = ?");
+        $update_epass->bind_param("s", $epass_id);
+        $update_epass->execute();
+
+        $result1 = $con->query("SELECT `id`, `user_id`, `full_name`, `relationship` FROM `user_family` WHERE `user_id` = ".$row['user_id']);
+    ?>
     <div class="table-responsive">
         <table class="table table-bordered" width="100%" cellspacing="0">
             <tr>
@@ -72,8 +73,31 @@ $result1 = $con->query("SELECT `id`, `user_id`, `full_name`, `relationship` FROM
         </table>
     <div>
 
+    <?php
+    }
+    ?>
+    <div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-body fw-bolder text-align-center">
+                <center>
+            This E-Pass can be scanned only once.
+                </center>
+            </div>
+            </div>
+        </div>
+    </div>
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <?php
+        if(!$row){
+            ?>
+            <script>
+                $('#modal').modal("show")
+            </script>
+            <?php
+        }
+    ?>
 </body>
 </html>

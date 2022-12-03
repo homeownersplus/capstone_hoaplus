@@ -9,6 +9,7 @@ require_once 'dbconfig.php';
 include('./global/model.php');
 $model = new Model();
 
+$con = new mysqli("localhost", "root", "", "pdocrud");
 
 //inactiveposts
 if (isset($_REQUEST['del'])) {
@@ -35,6 +36,9 @@ if (isset($_REQUEST['active'])) {
 	echo "<script>window.location.href='adminlandingpage.php'</script>";
 }
 
+$user_sql = "SELECT * FROM `user`";
+
+$user_results = $con->query($user_sql);
 ?>
 <!doctype html>
 <html lang="en">
@@ -64,6 +68,12 @@ if (isset($_REQUEST['active'])) {
 
 
 	<!-- <link href="style_postboard.css" rel="stylesheet"> -->
+	<!-- Custom styles for this template-->
+<link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+	integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <!--------------------------- left navigation  ----------------------------->
@@ -158,15 +168,15 @@ if (isset($_REQUEST['active'])) {
 												<div class="row">
 													<div class="form-group col-md-2">
 														<label class="col-sm-2 col-form-label">Phase: </label>
-														<input type="text" name="phase" class="form-control" onInput="onlyLetters(this)">
+														<input type="text" name="phase" class="form-control" >
 													</div>
 													<div class="form-group col-md-2">
 														<label class="col-sm-2 col-form-label">Block: </label>
-														<input type="text" name="block" class="form-control" onInput="onlyLetters(this)">
+														<input type="text" name="block" class="form-control">
 													</div>
 													<div class="form-group col-md-2">
 														<label class="col-sm-2 col-form-label">Lot: </label>
-														<input type="text" name="lot" class="form-control" onInput="onlyLetters(this)">
+														<input type="text" name="lot" class="form-control">
 													</div>
 													<div class="col">
 														<label class="col-sm-2 col-form-label"> Barangay: </label>
@@ -267,34 +277,40 @@ if (isset($_REQUEST['active'])) {
 					<div class="card shadow mb-4" style="margin-top:2%;">
 
 						<div class="card-body">
-							<div class="input-group mb-3">
-								<input type="text" class="form-control" placeholder="Looking for someone ? " id="search-field">
-								<button class="btn btn-primary" type="button" id="search-btn">Search</button>
-							</div>
 
+						<div class="form-group input-daterange d-flex justify-content-between align-items-center">
+							<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
+								placeholder="From:">
+							<div class="form-group-addon mx-4">To</div>
+							<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
+								placeholder="To:">
+						</div>
 							<div class="table-responsive">
-								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								<table class="table table-bordered" width="100%" cellspacing="0">
 
-									<table class="table" id="example1" style="margin-top:2%;">
-										<thead>
-											<th scope="col">MemberID</th>
-											<th scope="col">Lastname</th>
-											<th scope="col">Firstname</th>
-											<th scope="col">M.I</th>
-											<th scope="col">Action</th>
-										</thead>
-										<tbody>
-
-										</tbody>
-									</table>
-							</div>
-
-							<div class="d-flex justify-content-end">
-								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-outline-primary" id="prev-btn">Prev</button>
-									<button type="button" class="btn btn-outline-primary" id="current-page">1</button>
-									<button type="button" class="btn btn-outline-primary" id="next-btn">Next</button>
-								</div>
+									<table class="table" id="table-data" style="margin-top:2%;">
+									<thead>
+										<th scope="col">MemberID</th>
+										<th scope="col">Lastname</th>
+										<th scope="col">Firstname</th>
+										<th scope="col">M.I</th>
+										<th scope="col">Date created</th>
+									</thead>
+									<tbody>
+										<?php 
+										while($row = $user_results->fetch_assoc()){
+											?>
+											<tr>
+												<td><?php echo str_pad($row['id'], 5,"0", STR_PAD_LEFT); ?></td>
+												<td><?php echo $row['last_name']; ?></td>
+												<td><?php echo $row['first_name']; ?></td>
+												<td><?php echo $row['middle_initial']; ?></td>
+												<td><?php echo $row['created_at']; ?></td>
+											</tr>
+										<?php }
+										?>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
@@ -422,6 +438,73 @@ if (isset($_REQUEST['active'])) {
 			integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
 		</script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		
+		<script src="vendor/datatables/jquery.dataTables.min.js"></script>
+		<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+		<!-- <script src="js/demo/datatables-demo.js"></script> -->
+		<script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+		<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+		<!-- <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+		<!-- <script src="https://cdn.datatables.net/datetime/1.2.0/js/dataTables.dateTime.min.js"></script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
+			integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
+			crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script>
+
+		$('.input-daterange input').each(function() {
+			$(this).datepicker('clearDates');
+		});
+
+		var table = $('#table-data').DataTable({
+			// lengthChange: true,
+			dom: 'lBfrtip',
+			// responsive: true,
+			buttons: [
+				{
+					extend: 'pdf',
+					text: 'Generate Report',
+					className: "btn btn-primary",
+					exportOptions: {
+						columns: 'th:not(:last-child)',
+						columnGap: 1
+					}
+				}
+			],
+			'lengthMenu': [
+				[10, 25, 50, -1],
+				[10, 25, 50, "All"]
+			]
+		});
+
+		// Extend dataTables search
+		$.fn.dataTable.ext.search.push(
+			function(settings, data, dataIndex) {
+				var min = $('#min-date').val();
+				var max = $('#max-date').val();
+				var createdAt = data[3] || 0; // due date column in the table
+
+				if (
+					(min == "" || max == "") ||
+					(moment(createdAt).isSameOrAfter(min) && moment(createdAt).isSameOrBefore(max))
+				) {
+					return true;
+				}
+				return false;
+			}
+		);
+
+		// Re-draw the table when the a date range filter changes
+		$('.date-range-filter').change(function() {
+			table.draw();
+		});
+
+		$('#my-table_filter').hide();
+		</script>
 		<script>
 		const generatePDF = () => {
 			html2pdf()
@@ -545,69 +628,69 @@ if (isset($_REQUEST['active'])) {
 
 		registerBtn.addEventListener('click', handleRegisterMember)
 
-		let table_data = null
-		const fetchData = async (search, page) => {
-			try {
-				const url = await fetch(`api/fetch_member.php?page=${page ? page : '1'}&${search ? `search=${search}` : ''}`)
-				const toJson = await url.json()
+		// let table_data = null
+		// const fetchData = async (search, page) => {
+		// 	try {
+		// 		const url = await fetch(`api/fetch_member.php?page=${page ? page : '1'}&${search ? `search=${search}` : ''}`)
+		// 		const toJson = await url.json()
 
-				console.log(toJson)
-				let temp = ''
+		// 		console.log(toJson)
+		// 		let temp = ''
 
-				table_data = toJson
-				for (const i of toJson?.data) {
-					temp += `
-						<tr>
-							<td>HOAM${(i.id).padStart(5, '0')}</td>
-							<td>${i.last_name}</td>
-							<td>${i.first_name}</td>
-							<td>${i.middle_initial}</td>
-							<td></td>
-						</tr>
-					`
-				}
+		// 		table_data = toJson
+		// 		for (const i of toJson?.data) {
+		// 			temp += `
+		// 				<tr>
+		// 					<td>HOAM${(i.id).padStart(5, '0')}</td>
+		// 					<td>${i.last_name}</td>
+		// 					<td>${i.first_name}</td>
+		// 					<td>${i.middle_initial}</td>
+		// 					<td></td>
+		// 				</tr>
+		// 			`
+		// 		}
 
-				DQ('tbody').innerHTML = temp
-				DQ('#current-page').innerHTML = page || 1
-			} catch (error) {
-				console.log(error)
-			}
-		}
+		// 		DQ('tbody').innerHTML = temp
+		// 		DQ('#current-page').innerHTML = page || 1
+		// 	} catch (error) {
+		// 		console.log(error)
+		// 	}
+		// }
 
-		DQ('#search-btn').addEventListener('click', () => {
-			if (DQ('#search-field').value.length == 0) return fetchData()
-			fetchData(DQ('#search-field').value, 1)
-		})
+		// DQ('#search-btn').addEventListener('click', () => {
+		// 	if (DQ('#search-field').value.length == 0) return fetchData()
+		// 	fetchData(DQ('#search-field').value, 1)
+		// })
 
-		DQ('#next-btn').addEventListener('click', async () => {
-			if (!table_data) return
+		// DQ('#next-btn').addEventListener('click', async () => {
+		// 	if (!table_data) return
 
-			if (Number(table_data.page) === Number(table_data.total_pages)) return
-			DQ('#next-btn').disabled = true
+		// 	if (Number(table_data.page) === Number(table_data.total_pages)) return
+		// 	DQ('#next-btn').disabled = true
 
-			await fetchData(
-				(
-					(DQ('#search-field').value.length == 0) ? null : DQ('#search-field').value
-				), Number(table_data.page) + 1)
+		// 	await fetchData(
+		// 		(
+		// 			(DQ('#search-field').value.length == 0) ? null : DQ('#search-field').value
+		// 		), Number(table_data.page) + 1)
 
-			DQ('#next-btn').disabled = false
-		})
+		// 	DQ('#next-btn').disabled = false
+		// })
 
-		DQ('#prev-btn').addEventListener('click', async () => {
-			if (!table_data) return
+		// DQ('#prev-btn').addEventListener('click', async () => {
+		// 	if (!table_data) return
 
-			if (Number(table_data.page) === 0) return
-			DQ('#prev-btn').disabled = true
+		// 	if (Number(table_data.page) === 0) return
+		// 	DQ('#prev-btn').disabled = true
 
-			await fetchData(
-				(
-					(DQ('#search-field').value.length == 0) ? null : DQ('#search-field').value
-				), Number(table_data.page) - 1)
+		// 	await fetchData(
+		// 		(
+		// 			(DQ('#search-field').value.length == 0) ? null : DQ('#search-field').value
+		// 		), Number(table_data.page) - 1)
 
-			DQ('#prev-btn').disabled = false
-		})
+		// 	DQ('#prev-btn').disabled = false
+		// })
 
-		fetchData()
+		// fetchData()
 
 		const repeatFetchNextId = async () => {
 			try {

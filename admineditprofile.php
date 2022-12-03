@@ -4,6 +4,12 @@ session_start();
 require_once "./helpers/auth.php";
 require_once "./helpers/redirect.php";
 adminOnlyMiddleware();
+
+$con = new mysqli("localhost", "root", "", "pdocrud");
+
+$result = $con->query("SELECT * FROM `admins` WHERE id = ".$_SESSION['userid']);
+$row = $result->fetch_assoc();
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -63,37 +69,31 @@ adminOnlyMiddleware();
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Username</label>
-													<input class="form-control" type="text" value="fetch admin username" disabled>
+													<input class="form-control" type="text" value="<?php echo $row['username'];?>" disabled>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Email address</label>
-													<input class="form-control" type="email" value=" fetchadminemail@example.com" disabled>
+													<input class="form-control" type="email" value="<?php echo $row['email'];?>" disabled>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Full Name</label>
-													<input class="form-control" type="text" value="Admin Full Name" disabled>
+													<input class="form-control" type="text" value="<?php echo $row['fullname'];?>" disabled>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Position</label>
-													<input class="form-control" type="text" value="Fetch Admin Position" disabled>
+													<input class="form-control" type="text" value="<?php echo $row['position'];?>" disabled>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label for="example-text-input" class="form-control-label">Admin ID</label>
-													<input class="form-control" type="text" value="Fetch AdminID" disabled>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													<label for="example-text-input" class="form-control-label">Date Added</label>
-													<input class="form-control" type="text" value="Fetch when is the admin added" disabled>
+													<input class="form-control" type="text" value="<?php echo $row['id'];?>" disabled>
 												</div>
 											</div>
 										</div>
@@ -123,7 +123,7 @@ adminOnlyMiddleware();
 										<div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0"> <img src="./photos/profile.png"
 												class="img-fluid rounded-circle"
 												style="width: 150px;height: 150px; margin-left: 25%; margin-top:10%;">
-											<h5 class="card-title" style="margin-top:7%; margin-left:20%">Fetch Adminfullname</h5>
+											<h5 class="card-title" style="margin-top:7%; margin-left:20%"><?php echo $row['fullname'];?></h5>
 											<input class="form-control" type="file" name="image" accept="image/*" onchange="readURL(this, '')"
 												style="border: 0px; padding: 3px; margin-top:3%; margin-top:10%; margin-left:5%; width:90%;"
 												required>
