@@ -79,7 +79,7 @@ if (isset($_REQUEST['del'])) {
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
 
-					<h1 class="h3 mb-4 text-gray-800">INBOX</h1>
+					<h1 class="font-weight-bold">Inbox</h1>
 
 
 					<!---alert messages--->
@@ -114,7 +114,7 @@ if (isset($_REQUEST['del'])) {
 										<tr>
 											<th scope="col">From</th>
 											<th scope="col">Messages</th>
-											<th scope="col">Recieved</th>
+											<th scope="col">Receieved</th>
 										</tr>
 									</thead>
 									<tbody id="mail-body">

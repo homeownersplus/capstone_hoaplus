@@ -91,7 +91,7 @@ if (isset($_REQUEST['active'])) {
 
 					<!-- Page Heading -->
 
-					<h1 class="h3 mb-4 text-gray-800">Manage Posts</h1>
+					<h1 class="font-weight-bold">Announcements</h1>
 					<a class="btn btn-primary" href="adminaddpost.php">Add Post
 						<i class="fas fa-plus"></i></a>
 

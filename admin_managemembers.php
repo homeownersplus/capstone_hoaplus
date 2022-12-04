@@ -105,7 +105,7 @@ $user_results = $con->query($user_sql);
 					<!-- Page Heading -->
 
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">HOA User Accounts</h1>
+						<h1 class="font-weight-bold">User Accounts</h1>
 						<!-- <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onClick="generatePDF()"><i
 								class="fas fa-download fa-sm text-white-50"></i> Generate Report</button> -->
 					</div>
