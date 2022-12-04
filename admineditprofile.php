@@ -212,7 +212,7 @@ if ($action == "update_photo") {
 												<?php if (isset($_SESSION["logged_user"]["avatar"])) : ?>
 												<input type="hidden" name="action" value="update_photo">
 												<img id="img-preview"
-													src='<?php echo $_SESSION["logged_user"]["avatar"] ? "../photos/" . $_SESSION["logged_user"]["avatar"] : "./photos/profile.png" ?>'
+													src='<?php echo $_SESSION["logged_user"]["avatar"] ? "./photos/" . $_SESSION["logged_user"]["avatar"] : "./photos/profile.png" ?>'
 													class="img-fluid rounded-circle"
 													style="width: 150px;height: 150px; margin-left: 25%; margin-top:10%;">
 												<h5 class="card-title" style="margin-top:7%; margin-left:20%"><?php echo $row['fullname']; ?>

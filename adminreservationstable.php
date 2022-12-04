@@ -90,6 +90,22 @@ if ($stmt->rowCount() > 0) {
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 	<!-- <link href="style_postboard.css" rel="stylesheet"> -->
+	<style>
+	.left-col {
+		float: left;
+		width: 25%;
+	}
+
+	.center-col {
+		float: left;
+		width: 50%;
+	}
+
+	.right-col {
+		float: left;
+		width: 25%;
+	}
+	</style>
 </head>
 
 <!--------------------------- left navigation  ----------------------------->
@@ -127,17 +143,35 @@ if ($stmt->rowCount() > 0) {
 
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4" style="margin-top:2%;">
-
+						<div class="card text-center">
+							<div class="card-header">
+								<ul id="card-nav" class="nav nav-tabs card-header-tabs">
+									<li class="nav-item">
+										<button type="button" onclick="filterStatus(0)" class="nav-link active">All</button>
+									</li>
+									<li class="nav-item">
+										<button type="button" onclick="filterStatus(1)" class="nav-link">Confirmed</button>
+									</li>
+									<li class="nav-item">
+										<button type="button" onclick="filterStatus(2)" class="nav-link">Cancelled</button>
+									</li>
+									<li class="nav-item">
+										<button type="button" onclick="filterStatus(3)" class="nav-link">Completed</button>
+									</li>
+								</ul>
+							</div>
+						</div>
 						<div class="card-body">
-							<div class="form-group input-daterange d-flex justify-content-between align-items-center">
+							<div class="form-group d-flex justify-content-between align-items-center">
 
-								<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
-									placeholder="From:">
-
-								<div class="form-group-addon mx-4">To</div>
-
-								<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
-									placeholder="To:">
+								<div class="d-flex input-daterange">
+									<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
+										placeholder="From:">
+									<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
+										placeholder="To:">
+								</div>
+								<button class="btn btn-primary" onclick="generatePdf()">Generate
+									Report</button>
 
 							</div>
 							<div class="table-responsive">
@@ -150,7 +184,7 @@ if ($stmt->rowCount() > 0) {
 											<th>Reservation Time End</th>
 											<th>Date Created</th>
 											<th>Status</th>
-											<th></th>
+											<th>Action</th>
 										</thead>
 										<tbody>
 											<?php foreach ($rows as $row) : ?>
@@ -161,23 +195,25 @@ if ($stmt->rowCount() > 0) {
 												<th><?php echo date("M d, Y h:i A", strtotime($row["end_date"])); ?></th>
 												<th><?php echo date("Y-m-d", strtotime($row["created_at"])); ?></th>
 												<th><?php echo $statusList[$row["status"]]; ?></th>
-												<th class="d-flex gap-1">
-													<?php if ($row["status"] == 1) : ?>
-													<form method="POST">
-														<input type="hidden" name="delete_id" value="<?php echo $row["id"]; ?>">
-														<button type="submit" class="btn btn-danger btn-sm">REMOVE</button>
-													</form>
-													<?php endif; ?>
-													<?php if ($row["status"] == 2) : ?>
-													<form method="POST">
-														<input type="hidden" name="cancel_id" value="<?php echo $row["id"]; ?>">
-														<button type="submit" class="btn btn-warning btn-sm">CANCEL</button>
-													</form>
-													<form method="POST">
-														<input type="hidden" name="complete_id" value="<?php echo $row["id"]; ?>">
-														<button type="submit" class="btn btn-success btn-sm">COMPLETE</button>
-													</form>
-													<?php endif; ?>
+												<th>
+													<div class="btn-group">
+														<?php if ($row["status"] == 1) : ?>
+														<form method="POST">
+															<input type="hidden" name="delete_id" value="<?php echo $row["id"]; ?>">
+															<button type="submit" class="btn btn-outline-dark btn-sm">REMOVE</button>
+														</form>
+														<?php endif; ?>
+														<?php if ($row["status"] == 2) : ?>
+														<form method="POST">
+															<input type="hidden" name="cancel_id" value="<?php echo $row["id"]; ?>">
+															<button type="submit" class="btn btn-outline-dark btn-sm">CANCEL</button>
+														</form>
+														<form method="POST">
+															<input type="hidden" name="complete_id" value="<?php echo $row["id"]; ?>">
+															<button type="submit" class="btn btn-outline-primary btn-sm">COMPLETE</button>
+														</form>
+														<?php endif; ?>
+													</div>
 												</th>
 											</tr>
 											<?php endforeach; ?>
@@ -238,37 +274,71 @@ if ($stmt->rowCount() > 0) {
 						integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
 						crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 					<script>
+					const loggedUser = '<?php echo $_SESSION["logged_user"]["username"] ?>';
+					let statusFilterValue = 0;
+					const statusFilter = {
+						0: "All",
+						1: "Confirmed",
+						2: "Cancelled",
+						3: "Completed"
+					};
+
 					$('.input-daterange input').each(function() {
 						$(this).datepicker('clearDates');
 					});
+
 					var table = $('#table-data').DataTable({
 						// lengthChange: true,
-						dom: 'lBfrtip',
+						// dom: 'lBfrtip',
 						// responsive: true,
-						buttons: [
-							// {
-							// 	extend: 'excel',
-							// 	text: 'Excel Report',
-							// 	className: "btn btn-primary",
-							// 	exportOptions: {
-							// 		columns: 'th:not(:last-child)'
-							// 	}
-							// },
-							{
-								extend: 'pdf',
-								text: 'Generate Report',
-								className: "btn btn-primary",
-								exportOptions: {
-									columns: 'th:not(:last-child)',
-									columnGap: 1
-								}
-							}
-						],
+						"dom": '<"top"<"left-col"l><"center-col"B><"right-col">>frt<"bottom"<"left-col"i><p>>',
+						buttons: [{
+							extend: 'pdf',
+							text: 'Generate Report',
+							className: "btn btn-primary invisible pdf-generate-btn",
+							exportOptions: {
+								columns: 'th:not(:last-child)',
+								columnGap: 1
+							},
+							customize: function(doc) {
+								const date = moment().format("MMMM Do YYYY, h:mm:ss a");
+								doc.content.splice(0, 1, {
+									text: [{
+										text: 'HOA+ RESERVED AMENITIES REPORT \n',
+										bold: true,
+										fontSize: 16
+									}, {
+										text: ` As of ${date} \n`,
+										bold: false,
+										fontSize: 9
+									}, {
+										text: `Generated By: ${loggedUser}`,
+										bold: false,
+										fontSize: 9
+									}],
+									margin: [0, 0, 0, 12],
+									alignment: 'center'
+								});
+							},
+						}],
 						'lengthMenu': [
 							[10, 25, 50, -1],
 							[10, 25, 50, "All"]
 						]
 					});
+
+					// Card Nav
+					const cardNav = document.querySelector("#card-nav");
+					const filterStatus = (status) => {
+						// update active status
+						const cardNavItems = cardNav.querySelectorAll("button");
+						cardNavItems.forEach((item, index) => {
+							if (item.classList.contains('active')) item.classList.remove("active");
+							if (index == status) item.classList.add("active");
+						})
+						statusFilterValue = status;
+						table.draw();
+					}
 
 					// Extend dataTables search
 					$.fn.dataTable.ext.search.push(
@@ -277,10 +347,16 @@ if ($stmt->rowCount() > 0) {
 							var max = $('#max-date').val();
 							var createdAt = data[2] || 0; // Our date column in the table
 
+							// Filter by date range
 							if (
 								(min == "" || max == "") ||
 								(moment(createdAt).isSameOrAfter(min, "day") && moment(createdAt).isSameOrBefore(max, "day"))
 							) {
+								// Filter by status
+								const filter = statusFilter[statusFilterValue];
+								if (filter != "All") {
+									if (data[5] != filter) return false
+								}
 								return true;
 							}
 							return false;
@@ -293,6 +369,10 @@ if ($stmt->rowCount() > 0) {
 					});
 
 					$('#my-table_filter').hide();
+
+					const generatePdf = () => {
+						document.querySelector('.pdf-generate-btn').click()
+					}
 					</script>
 
 </body>
