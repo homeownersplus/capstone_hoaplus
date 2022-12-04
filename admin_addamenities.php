@@ -96,9 +96,15 @@ $model = new Model();
 
 					<!-- Page Heading -->
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+<<<<<<< HEAD
+						<h1 class="font-weight-bold">Manage Amenities</h1>
+						<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+								class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+=======
 						<h1 class="h3 mb-0 text-gray-800">Manage Available Amenities</h1>
 						<a class="btn btn-primary" href="adminaddamenity_form.php">Add Amenity
 							<i class="fas fa-plus"></i></a>
+>>>>>>> 272f0464d4a4aba853c1cfb36b26a29d24502bc6
 					</div>
 
 
