@@ -451,10 +451,15 @@ if (isset($_POST["amenity"])) {
 						document.querySelector("#time-start-input-picker").value = ""
 						document.querySelector("#time-end-input").value = ""
 						document.querySelector("#time-start-input").value = ""
+						const ext = new Date().toLocaleString('en-US', {
+							hour: 'numeric',
+							hour12: true
+						}).split(" ")[1];
 						if (moment(document.querySelector("#date-input").value).isSame(new Date(), "day")) {
-							$('#time-start-input-picker').timepicker('option', 'minTime', `${parseInt(new Date().getHours()) + 1}`);
+							$('#time-start-input-picker').timepicker('option', 'minTime',
+								`${parseInt(new Date().getHours()) + 1}${ext}`);
 						} else {
-							$('#time-start-input-picker').timepicker('option', 'minTime', `1`);
+							$('#time-start-input-picker').timepicker('option', 'minTime', `8AM`);
 						}
 					});
 
@@ -489,15 +494,20 @@ if (isset($_POST["amenity"])) {
 					// setInterval(() => {
 					// 	timeChecker()
 					// }, 1000 * 10)
+					const ext = new Date().toLocaleString('en-US', {
+						hour: 'numeric',
+						hour12: true
+					}).split(" ")[1];
 
 					$('#time-start-input-picker').timepicker({
 						timeFormat: 'h p',
 						interval: 60,
-						minTime: `${parseInt(new Date().getHours()) + 1}`,
-						maxTime: '10:00pm',
-						defaultTime: new Date(),
-						startTime: '12:00am',
-						dynamic: false,
+						minTime: `${parseInt(new Date().getHours()) + 1}${ext}`,
+						// minTime: "8am",
+						startTime: '8:00am',
+						maxTime: '6:00pm',
+						defaultTime: null,
+						dynamic: true,
 						dropdown: true,
 						scrollbar: true,
 						change: function(time) {
@@ -526,9 +536,9 @@ if (isset($_POST["amenity"])) {
 						timeFormat: 'h p',
 						interval: 60,
 						minTime: '1',
-						maxTime: '11:00pm',
+						maxTime: '7:00pm',
 						defaultTime: null,
-						startTime: '1:00am',
+						startTime: '9:00am',
 						dynamic: true,
 						dropdown: true,
 						scrollbar: true,

@@ -23,7 +23,8 @@ $sql = "
 		payments.date_paid,
 		payments.date_due,
 		payments.amount,
-		DATE_ADD(date_due, INTERVAL 1 MONTH) as next_due
+		DATE_ADD(date_due, INTERVAL 1 MONTH) as next_due,
+		YEAR(payments.date_due) as payment_year
 	FROM payments
 	INNER JOIN user
 	ON payments.member_id = user.id
@@ -65,7 +66,13 @@ if (isset($_POST['confirmPwd'])) {
 		}
 	}
 	// prepare data
-	$currentDate = date("Y-m-d");
+	if ($_POST["btn_action"] == "pay") {
+		$currentDate = date("Y-m-d");
+	} else if ($_POST["btn_action"] == "unpay") {
+		$currentDate = null;
+	} else {
+		redirect("./admin_managepayments.php?code=400");
+	}
 	$id = intval($_POST['payment_id']);
 
 	// get payment record
@@ -138,7 +145,7 @@ if (isset($_POST['confirmPwd'])) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title> HOA+ Admin </title>
+	<title> HOA+ PAYMENT REPORT </title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
@@ -162,7 +169,22 @@ if (isset($_POST['confirmPwd'])) {
 		integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+	<style>
+	.left-col {
+		float: left;
+		width: 25%;
+	}
 
+	.center-col {
+		float: left;
+		width: 50%;
+	}
+
+	.right-col {
+		float: left;
+		width: 25%;
+	}
+	</style>
 	<!-- <link href="style_postboard.css" rel="stylesheet"> -->
 </head>
 
@@ -259,15 +281,16 @@ if (isset($_POST['confirmPwd'])) {
 					<div class="card shadow mb-4" style="margin-top:2%;">
 
 						<div class="card-body">
-							<div class="form-group input-daterange d-flex justify-content-between align-items-center">
+							<div class="form-group d-flex justify-content-between align-items-center">
 
-								<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
-									placeholder="From:">
-
-								<div class="form-group-addon mx-4">To</div>
-
-								<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
-									placeholder="To:">
+								<div class="d-flex input-daterange">
+									<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
+										placeholder="From:">
+									<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
+										placeholder="To:">
+								</div>
+								<button class="btn btn-primary" onclick="generatePdf()">Generate
+									Report</button>
 
 							</div>
 							<div class="table-responsive">
@@ -276,9 +299,9 @@ if (isset($_POST['confirmPwd'])) {
 									<table class="table" id="table-data" style="margin-top:2%;">
 										<thead>
 											<th scope="col">Payment ID</th>
-											<th scope="col">Member Full Name</th>
+											<th scope="col">Member's Name</th>
 											<th scope="col">Amount Due</th>
-											<th scope="col">Date Due</th>
+											<th scope="col">Due Date</th>
 											<th scope="col">Date Paid</th>
 											<th scope="col">Next Due</th>
 											<th scope="col">Status</th>
@@ -287,7 +310,7 @@ if (isset($_POST['confirmPwd'])) {
 										<tbody>
 											<?php foreach ($rows as $row) : ?>
 											<tr>
-												<th>PAY<?php echo str_pad($row["p_id"], 4, "0", STR_PAD_LEFT); ?></th>
+												<th>PAY<?php echo $row["payment_year"] . str_pad($row["p_id"], 3, "0", STR_PAD_LEFT); ?></th>
 												<th><?php echo $row["fname"] . " " . $row["mi"] . " " . $row["lname"] ?></th>
 												<th><?php
 															// Check if paid
@@ -311,12 +334,17 @@ if (isset($_POST['confirmPwd'])) {
 															echo "&#8369; " . $initial * $multiplier;
 															?></th>
 												<th><?php echo date("M d, Y", strtotime($row["date_due"])); ?></th>
-												<th><?php echo $row["date_paid"] != null ? date("M d, Y", strtotime($row["date_paid"])) : ""  ?>
+												<th>
+													<?php echo $row["date_paid"] != null ? date("M d, Y", strtotime($row["date_paid"])) : "N/A"  ?>
 												</th>
 												<th><?php echo date("M d, Y", strtotime($row["next_due"])); ?></th>
-												<th><?php echo $row["date_paid"] != null ? "Paid" : "Not Paid" ?></th>
+												<th><?php echo $row["date_paid"] != null ? "Paid" : "Unpaid" ?></th>
 												<th>
-													<?php echo $row["date_paid"] != null ? "" : '<button onclick="loadId(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-primary btn-sm">Mark as Paid</button>' ?>
+													<?php
+														echo $row["date_paid"] != null
+															? '<button onclick="undoPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-dark btn-sm">Mark as Unpaid</button>'
+															: '<button onclick="markPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-primary btn-sm">Mark as Paid</button>'
+														?>
 												</th>
 											</tr>
 											<?php endforeach; ?>
@@ -346,6 +374,7 @@ if (isset($_POST['confirmPwd'])) {
 								<div class="modal-body">
 									<input id="payment-id" type="hidden" name="payment_id">
 									Please type your password to continue.
+									<input type="hidden" name="btn_action">
 									<input class="form-control mt-2" type="password" name="confirmPwd" placeholder="Your password">
 								</div>
 								<div class="modal-footer">
@@ -418,12 +447,16 @@ if (isset($_POST['confirmPwd'])) {
 			integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
 			crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script>
+		const loggedUser = '<?php echo $_SESSION["logged_user"]["username"] ?>';
+
 		$('.input-daterange input').each(function() {
 			$(this).datepicker('clearDates');
 		});
+
 		var table = $('#table-data').DataTable({
 			// lengthChange: true,
-			dom: 'lBfrtip',
+			// dom: 'lBfrtip',
+			"dom": '<"top"<"left-col"l><"center-col"B><"right-col">>frtip',
 			// responsive: true,
 			buttons: [
 				// {
@@ -437,11 +470,31 @@ if (isset($_POST['confirmPwd'])) {
 				{
 					extend: 'pdf',
 					text: 'Generate Report',
-					className: "btn btn-primary",
+					className: "btn btn-primary invisible pdf-generate-btn",
 					exportOptions: {
 						columns: 'th:not(:last-child)',
 						columnGap: 1
-					}
+					},
+					customize: function(doc) {
+						const date = moment().format("MMMM Do YYYY, h:mm:ss a");
+						doc.content.splice(0, 1, {
+							text: [{
+								text: 'HOA+ PAYMENT REPORT \n',
+								bold: true,
+								fontSize: 16
+							}, {
+								text: ` As of ${date} \n`,
+								bold: false,
+								fontSize: 9
+							}, {
+								text: `Generated By: ${loggedUser}`,
+								bold: false,
+								fontSize: 9
+							}],
+							margin: [0, 0, 0, 12],
+							alignment: 'center'
+						});
+					},
 				}
 			],
 			'lengthMenu': [
@@ -476,8 +529,16 @@ if (isset($_POST['confirmPwd'])) {
 		</script>
 
 		<script>
-		const loadId = (id) => {
+		const generatePdf = () => {
+			document.querySelector('.pdf-generate-btn').click()
+		}
+		const markPaid = (id) => {
 			document.querySelector("#payment-id").value = id;
+			document.querySelector("#btn_action").value = "pay";
+		}
+		const undoPaid = (id) => {
+			document.querySelector("#payment-id").value = id;
+			document.querySelector("#btn_action").value = "unpay";
 		}
 		</script>
 	</div>
