@@ -285,7 +285,7 @@ if (isset($_POST['cancel-reservation-id'])) {
 													<button onclick="loadId(<?php echo $row['id']; ?>)" data-toggle="modal"
 														data-target="#cancel-modal" class="btn btn-danger m-0">Cancel</button>
 													<?php endif; ?>
-													<?php if ($row["status"] != 1) : ?>
+													<?php if ($row["status"] == 2) : ?>
 													<button class="m-0 btn btn-primary" onClick="generateEPass(<?php echo $row['id']; ?>)">
 														E-Pass
 													</button>

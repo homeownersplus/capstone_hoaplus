@@ -236,15 +236,17 @@ $model = new Model();
 								</div>
 								<div class="card-body">
 									<div class="text-center">
-										<a href="../assets/images/<?php echo $row['Photo']; ?>.jpg" target="_blank"><img
+										<a href="../assets/images/<?php echo $row['Photo']; ?>.jpg" target="_blank"><img class="img-fluid"
 												src="../assets/images/<?php echo $row['Photo']; ?>.jpg"
 												style="width: 250px;height: 150px; object-fit: cover;"></a>
 									</div>
 									<p>
-									<h6 class="card-title">
-										<?php
-												echo date('M d, Y', strtotime($row['PostingDate']))
-												?>
+									<h6 class="card-title text-dark">
+										<b>
+											<?php
+													echo date('M d, Y', strtotime($row['PostingDate']))
+													?>
+										</b>
 									</h6>
 									</p>
 									<h6 class="card-title">

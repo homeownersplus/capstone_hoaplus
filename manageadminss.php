@@ -59,16 +59,18 @@ adminOnlyMiddleware();
 
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
-					<h1 class="h3 mb-4 text-gray-800">Manage Admin</h1>
+
+					<!-- Page Heading -->
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 text-gray-800">Manage Admin</h1>
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addnew">
+							Add New Admin
+						</button>
+					</div>
 
 					<div class="card">
 						<div class="card-body">
-							<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addnew">
-								Add New Admin
-							</button>
-
 							<!---alert messages--->
-
 							<?php
 
 							if (isset($_SESSION['message'])) {

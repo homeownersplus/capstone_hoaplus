@@ -59,7 +59,22 @@ if ($stmt->rowCount() > 0) {
 
 
 	<!-- <link href="style_postboard.css" rel="stylesheet"> -->
+	<style>
+	.left-col {
+		float: left;
+		width: 25%;
+	}
 
+	.center-col {
+		float: left;
+		width: 50%;
+	}
+
+	.right-col {
+		float: left;
+		width: 25%;
+	}
+	</style>
 
 </head>
 
@@ -223,57 +238,62 @@ if ($stmt->rowCount() > 0) {
 					<div class="card shadow mb-4" style="margin-top:2%;">
 
 						<div class="card-body">
+							<div class="form-group d-flex justify-content-end align-items-center">
+
+								<button class="btn btn-primary" onclick="generatePdf()">Generate
+									Report</button>
+
+							</div>
 							<div class="table-responsive">
-								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
-									<table class="table" id="table-data" style="margin-top:2%;">
-										<thead>
-											<th>Payment ID</th>
-											<th>Amount Due</th>
-											<th>Date Due</th>
-											<th>Date Paid</th>
-											<th>Next Payment Date</th>
-											<th>Status</th>
-										</thead>
-										<tbody>
-											<?php foreach ($rows as $row) : ?>
-											<tr>
-												<th>PAY<?php echo str_pad($row["p_id"], 4, "0", STR_PAD_LEFT); ?></th>
-												<th><?php
-															// Check if paid
-															// multiply amount for every 30 days overdue
-															$initial = $row["amount"];
-															$multiplier = 1;
+								<table class="table" id="table-data" style="margin-top:2%;">
+									<thead>
+										<th>Payment ID</th>
+										<th>Amount Due</th>
+										<th>Date Due</th>
+										<th>Date Paid</th>
+										<th>Next Payment Date</th>
+										<th>Status</th>
+									</thead>
+									<tbody>
+										<?php foreach ($rows as $row) : ?>
+										<tr>
+											<th>PAY<?php echo str_pad($row["p_id"], 4, "0", STR_PAD_LEFT); ?></th>
+											<th><?php
+														// Check if paid
+														// multiply amount for every 30 days overdue
+														$initial = $row["amount"];
+														$multiplier = 1;
 
-															if ($row["date_paid"] == null) {
-																if ($row["date_due"] < date("Y-m-d")) {
-																	$dueDate = new DateTime($row["date_due"]);
-																	$currentDate = new DateTime();
+														if ($row["date_paid"] == null) {
+															if ($row["date_due"] < date("Y-m-d")) {
+																$dueDate = new DateTime($row["date_due"]);
+																$currentDate = new DateTime();
 
-																	$dateDiff = $dueDate->diff($currentDate)->format("%a");
+																$dateDiff = $dueDate->diff($currentDate)->format("%a");
 
-																	if ($dateDiff > 30) {
-																		// echo ("($dateDiff)");
-																		$multiplier = ceil($dateDiff / 30);
-																	}
+																if ($dateDiff > 30) {
+																	// echo ("($dateDiff)");
+																	$multiplier = ceil($dateDiff / 30);
 																}
 															}
-															echo "&#8369; " . $initial * $multiplier;
-															?></th>
-												<th><?php echo date("M d, Y", strtotime($row["date_due"])); ?></th>
-												<th><?php echo $row["date_paid"] != null ? date("M d, Y", strtotime($row["date_paid"])) : ""  ?>
-												</th>
-												<th><?php echo date("M d, Y", strtotime($row["next_due"])); ?></th>
-												<th><?php echo $row["date_paid"] != null ? "Paid" : "Not Paid" ?></th>
-											</tr>
-											<?php endforeach; ?>
-										</tbody>
-									</table>
-									<div>
+														}
+														echo "&#8369; " . $initial * $multiplier;
+														?></th>
+											<th><?php echo date("M d, Y", strtotime($row["date_due"])); ?></th>
+											<th><?php echo $row["date_paid"] != null ? date("M d, Y", strtotime($row["date_paid"])) : ""  ?>
+											</th>
+											<th><?php echo date("M d, Y", strtotime($row["next_due"])); ?></th>
+											<th><?php echo $row["date_paid"] != null ? "Paid" : "Unpaid" ?></th>
+										</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
+								<div>
 
 
-									</div>
-									<!-- /.container-fluid -->
+								</div>
+								<!-- /.container-fluid -->
 
 							</div>
 							<!-- End of Main Content -->
@@ -336,14 +356,20 @@ if ($stmt->rowCount() > 0) {
 					<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 					<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 					<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+					<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+
 					<!-- <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script> -->
 
 
 
 					<script>
+					const loggedUser = '<?php echo $_SESSION["logged_user"]["username"] ?>';
+
 					var table = $('#table-data').DataTable({
 						// lengthChange: true,
-						dom: 'lBfrtip',
+						// dom: 'lBfrtip',
+						"dom": '<"top"<"left-col"l><"center-col"B><"right-col">>frt<"bottom"<"left-col"i><p>>',
+
 						// responsive: true,
 						buttons: [
 							// {
@@ -357,7 +383,27 @@ if ($stmt->rowCount() > 0) {
 							{
 								extend: 'pdf',
 								text: 'Generate Report',
-								className: "btn btn-primary",
+								className: "btn btn-primary invisible pdf-generate-btn",
+								customize: function(doc) {
+									const date = moment().format("MMMM Do YYYY, h:mm:ss a");
+									doc.content.splice(0, 1, {
+										text: [{
+											text: 'HOA+ USER PAYMENTS REPORT \n',
+											bold: true,
+											fontSize: 16
+										}, {
+											text: ` As of ${date} \n`,
+											bold: false,
+											fontSize: 9
+										}, {
+											text: `Generated By: ${loggedUser}`,
+											bold: false,
+											fontSize: 9
+										}],
+										margin: [0, 0, 0, 12],
+										alignment: 'center'
+									});
+								},
 							}
 						],
 						'lengthMenu': [
@@ -365,6 +411,10 @@ if ($stmt->rowCount() > 0) {
 							[10, 25, 50, "All"]
 						]
 					});
+
+					const generatePdf = () => {
+						document.querySelector('.pdf-generate-btn').click()
+					}
 					</script>
 
 </body>
