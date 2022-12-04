@@ -90,10 +90,12 @@ if (isset($_REQUEST['active'])) {
 				<div class="container-fluid">
 
 					<!-- Page Heading -->
+					<div class="d-sm-flex align-items-center justify-content-between mb-4">
 
-					<h1 class="h3 mb-4 text-gray-800">Manage Posts</h1>
-					<a class="btn btn-primary" href="adminaddpost.php">Add Post
-						<i class="fas fa-plus"></i></a>
+						<h1 class="h3 mb-4 text-gray-800">Manage Posts</h1>
+						<a class="btn btn-primary" href="adminaddpost.php">Add Post
+							<i class="fas fa-plus"></i></a>
+					</div>
 
 					<!---alert messages--->
 					<?php

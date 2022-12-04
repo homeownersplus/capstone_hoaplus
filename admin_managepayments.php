@@ -66,6 +66,8 @@ if (isset($_POST['confirmPwd'])) {
 		}
 	}
 	// prepare data
+
+
 	if ($_POST["btn_action"] == "pay") {
 		$currentDate = date("Y-m-d");
 	} else if ($_POST["btn_action"] == "unpay") {
@@ -95,12 +97,15 @@ if (isset($_POST['confirmPwd'])) {
 	$query->bindParam(':date_paid', $currentDate, PDO::PARAM_STR);
 	$query->bindParam(':id', $id, PDO::PARAM_STR);
 
-	$adminId = "Admin_" . $_SESSION["logged_user"]["username"];
-	$memberId = "HOAM" . str_pad($payment["m_id"], 4, "0", STR_PAD_LEFT);
 
 	if ($query->execute()) {
 		// log as paid
-		logAction($dbh, "$adminId marked Member $memberId as paid.");
+
+		if ($_POST["btn_action"] == "pay") {
+			logAction($dbh, "$adminId marked Member $memberId as paid.");
+		} else {
+			logAction($dbh, "$adminId marked Member $memberId as Unpaid.");
+		}
 
 		// calculate next payment due
 		$newPaymentSql = "
@@ -456,7 +461,7 @@ if (isset($_POST['confirmPwd'])) {
 		var table = $('#table-data').DataTable({
 			// lengthChange: true,
 			// dom: 'lBfrtip',
-			"dom": '<"top"<"left-col"l><"center-col"B><"right-col">>frtip',
+			"dom": '<"top"<"left-col"l><"center-col"B><"right-col">>frt<"bottom"<"left-col"i><p>>',
 			// responsive: true,
 			buttons: [
 				// {

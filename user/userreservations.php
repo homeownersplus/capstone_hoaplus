@@ -312,6 +312,7 @@ if (isset($_POST["amenity"])) {
 											echo $msg;
 											?>
 									</div>
+
 									<?php endif; ?>
 									<form method="POST">
 										<div class="mb-3" style="width:100%;">
@@ -407,6 +408,23 @@ if (isset($_POST["amenity"])) {
 						</div>
 					</div>
 
+					<div class="modal" id="warning-modal" tabindex="-1" role="dialog" aria-labelledby="warning-label"
+						aria-hidden="false">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-body text-center p-4">
+									<i class="fas fa-exclamation-circle text-danger p-4" style="font-size: 12rem;"></i>
+									<h4>
+										You must settle all remaining balance to reserve an amenity
+									</h4>
+								</div>
+								<div class="modal-footer d-flex justify-content-center">
+									<button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
 					<!-- Bootstrap core JavaScript-->
 					<script src="../vendor/jquery/jquery.min.js"></script>
 					<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -429,6 +447,9 @@ if (isset($_POST["amenity"])) {
 					<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
 					<script>
+					<?php if (isset($_GET["code"]) && $_GET["code"] == "103") : ?>
+					$('#warning-modal').modal('toggle')
+					<?php endif; ?>
 					// Archived
 					const dateChecker = () => {
 						const today = new Date();

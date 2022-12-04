@@ -6,6 +6,24 @@
 
 ## Changelog
 
+### Week 4 2022-12-04
+
+- fixed `tblameneties`, changed type of `amedesc` from int(11) to varchar(500)
+- fixed admin profile preview
+- updated layout of report tables
+- added headers to pdf exports
+- added edit amenity function
+- added warning popup when user tries to book with unpaid fees
+- renamed `Not Paid` to `Paid`
+- added reservation time restriction `8 AM to 7PM`
+- changed design of some buttons to outline
+- added admin undo payment
+- changed payment id format
+- made post image responsive
+- made post date font bold
+- changed admin reservation table to tab format
+- added preview when editing amenity
+
 ### Week 4 2022-12-03
 
 - added admin profile page

@@ -488,7 +488,8 @@ $user_results = $con->query($user_sql);
 			// lengthChange: true,
 			// dom: 'lBfrtip',
 			// responsive: true,
-			"dom": '<"top"<"left-col"l><"center-col"B><"right-col">>frtip',
+			"dom": '<"top"<"left-col"l><"center-col"B><"right-col">>frt<"bottom"<"left-col"i><p>>',
+
 			buttons: [{
 				extend: 'pdf',
 				text: 'Generate Report',
