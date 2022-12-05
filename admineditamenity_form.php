@@ -189,8 +189,8 @@ if (isset($_POST['insert'])) {
 
 									<!----------for post buttons---------->
 									<div class="row" style="margin-top:1%">
-										<div class="mb-3">
-											<input class="btn btn-primary" type="submit" value="Update" name="insert"
+										<div class="mb-3 d-flex justify-content-end" style="width:56%;">
+											<input class="btn btn-primary mr-2" type="submit" value="Update" name="insert"
 												style="margin-left:10%; ">
 											<a href="admin_addamenities.php" class="btn btn-secondary">Back</a>
 										</div>

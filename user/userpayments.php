@@ -89,7 +89,7 @@ if ($stmt->rowCount() > 0) {
 		<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
 			<!-- Sidebar - Brand -->
-			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="../index.php">
 				<div class="sidebar-brand-icon rotate-n-15">
 					<i class="fa fa-home" aria-hidden="true"></i>
 				</div>
@@ -102,28 +102,28 @@ if ($stmt->rowCount() > 0) {
 			<!-- Nav Item - Dashboard -->
 			<li class="nav-item">
 				<a class="nav-link" href="userlandingpage.php">
-				<i class="fa fa-bullhorn" aria-hidden="true"></i>
+					<i class="fa fa-bullhorn" aria-hidden="true"></i>
 					<span>Announcements</span></a>
 			</li>
 
 			<li class="nav-item">
 				<a class="nav-link" href="userpayments.php">
-				<i class="fa fa-heart" aria-hidden="true"></i>
+					<i class="fa fa-heart" aria-hidden="true"></i>
 					<span>Payments</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userreservations.php">
-				<i class="fa fa-ticket" aria-hidden="true"></i>
+					<i class="fa fa-ticket" aria-hidden="true"></i>
 					<span>Reserve Amenity</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userreservationtable.php">
-				<i class="fa fa-history" aria-hidden="true"></i>
+					<i class="fa fa-history" aria-hidden="true"></i>
 					<span>Reservation History</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userconcernform.php">
-				<i class="fa fa-comments" aria-hidden="true"></i>
+					<i class="fa fa-comments" aria-hidden="true"></i>
 					<span>Send a Message </span></a>
 			</li>
 
@@ -386,6 +386,9 @@ if ($stmt->rowCount() > 0) {
 								className: "btn btn-primary invisible pdf-generate-btn",
 								customize: function(doc) {
 									const date = moment().format("MMMM Do YYYY, h:mm:ss a");
+									doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+									doc.styles.tableBodyEven.alignment = 'center';
+									doc.styles.tableBodyOdd.alignment = 'center';
 									doc.content.splice(0, 1, {
 										text: [{
 											text: 'HOA+ USER PAYMENTS REPORT \n',

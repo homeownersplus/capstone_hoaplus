@@ -65,7 +65,7 @@ if ($stmt->rowCount() > 0) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title> HOA+ Admin </title>
+	<title> HOA+ RESERVED AMENITIES REPORT</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
@@ -162,9 +162,9 @@ if ($stmt->rowCount() > 0) {
 							</div>
 						</div>
 						<div class="card-body">
-							<div class="form-group d-flex justify-content-between align-items-center">
+							<div class="form-group d-flex justify-content-end align-items-center">
 
-								<div class="d-flex input-daterange">
+								<div class="d-flex input-daterange mr-2">
 									<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
 										placeholder="From:">
 									<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
@@ -175,54 +175,51 @@ if ($stmt->rowCount() > 0) {
 
 							</div>
 							<div class="table-responsive">
-								<table class="table table-bordered" width="100%" cellspacing="0">
-									<table class="table" id="table-data" style="margin-top:2%;">
-										<thead>
-											<th>Member ID</th>
-											<th>Reserved Amenity</th>
-											<th>Reservation Time Start</th>
-											<th>Reservation Time End</th>
-											<th>Date Created</th>
-											<th>Status</th>
-											<th>Action</th>
-										</thead>
-										<tbody>
-											<?php foreach ($rows as $row) : ?>
-											<tr>
-												<th>HOAM<?php echo str_pad($row["member_id"], 4, "0", STR_PAD_LEFT); ?></th>
-												<th><?php echo $row["amenity"] ?></th>
-												<th><?php echo date("M d, Y h:i A", strtotime($row["start_date"])); ?></th>
-												<th><?php echo date("M d, Y h:i A", strtotime($row["end_date"])); ?></th>
-												<th><?php echo date("Y-m-d", strtotime($row["created_at"])); ?></th>
-												<th><?php echo $statusList[$row["status"]]; ?></th>
-												<th>
-													<div class="btn-group">
-														<?php if ($row["status"] == 1) : ?>
-														<form method="POST">
-															<input type="hidden" name="delete_id" value="<?php echo $row["id"]; ?>">
-															<button type="submit" class="btn btn-outline-dark btn-sm">REMOVE</button>
-														</form>
-														<?php endif; ?>
-														<?php if ($row["status"] == 2) : ?>
-														<form method="POST">
-															<input type="hidden" name="cancel_id" value="<?php echo $row["id"]; ?>">
-															<button type="submit" class="btn btn-outline-dark btn-sm">CANCEL</button>
-														</form>
-														<form method="POST">
-															<input type="hidden" name="complete_id" value="<?php echo $row["id"]; ?>">
-															<button type="submit" class="btn btn-outline-primary btn-sm">COMPLETE</button>
-														</form>
-														<?php endif; ?>
-													</div>
-												</th>
-											</tr>
-											<?php endforeach; ?>
-										</tbody>
-									</table>
-									<div>
-									</div>
-									<!-- /.container-fluid -->
+								<table class="table" id="table-data" style="margin-top:2%;">
+									<thead>
+										<th scope="col">Member ID</th>
+										<th scope="col">Reserved Amenity</th>
+										<th scope="col">Reservation Time Start</th>
+										<th scope="col">Reservation Time End</th>
+										<th scope="col">Date Created</th>
+										<th scope="col">Status</th>
+										<th scope="col">Action</th>
+									</thead>
+									<tbody>
+										<?php foreach ($rows as $row) : ?>
+										<tr>
+											<th>HOAM<?php echo str_pad($row["member_id"], 4, "0", STR_PAD_LEFT); ?></th>
+											<th><?php echo $row["amenity"] ?></th>
+											<th><?php echo date("M d, Y h:i A", strtotime($row["start_date"])); ?></th>
+											<th><?php echo date("M d, Y h:i A", strtotime($row["end_date"])); ?></th>
+											<th><?php echo date("Y-m-d", strtotime($row["created_at"])); ?></th>
+											<th><?php echo $statusList[$row["status"]]; ?></th>
+											<th>
+												<div class="btn-group">
+													<?php if ($row["status"] == 1) : ?>
+													<form method="POST">
+														<input type="hidden" name="delete_id" value="<?php echo $row["id"]; ?>">
+														<button type="submit" class="btn btn-outline-dark btn-sm">REMOVE</button>
+													</form>
+													<?php endif; ?>
+													<?php if ($row["status"] == 2) : ?>
+													<form method="POST">
+														<input type="hidden" name="cancel_id" value="<?php echo $row["id"]; ?>">
+														<button type="submit" class="btn btn-outline-dark btn-sm">CANCEL</button>
+													</form>
+													<form method="POST">
+														<input type="hidden" name="complete_id" value="<?php echo $row["id"]; ?>">
+														<button type="submit" class="btn btn-outline-primary btn-sm">COMPLETE</button>
+													</form>
+													<?php endif; ?>
+												</div>
+											</th>
+										</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
 
+								<!-- /.container-fluid -->
 							</div>
 							<!-- End of Main Content -->
 
@@ -288,6 +285,7 @@ if ($stmt->rowCount() > 0) {
 					});
 
 					var table = $('#table-data').DataTable({
+						"autoWidth": false,
 						// lengthChange: true,
 						// dom: 'lBfrtip',
 						// responsive: true,
@@ -302,6 +300,10 @@ if ($stmt->rowCount() > 0) {
 							},
 							customize: function(doc) {
 								const date = moment().format("MMMM Do YYYY, h:mm:ss a");
+								doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+								doc.styles.tableBodyEven.alignment = 'center';
+								doc.styles.tableBodyOdd.alignment = 'center';
+
 								doc.content.splice(0, 1, {
 									text: [{
 										text: 'HOA+ RESERVED AMENITIES REPORT \n',
@@ -346,14 +348,22 @@ if ($stmt->rowCount() > 0) {
 							var min = $('#min-date').val();
 							var max = $('#max-date').val();
 							var createdAt = data[2] || 0; // Our date column in the table
+							// Action Column
+							const filter = statusFilter[statusFilterValue];
+							var column = table.column(6);
 
+							// Toggle action column the visibility
+							if (filter == "Completed") {
+								column.visible(false);
+							} else {
+								column.visible(true);
+							}
 							// Filter by date range
 							if (
 								(min == "" || max == "") ||
 								(moment(createdAt).isSameOrAfter(min, "day") && moment(createdAt).isSameOrBefore(max, "day"))
 							) {
 								// Filter by status
-								const filter = statusFilter[statusFilterValue];
 								if (filter != "All") {
 									if (data[5] != filter) return false
 								}

@@ -60,28 +60,28 @@ userOnlyMiddleware("../index.php");
 			<!-- Nav Item - Dashboard -->
 			<li class="nav-item">
 				<a class="nav-link" href="userlandingpage.php">
-				<i class="fa fa-bullhorn" aria-hidden="true"></i>
+					<i class="fa fa-bullhorn" aria-hidden="true"></i>
 					<span>Announcements</span></a>
 			</li>
 
 			<li class="nav-item">
 				<a class="nav-link" href="userpayments.php">
-				<i class="fa fa-heart" aria-hidden="true"></i>
+					<i class="fa fa-heart" aria-hidden="true"></i>
 					<span>Payments</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userreservations.php">
-				<i class="fa fa-ticket" aria-hidden="true"></i>
+					<i class="fa fa-ticket" aria-hidden="true"></i>
 					<span>Reserve Amenity</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userreservationtable.php">
-				<i class="fa fa-history" aria-hidden="true"></i>
+					<i class="fa fa-history" aria-hidden="true"></i>
 					<span>Reservation History</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userconcernform.php">
-				<i class="fa fa-comments" aria-hidden="true"></i>
+					<i class="fa fa-comments" aria-hidden="true"></i>
 					<span>Send a Message </span></a>
 			</li>
 
@@ -214,8 +214,8 @@ userOnlyMiddleware("../index.php");
 										<div>
 
 
-											<div style="margin-top:3%">
-												<input class="btn btn-primary" type="submit" value="Send message" name="userreportconcern">
+											<div class="d-flex justify-content-end mt-2">
+												<input class="btn btn-primary mr-2" type="submit" value="Send message" name="userreportconcern">
 												<a href="userlandingpage.php" class="btn btn-secondary">Back</a>
 
 											</div>

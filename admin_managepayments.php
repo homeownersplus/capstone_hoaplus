@@ -286,9 +286,9 @@ if (isset($_POST['confirmPwd'])) {
 					<div class="card shadow mb-4" style="margin-top:2%;">
 
 						<div class="card-body">
-							<div class="form-group d-flex justify-content-between align-items-center">
+							<div class="form-group d-flex justify-content-end align-items-center">
 
-								<div class="d-flex input-daterange">
+								<div class="d-flex input-daterange mr-2">
 									<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
 										placeholder="From:">
 									<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
@@ -299,62 +299,61 @@ if (isset($_POST['confirmPwd'])) {
 
 							</div>
 							<div class="table-responsive">
-								<table class="table table-bordered" width="100%" cellspacing="0">
 
-									<table class="table" id="table-data" style="margin-top:2%;">
-										<thead>
-											<th scope="col">Payment ID</th>
-											<th scope="col">Member's Name</th>
-											<th scope="col">Amount Due</th>
-											<th scope="col">Due Date</th>
-											<th scope="col">Date Paid</th>
-											<th scope="col">Next Due</th>
-											<th scope="col">Status</th>
-											<th scope="col">Action</th>
-										</thead>
-										<tbody>
-											<?php foreach ($rows as $row) : ?>
-											<tr>
-												<th>PAY<?php echo $row["payment_year"] . str_pad($row["p_id"], 3, "0", STR_PAD_LEFT); ?></th>
-												<th><?php echo $row["fname"] . " " . $row["mi"] . " " . $row["lname"] ?></th>
-												<th><?php
-															// Check if paid
-															// multiply amount for every 30 days overdue
-															$initial = $row["amount"];
-															$multiplier = 1;
+								<table class="table" id="table-data" style="margin-top:2%;">
+									<thead>
+										<th scope="col">Payment ID</th>
+										<th scope="col">Member's Name</th>
+										<th scope="col">Amount Due</th>
+										<th scope="col">Due Date</th>
+										<th scope="col">Date Paid</th>
+										<th scope="col">Next Due</th>
+										<th scope="col">Status</th>
+										<th scope="col">Action</th>
+									</thead>
+									<tbody>
+										<?php foreach ($rows as $row) : ?>
+										<tr>
+											<th>PAY<?php echo $row["payment_year"] . str_pad($row["p_id"], 3, "0", STR_PAD_LEFT); ?></th>
+											<th><?php echo $row["fname"] . " " . $row["mi"] . " " . $row["lname"] ?></th>
+											<th><?php
+														// Check if paid
+														// multiply amount for every 30 days overdue
+														$initial = $row["amount"];
+														$multiplier = 1;
 
-															if ($row["date_paid"] == null) {
-																if ($row["date_due"] < date("Y-m-d")) {
-																	$dueDate = new DateTime($row["date_due"]);
-																	$currentDate = new DateTime();
+														if ($row["date_paid"] == null) {
+															if ($row["date_due"] < date("Y-m-d")) {
+																$dueDate = new DateTime($row["date_due"]);
+																$currentDate = new DateTime();
 
-																	$dateDiff = $dueDate->diff($currentDate)->format("%a");
+																$dateDiff = $dueDate->diff($currentDate)->format("%a");
 
-																	if ($dateDiff > 30) {
-																		// echo ("($dateDiff)");
-																		$multiplier = ceil($dateDiff / 30);
-																	}
+																if ($dateDiff > 30) {
+																	// echo ("($dateDiff)");
+																	$multiplier = ceil($dateDiff / 30);
 																}
 															}
-															echo "&#8369; " . $initial * $multiplier;
-															?></th>
-												<th><?php echo date("M d, Y", strtotime($row["date_due"])); ?></th>
-												<th>
-													<?php echo $row["date_paid"] != null ? date("M d, Y", strtotime($row["date_paid"])) : "N/A"  ?>
-												</th>
-												<th><?php echo date("M d, Y", strtotime($row["next_due"])); ?></th>
-												<th><?php echo $row["date_paid"] != null ? "Paid" : "Unpaid" ?></th>
-												<th>
-													<?php
-														echo $row["date_paid"] != null
-															? '<button onclick="undoPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-dark btn-sm">Mark as Unpaid</button>'
-															: '<button onclick="markPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-primary btn-sm">Mark as Paid</button>'
-														?>
-												</th>
-											</tr>
-											<?php endforeach; ?>
-										</tbody>
-									</table>
+														}
+														echo "&#8369; " . $initial * $multiplier;
+														?></th>
+											<th><?php echo date("M d, Y", strtotime($row["date_due"])); ?></th>
+											<th>
+												<?php echo $row["date_paid"] != null ? date("M d, Y", strtotime($row["date_paid"])) : "N/A"  ?>
+											</th>
+											<th><?php echo date("M d, Y", strtotime($row["next_due"])); ?></th>
+											<th><?php echo $row["date_paid"] != null ? "Paid" : "Unpaid" ?></th>
+											<th>
+												<?php
+													echo $row["date_paid"] != null
+														? '<button onclick="undoPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-dark btn-sm">Mark as Unpaid</button>'
+														: '<button onclick="markPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-primary btn-sm">Mark as Paid</button>'
+													?>
+											</th>
+										</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
@@ -482,6 +481,9 @@ if (isset($_POST['confirmPwd'])) {
 					},
 					customize: function(doc) {
 						const date = moment().format("MMMM Do YYYY, h:mm:ss a");
+						doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+						doc.styles.tableBodyEven.alignment = 'center';
+						doc.styles.tableBodyOdd.alignment = 'center';
 						doc.content.splice(0, 1, {
 							text: [{
 								text: 'HOA+ PAYMENT REPORT \n',

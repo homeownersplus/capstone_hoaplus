@@ -8,6 +8,11 @@
 
 ### Week 4 2022-12-04
 
+- centered table alignment in pdf reports
+- move form actions to the right side
+
+### Week 4 2022-12-04
+
 - fixed `tblameneties`, changed type of `amedesc` from int(11) to varchar(500)
 - fixed admin profile preview
 - updated layout of report tables
