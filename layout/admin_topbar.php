@@ -30,7 +30,7 @@
 				</a>
 
 				<a class="dropdown-item" href="admin_changepassword.php">
-					<i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+					<i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
 					Change password
 				</a>
 				<div class="dropdown-divider"></div>

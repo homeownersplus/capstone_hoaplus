@@ -1,8 +1,19 @@
 <?php
 session_start();
+require_once '../dbconfig.php';
 require_once "../helpers/auth.php";
 require_once "../helpers/redirect.php";
 userOnlyMiddleware("../index.php");
+
+$sql = "SELECT * FROM user WHERE id =:id";
+$userrow = $dbh->prepare($sql);
+$userrow->execute(
+    [
+        'id' => $_SESSION['userid']
+    ]
+);
+
+$result = $userrow->fetch(PDO::FETCH_ASSOC);
 ?>
 <!doctype html>
 <html lang="en">
@@ -183,19 +194,19 @@ userOnlyMiddleware("../index.php");
 							<div class="table-responsive">
 								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
-									<form name="reserveamenityusr" method="POST" enctype="multipart/form-data">
+									<div>
 										<!-- <fieldset disabled> -->
 
 										<div class="mb-3" style="width:100%;">
 											<label for="disabledTextInput" class="form-label">Member Email</label>
 											<input type="text" id="disabledTextInput" class="form-control"
-												placeholder="fetch logged in user email here" disabled>
+												placeholder="fetch logged in user email here" value="<?php echo $result['email'];?>" disabled>
 										</div>
 
 										<div class="mb-3" style="width:100%;">
 											<label for="disabledTextInput" class="form-label">Member Fullname</label>
 											<input type="text" id="disabledTextInput" class="form-control"
-												placeholder="fetch logged in full name here" disabled>
+												placeholder="fetch logged in full name here" disabled  value="<?php echo $result['first_name']." ".$result['middle_initial']." ".$result['last_name'];?>">
 										</div>
 
 
@@ -206,7 +217,7 @@ userOnlyMiddleware("../index.php");
 
 
 										<div class="form-floating" style="margin-top:3%;">
-											<textarea class="form-control" name="pconcern" required></textarea>
+											<textarea class="form-control" name="pconcern" id="report" required></textarea>
 											<label for="pconcern">Write your concern here...</label>
 											<div id="emailHelp" class="form-text">Compose your concern short but precise.</div>
 										</div>
@@ -215,7 +226,7 @@ userOnlyMiddleware("../index.php");
 
 
 											<div class="d-flex justify-content-end mt-2">
-												<input class="btn btn-primary mr-2" type="submit" value="Send message" name="userreportconcern">
+												<input class="btn btn-primary mr-2" type="button" value="Send message" name="userreportconcern" onClick="handleSubmitConcern()">
 												<a href="userlandingpage.php" class="btn btn-secondary">Back</a>
 
 											</div>
@@ -283,5 +294,19 @@ userOnlyMiddleware("../index.php");
 						<script src="../js/demo/datatables-demo.js"></script>
 						<link rel="stylesheet"
 							href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+						<script>
+							const handleSubmitConcern = async () => {
+								const report = document.querySelector("#report")
+
+								if(!report.value) return alert("Concern field is required")
+
+								const url = await fetch('../api/send_report.php?report='+report.value)
+
+								const res = await url.json()
+
+								alert(res.message)
+							}
+						</script>
 
 </body>

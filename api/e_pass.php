@@ -43,7 +43,11 @@ if($row){
     ?>
     <div class="movie-card">
 		<div class="movie-content">
-            <h3 class="text-center">RESERVATION TICKET</h3>
+			<center>
+
+			<img src="../assets/hoa_logo.png" style="display:width;width:150px;margin:auto;"/>
+            <h3 class="text-center" style="margin-top : -20px;">RESERVATION TICKET</h3>
+			</center>
         </div>
 
         <div id="qr-con" class="justify-content-center d-flex">
@@ -56,11 +60,11 @@ if($row){
 			<div class="movie-info">
 				<div class="info-section">
 					<label>Posted Date</label>
-					<span><?php echo $row["amenity_posted_date"]; ?></span>
+					<span><?php echo date('M d,Y, h:i A',strtotime($row["amenity_posted_date"])); ?></span>
 				</div><!--date,time-->
 				<div class="info-section">
 					<label>Status</label>
-					<span><?php echo $row["reservation_status"] == "1" ? "Cancelled" : ($row["reservation_status"] == "2" ? "Pending" : "Confirmed");  ?></span>
+					<span>Confirmed</span>
 				</div><!--screen-->
 				<div class="info-section">
 					<label>Fullname</label>
@@ -70,11 +74,11 @@ if($row){
 			<div class="movie-info">
 				<div class="info-section">
 					<label>Start </label>
-					<span><?php echo $row["start_date"]; ?></span>
+					<span><?php echo date('M d,Y, h:i A',strtotime($row["start_date"])); ?></span>
 				</div>
 				<div class="info-section">
 					<label>End </label>
-					<span><?php echo $row["end_date"]; ?></span>
+					<span><?php echo date('M d,Y, h:i A',strtotime($row["end_date"])); ?></span>
 				</div>
 			</div>
 		</div><!--movie-content-->
