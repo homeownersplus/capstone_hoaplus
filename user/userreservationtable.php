@@ -376,7 +376,7 @@ if (isset($_POST['cancel-reservation-id'])) {
 					<div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
 						<div class="modal-dialog text-center">
 							<div class="modal-content p-3">
-								<h3>HOA+ ONE TIME E-PASS</h3>
+								<h3>HOA+ MODIFY ONE TIME E-PASS</h3>
 								<p> Present this before entering the amenity. </p>
 								<div class="modal-body d-flex justify-content-center" id="qr-con">
 								</div>
