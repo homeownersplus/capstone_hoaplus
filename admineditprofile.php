@@ -242,7 +242,7 @@ if ($action == "update_photo") {
 			<!-- Footer -->
 			<footer class="sticky-footer bg-white">
 				<div class="container my-auto">
-					<div class="copyright text-center my-auto"> <span>Copyright &copy; Capstone 2022</span> </div>
+					<div class="copyright text-center my-auto"> <span> Capstone 2022</span> </div>
 				</div>
 			</footer>
 			<!-- End of Footer -->
