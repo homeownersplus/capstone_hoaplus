@@ -209,7 +209,7 @@ if ($action == "update_photo") {
 											</div>
 											<?php endif; ?>
 											<div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
-												<?php if (isset($_SESSION["logged_user"]["avatar"])) : ?>
+												<?php if ($_SESSION['logged_position'] != "admin") : ?>
 												<input type="hidden" name="action" value="update_photo">
 												<img id="img-preview"
 													src='<?php echo $_SESSION["logged_user"]["avatar"] ? "./photos/" . $_SESSION["logged_user"]["avatar"] : "./photos/profile.png" ?>'
