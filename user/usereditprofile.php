@@ -107,7 +107,7 @@ if ($action == "update_photo") {
 		<!-- Sidebar -->
 		<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 			<!-- Sidebar - Brand -->
-			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="../index.php">
 				<div class="sidebar-brand-icon rotate-n-15"> <i class="fa fa-home" aria-hidden="true"></i> </div>
 				<div class="sidebar-brand-text mx-3">HOA+Member <sup></sup></div>
 			</a>
@@ -116,28 +116,28 @@ if ($action == "update_photo") {
 			<!-- Nav Item - Dashboard -->
 			<li class="nav-item">
 				<a class="nav-link" href="userlandingpage.php">
-				<i class="fa fa-bullhorn" aria-hidden="true"></i>
+					<i class="fa fa-bullhorn" aria-hidden="true"></i>
 					<span>Announcements</span></a>
 			</li>
 
 			<li class="nav-item">
 				<a class="nav-link" href="userpayments.php">
-				<i class="fa fa-heart" aria-hidden="true"></i>
+					<i class="fa fa-heart" aria-hidden="true"></i>
 					<span>Payments</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userreservations.php">
-				<i class="fa fa-ticket" aria-hidden="true"></i>
+					<i class="fa fa-ticket" aria-hidden="true"></i>
 					<span>Reserve Amenity</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userreservationtable.php">
-				<i class="fa fa-history" aria-hidden="true"></i>
+					<i class="fa fa-history" aria-hidden="true"></i>
 					<span>Reservation History</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userconcernform.php">
-				<i class="fa fa-comments" aria-hidden="true"></i>
+					<i class="fa fa-comments" aria-hidden="true"></i>
 					<span>Send a Message </span></a>
 			</li>
 

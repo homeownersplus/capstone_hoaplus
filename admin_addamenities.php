@@ -30,7 +30,7 @@ $model = new Model();
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title> HOA+ Admin </title>
+	<title> HOA+ AMENITIES REPORT </title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
@@ -124,9 +124,9 @@ $model = new Model();
 					<div class="card shadow mb-4" style="margin-top:2%;">
 
 						<div class="card-body">
-							<div class="form-group d-flex justify-content-between align-items-center">
+							<div class="form-group d-flex justify-content-end align-items-center">
 
-								<div class="d-flex input-daterange">
+								<div class="d-flex input-daterange mr-2">
 									<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
 										placeholder="From:">
 									<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
@@ -249,6 +249,9 @@ $model = new Model();
 			},
 			customize: function(doc) {
 				const date = moment().format("MMMM Do YYYY, h:mm:ss a");
+				doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+				doc.styles.tableBodyEven.alignment = 'center';
+				doc.styles.tableBodyOdd.alignment = 'center';
 				doc.content.splice(0, 1, {
 					text: [{
 						text: 'HOA+ AMENITIES REPORT \n',

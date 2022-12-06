@@ -123,16 +123,15 @@ $user_results = $con->query($user_sql);
 
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="font-weight-bold">User Accounts</h1>
-						<!-- <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onClick="generatePDF()"><i
-								class="fas fa-download fa-sm text-white-50"></i> Generate Report</button> -->
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registermember"
+							onclick="increase();">
+							Register
+						</button>
 					</div>
 
 					<!--------------------------------------- Add Modal ------------------------------------->
 					<!-- Button trigger modal -->
-					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registermember"
-						onclick="increase();">
-						Register
-					</button>
+
 
 					<!-- Modal -->
 					<div class="modal fade" id="registermember" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -496,6 +495,9 @@ $user_results = $con->query($user_sql);
 				className: "btn btn-primary invisible pdf-generate-btn",
 				customize: function(doc) {
 					const date = moment().format("MMMM Do YYYY, h:mm:ss a");
+					doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+					doc.styles.tableBodyEven.alignment = 'center';
+					doc.styles.tableBodyOdd.alignment = 'center';
 					doc.content.splice(0, 1, {
 						text: [{
 							text: 'HOA+ USER ACCOUNTS REPORT - HOA MEMBERS \n',

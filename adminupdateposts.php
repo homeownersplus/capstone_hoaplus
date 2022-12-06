@@ -140,8 +140,8 @@ if (isset($_POST['update'])) {
 						?>
 						<!--------------------------- buttons  ----------------------------->
 						<div class="row" style="margin-top:1%">
-							<div class="mb-3">
-								<input class="btn btn-primary" type="submit" value="Update Announcement" name="update"
+							<div class="mb-3 d-flex justify-content-end" style="width:56%;">
+								<input class="btn btn-primary mr-2" type="submit" value="Update Announcement" name="update"
 									style="margin-left:11%;">
 								<a href="adminlandingpage.php" class="btn btn-secondary">Back</a>
 							</div>

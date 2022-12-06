@@ -153,9 +153,9 @@ if (isset($_POST['confirmPwd'])) {
 
 									<!----------for post buttons---------->
 									<div class="row" style="margin-top:1%">
-										<div class="mb-3">
-											<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirm-modal"
-												style="margin-left:10%;">
+										<div class="mb-3 d-flex justify-content-end" style="width:56%;">
+											<button type="button" class="btn btn-primary mr-2" data-toggle="modal"
+												data-target="#confirm-modal" style="margin-left:10%;">
 												Post Announcement
 											</button>
 											<a href="adminlandingpage.php" class="btn btn-secondary">Back</a>

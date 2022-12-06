@@ -57,7 +57,7 @@ if (isset($_POST["amenity"])) {
 		if ($payment["next_due"] < $currentDate) {
 			// check unpaid paid
 			if ($payment["date_paid"] == null) {
-				redirect("./userreservations.php?code=103");
+				redirect("./userreservations.php?status=unpaid");
 			}
 		}
 	}
@@ -156,7 +156,7 @@ if (isset($_POST["amenity"])) {
 		<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
 			<!-- Sidebar - Brand -->
-			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="../index.php">
 				<div class="sidebar-brand-icon rotate-n-15">
 					<i class="fa fa-home" aria-hidden="true"></i>
 				</div>
@@ -166,31 +166,31 @@ if (isset($_POST["amenity"])) {
 			<!-- Divider -->
 			<hr class="sidebar-divider my-0">
 
-		<!-- Nav Item - Dashboard -->
-		<li class="nav-item">
+			<!-- Nav Item - Dashboard -->
+			<li class="nav-item">
 				<a class="nav-link" href="userlandingpage.php">
-				<i class="fa fa-bullhorn" aria-hidden="true"></i>
+					<i class="fa fa-bullhorn" aria-hidden="true"></i>
 					<span>Announcements</span></a>
 			</li>
 
 			<li class="nav-item">
 				<a class="nav-link" href="userpayments.php">
-				<i class="fa fa-heart" aria-hidden="true"></i>
+					<i class="fa fa-heart" aria-hidden="true"></i>
 					<span>Payments</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userreservations.php">
-				<i class="fa fa-ticket" aria-hidden="true"></i>
+					<i class="fa fa-ticket" aria-hidden="true"></i>
 					<span>Reserve Amenity</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userreservationtable.php">
-				<i class="fa fa-history" aria-hidden="true"></i>
+					<i class="fa fa-history" aria-hidden="true"></i>
 					<span>Reservation History</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userconcernform.php">
-				<i class="fa fa-comments" aria-hidden="true"></i>
+					<i class="fa fa-comments" aria-hidden="true"></i>
 					<span>Send a Message </span></a>
 			</li>
 
@@ -295,9 +295,9 @@ if (isset($_POST["amenity"])) {
 												case "101":
 													$msg = "This date is already reserved. Please consider another date.";
 													break;
-												case "103":
-													$msg = "You must settle all unpaid payments, to continue booking";
-													break;
+													// case "103":
+													// 	$msg = "You must settle all unpaid payments, to continue booking";
+													// 	break;
 												case "104":
 													$msg = "Unable to verify payments status, please contact the admins";
 													break;
@@ -357,8 +357,8 @@ if (isset($_POST["amenity"])) {
 												placeholder="Ending Hour" required>
 										</div>
 
-										<div style="margin-top:5%">
-											<button class="btn btn-primary" type="submit">Save</button>
+										<div class="d-flex justify-content-end mt-2">
+											<button class="btn btn-primary mr-2" type="submit">Save</button>
 											<a href="userlandingpage.php" class="btn btn-secondary">Back</a>
 										</div>
 										<!-- /.container-fluid -->
@@ -446,7 +446,7 @@ if (isset($_POST["amenity"])) {
 					<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
 					<script>
-					<?php if (isset($_GET["code"]) && $_GET["code"] == "103") : ?>
+					<?php if (isset($_GET["status"]) && $_GET["status"] == "unpaid") : ?>
 					$('#warning-modal').modal('toggle')
 					<?php endif; ?>
 					// Archived

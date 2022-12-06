@@ -126,14 +126,9 @@ if (isset($_POST["login"])) {
 							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-8">
-
-						</div>
-					</div>
 					<!-- /.col -->
-					<div class="col-4">
-						<button type="submit" name="login" class="btn btn-primary btn-block">Sign In</button>
+					<div class="d-flex justify-content-end">
+						<button type="submit" name="login" class="btn btn-primary">Sign In</button>
 					</div>
 					<!-- /.col -->
 			</div>
