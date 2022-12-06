@@ -94,15 +94,15 @@
                     $mail->CharSet="UTF-8";                                           //Send using SMTP
                 $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
                 $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                $mail->Username   = 'everlastingpearl2@gmail.com';                      //SMTP username
-                $mail->Password   = 'vpszuqjxinmvskql';                               //SMTP password
+                $mail->Username   = 'casseybertman@gmail.com';                      //SMTP username
+                $mail->Password   = 'vfvotethahfzkwfd';                               //SMTP password
                 $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
                 $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS
 
                 //Recipients
-                $mail->setFrom('everlastingpearl2@gmail.com');
+                $mail->setFrom('casseybertman@gmail.com');
                 $mail->addAddress($email);     //Add a recipient             //Name is optional
-                $mail->addReplyTo('everlastingpearl2@gmail.com');
+                $mail->addReplyTo('casseybertman@gmail.com');
 
                 //Content
                 $mail->isHTML(true);                                  //Set email format to HTML

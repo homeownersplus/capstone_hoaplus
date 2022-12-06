@@ -126,6 +126,7 @@ if (isset($_POST["login"])) {
 							</div>
 						</div>
 					</div>
+					<a href="forgot_password.php">Forgot password ?</a>
 					<!-- /.col -->
 					<div class="d-flex justify-content-end">
 						<button type="submit" name="login" class="btn btn-primary">Sign In</button>
