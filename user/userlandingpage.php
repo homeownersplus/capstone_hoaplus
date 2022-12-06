@@ -68,28 +68,28 @@ $model = new Model();
 			<!-- Nav Item - Dashboard -->
 			<li class="nav-item">
 				<a class="nav-link" href="userlandingpage.php">
-				<i class="fa fa-bullhorn" aria-hidden="true"></i>
+					<i class="fa fa-bullhorn" aria-hidden="true"></i>
 					<span>Announcements</span></a>
 			</li>
 
 			<li class="nav-item">
 				<a class="nav-link" href="userpayments.php">
-				<i class="fa fa-heart" aria-hidden="true"></i>
+					<i class="fa fa-heart" aria-hidden="true"></i>
 					<span>Payments</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userreservations.php">
-				<i class="fa fa-ticket" aria-hidden="true"></i>
+					<i class="fa fa-ticket" aria-hidden="true"></i>
 					<span>Reserve Amenity</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userreservationtable.php">
-				<i class="fa fa-history" aria-hidden="true"></i>
+					<i class="fa fa-history" aria-hidden="true"></i>
 					<span>Reservation History</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="userconcernform.php">
-				<i class="fa fa-comments" aria-hidden="true"></i>
+					<i class="fa fa-comments" aria-hidden="true"></i>
 					<span>Send a Message </span></a>
 			</li>
 
@@ -278,7 +278,7 @@ $model = new Model();
 				<footer class="sticky-footer bg-white">
 					<div class="container my-auto">
 						<div class="copyright text-center my-auto">
-							<span>Copyright &copy; Capstone 2022</span>
+							<span> Capstone 2022</span>
 						</div>
 					</div>
 				</footer>

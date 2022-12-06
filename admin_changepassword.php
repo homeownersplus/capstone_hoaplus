@@ -53,44 +53,44 @@ adminOnlyMiddleware();
 							<div class="col-md-8">
 								<div class="card">
 									<div class="card-body">
-											<div class="col-md-6">
-    										    <p class="text-uppercase text-sm">Change password</p>
-                                            </div>
-											<div class="col-md-6">
-												<div class="form-group">
-													<label for="example-text-input" class="form-control-label">Old password</label>
-													<input class="form-control" type="password" id="old_pass">
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													<label for="example-text-input" class="form-control-label">New password</label>
-													<input class="form-control" type="password" id="new_pass">
-												</div>
-											</div>
-											<div class="col-md-6">
-                                                <button class="btn btn-warning" onClick="handleChangePassword()">Update password</button>
+										<div class="col-md-6">
+											<p class="text-uppercase text-sm">Change password</p>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="example-text-input" class="form-control-label">Old password</label>
+												<input class="form-control" type="password" id="old_pass">
 											</div>
 										</div>
-									</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="example-text-input" class="form-control-label">New password</label>
+												<input class="form-control" type="password" id="new_pass">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<button class="btn btn-warning" onClick="handleChangePassword()">Update password</button>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<!-- /.container-fluid -->
 				</div>
 			</div>
-			<!-- End of Main Content -->
-			<!-- Footer -->
-			<footer class="sticky-footer bg-white">
-				<div class="container my-auto">
-					<div class="copyright text-center my-auto"> <span>Copyright &copy; Capstone 2022</span> </div>
-				</div>
-			</footer>
-			<!-- End of Footer -->
+			<!-- /.container-fluid -->
 		</div>
-		<!-- End of Content Wrapper -->
+	</div>
+	<!-- End of Main Content -->
+	<!-- Footer -->
+	<footer class="sticky-footer bg-white">
+		<div class="container my-auto">
+			<div class="copyright text-center my-auto"> <span> Capstone 2022</span> </div>
+		</div>
+	</footer>
+	<!-- End of Footer -->
+	</div>
+	<!-- End of Content Wrapper -->
 	</div>
 	<!-- End of Page Wrapper -->
 	<!-- Scroll to Top Button-->
@@ -110,20 +110,20 @@ adminOnlyMiddleware();
 	<script src="js/demo/datatables-demo.js"></script>
 
 	<script>
-        const handleChangePassword = async () => {
-            const old = document.querySelector('#old_pass')
-            const newp = document.querySelector('#new_pass')
+	const handleChangePassword = async () => {
+		const old = document.querySelector('#old_pass')
+		const newp = document.querySelector('#new_pass')
 
-            if(!old || !newp) return alert("Please fill up the fields")
+		if (!old || !newp) return alert("Please fill up the fields")
 
-            const url = await fetch('./api/admin_updatepassword.php?old='+old.value+'&new='+newp.value)
-            const res = await url.json()
+		const url = await fetch('./api/admin_updatepassword.php?old=' + old.value + '&new=' + newp.value)
+		const res = await url.json()
 
-            alert(res?.message || "Error occured.")
+		alert(res?.message || "Error occured.")
 
-            old.value = ''
-            newp.value = ''
-        }
+		old.value = ''
+		newp.value = ''
+	}
 	</script>
 </body>
 

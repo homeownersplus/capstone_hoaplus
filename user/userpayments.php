@@ -302,7 +302,7 @@ if ($stmt->rowCount() > 0) {
 							<footer class="sticky-footer bg-white">
 								<div class="container my-auto">
 									<div class="copyright text-center my-auto">
-										<span>Copyright &copy; Capstone 2022</span>
+										<span> Capstone 2022</span>
 									</div>
 								</div>
 							</footer>
