@@ -315,6 +315,7 @@ $user_results = $con->query($user_sql);
 										<th scope="col">Firstname</th>
 										<th scope="col">M.I</th>
 										<th scope="col">Date created</th>
+										<th scope="col">Attachments</th>
 									</thead>
 									<tbody>
 										<?php
@@ -326,6 +327,16 @@ $user_results = $con->query($user_sql);
 											<td><?php echo $row['first_name']; ?></td>
 											<td><?php echo $row['middle_initial']; ?></td>
 											<th><?php echo date("M d, Y", strtotime($row["created_at"])); ?></th>
+											<th>
+												<?php if(($row["id_img"] != "")) {?>
+												<a target="_blank"href="./api/<?php echo $row["id_img"]; ?>">Valid ID</a> <br/>
+												<?php }?>
+
+												<?php if(($row["land_reg_img"] != "")) {?>
+												<a target="_blank"href="./api/<?php echo $row["land_reg_img"]; ?>">Land Registration</a>
+												<?php }?>
+
+											</th>
 										</tr>
 										<?php }
 										?>
@@ -670,70 +681,6 @@ $user_results = $con->query($user_sql);
 		}
 
 		registerBtn.addEventListener('click', handleRegisterMember)
-
-		// let table_data = null
-		// const fetchData = async (search, page) => {
-		// 	try {
-		// 		const url = await fetch(`api/fetch_member.php?page=${page ? page : '1'}&${search ? `search=${search}` : ''}`)
-		// 		const toJson = await url.json()
-
-		// 		console.log(toJson)
-		// 		let temp = ''
-
-		// 		table_data = toJson
-		// 		for (const i of toJson?.data) {
-		// 			temp += `
-		// 				<tr>
-		// 					<td>HOAM${(i.id).padStart(5, '0')}</td>
-		// 					<td>${i.last_name}</td>
-		// 					<td>${i.first_name}</td>
-		// 					<td>${i.middle_initial}</td>
-		// 					<td></td>
-		// 				</tr>
-		// 			`
-		// 		}
-
-		// 		DQ('tbody').innerHTML = temp
-		// 		DQ('#current-page').innerHTML = page || 1
-		// 	} catch (error) {
-		// 		console.log(error)
-		// 	}
-		// }
-
-		// DQ('#search-btn').addEventListener('click', () => {
-		// 	if (DQ('#search-field').value.length == 0) return fetchData()
-		// 	fetchData(DQ('#search-field').value, 1)
-		// })
-
-		// DQ('#next-btn').addEventListener('click', async () => {
-		// 	if (!table_data) return
-
-		// 	if (Number(table_data.page) === Number(table_data.total_pages)) return
-		// 	DQ('#next-btn').disabled = true
-
-		// 	await fetchData(
-		// 		(
-		// 			(DQ('#search-field').value.length == 0) ? null : DQ('#search-field').value
-		// 		), Number(table_data.page) + 1)
-
-		// 	DQ('#next-btn').disabled = false
-		// })
-
-		// DQ('#prev-btn').addEventListener('click', async () => {
-		// 	if (!table_data) return
-
-		// 	if (Number(table_data.page) === 0) return
-		// 	DQ('#prev-btn').disabled = true
-
-		// 	await fetchData(
-		// 		(
-		// 			(DQ('#search-field').value.length == 0) ? null : DQ('#search-field').value
-		// 		), Number(table_data.page) - 1)
-
-		// 	DQ('#prev-btn').disabled = false
-		// })
-
-		// fetchData()
 
 		const repeatFetchNextId = async () => {
 			try {
