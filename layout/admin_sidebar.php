@@ -17,16 +17,19 @@
 			<i class="fa fa-bullhorn" aria-hidden="true"></i>
 			<span>Announcements</span></a>
 	</li>
+	<?php if (!in_array(strtolower($_SESSION["logged_position"]), ["admin", "president"])) : ?>
 	<li class="nav-item">
 		<a class="nav-link" href="admin_managemembers.php">
 			<i class="fa fa-users" aria-hidden="true"></i>
 			<span>User Accounts</span></a>
 	</li>
+	<?php endif; ?>
+
 	<?php if (in_array(strtolower($_SESSION["logged_position"]), ["admin", "president"])) : ?>
 	<li class="nav-item">
-		<a class="nav-link" href="manageadminss.php">
+		<a class="nav-link" href="admin_manageaccounts.php">
 			<i class="fa fa-user" aria-hidden="true"></i>
-			<span>Manage Admins</span></a>
+			<span>Manage Accounts</span></a>
 	</li>
 	<?php endif; ?>
 	<li class="nav-item">

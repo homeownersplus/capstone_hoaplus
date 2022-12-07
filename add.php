@@ -149,4 +149,4 @@ if (isset($_POST['add'])) {
 	$_SESSION['message'] = 'Fill up add form first';
 }
 
-header('location: manageadminss.php');
+header('location: admin_manageaccounts.php');

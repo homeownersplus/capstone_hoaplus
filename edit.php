@@ -28,6 +28,4 @@
         $_SESSION['message'] = 'Fill up edit form first';
     }
  
-    header('location: manageadminss.php');
- 
-?>
+    header('location: admin_manageaccounts.php');

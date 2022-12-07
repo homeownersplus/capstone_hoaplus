@@ -105,6 +105,7 @@ if (isset($_POST['confirmPwd'])) {
 			logAction($dbh, "$adminId marked Member $memberId as paid.");
 		} else {
 			logAction($dbh, "$adminId marked Member $memberId as Unpaid.");
+			redirect("admin_managepayments.php?code=205");
 		}
 
 		// calculate next payment due
@@ -262,6 +263,9 @@ if (isset($_POST['confirmPwd'])) {
 								case "200":
 									$errMsg = "Marked as Paid!";
 									break;
+								case "205":
+									$errMsg = "Marked as Unpaid!";
+									break;
 								case "404":
 									$errMsg = "Error finding payment record.";
 									break;
@@ -346,8 +350,8 @@ if (isset($_POST['confirmPwd'])) {
 											<th>
 												<?php
 													echo $row["date_paid"] != null
-														? '<button onclick="undoPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-dark btn-sm">Mark as Unpaid</button>'
-														: '<button onclick="markPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-primary btn-sm">Mark as Paid</button>'
+														? '<button onclick="undoPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-dark btn-sm" style="width: 9em;">Mark as Unpaid</button>'
+														: '<button onclick="markPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-primary btn-sm" style="width: 9em;">Mark as Paid</button>'
 													?>
 											</th>
 										</tr>
@@ -378,7 +382,7 @@ if (isset($_POST['confirmPwd'])) {
 								<div class="modal-body">
 									<input id="payment-id" type="hidden" name="payment_id">
 									Please type your password to continue.
-									<input type="hidden" name="btn_action">
+									<input id="btn_action" type="hidden" name="btn_action">
 									<input class="form-control mt-2" type="password" name="confirmPwd" placeholder="Your password">
 								</div>
 								<div class="modal-footer">
