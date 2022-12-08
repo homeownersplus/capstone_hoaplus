@@ -22,6 +22,4 @@
         $_SESSION['message'] = 'Select admin to delete first';
     }
  
-    header('location: manageadminss.php');
- 
-?>
+    header('location: admin_manageaccounts.php');

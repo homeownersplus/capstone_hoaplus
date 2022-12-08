@@ -122,11 +122,16 @@ $user_results = $con->query($user_sql);
 					<!-- Page Heading -->
 
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="font-weight-bold">User Accounts</h1>
-						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registermember"
-							onclick="increase();">
-							Register
-						</button>
+						<h1 class="font-weight-bold">Manage Accounts</h1>
+						<div class="btn-group" role="group" aria-label="Add new accounts">
+							<button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#registermember"
+								onclick="increase();">
+								New Member
+							</button>
+							<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addnew">
+								New Admin
+							</button>
+						</div>
 					</div>
 
 					<!--------------------------------------- Add Modal ------------------------------------->
@@ -289,66 +294,136 @@ $user_results = $con->query($user_sql);
 						unset($_SESSION['message']);
 					}
 					?>
+					<ul class="nav nav-tabs" role="tablist">
+						<li class="nav-item" role="presentation">
+							<a class="nav-link active" data-bs-toggle="tab" href="#admin-table-tab" aria-selected="true"
+								role="tab">Admins</a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<a class="nav-link" data-bs-toggle="tab" href="#member-table-tab" aria-selected="false" role="tab"
+								tabindex="-1">Members</a>
+						</li>
+					</ul>
+					<div id="accounts-tab" class="tab-content">
+						<div class="tab-pane fade active show" id="admin-table-tab" role="tabpanel">
+							<!-- Admin Table -->
+							<div class="card shadow mb-4">
+								<div class="card-body">
+									<div class="form-group d-flex justify-content-end align-items-center">
+										<button class="btn btn-primary" onclick="generatePdfAdmin()">Generate
+											Report</button>
+									</div>
+									<div class="table-responsive">
+										<table id="admin-table" class="table">
+											<thead>
+												<th>ID</th>
+												<th>Username</th>
+												<th>Fullname</th>
+												<th>Email</th>
+												<th>Position</th>
+												<th class="not-this">Action</th>
+											</thead>
+											<tbody>
 
-					<!-- DataTales Example -->
-					<div class="card shadow mb-4" style="margin-top:2%;">
+												<!----------config---------->
+												<?php
 
-						<div class="card-body">
+												$database = new Connection();
+												$db = $database->open();
+												try {
+													$sql = 'SELECT * FROM admins';
+													foreach ($db->query($sql) as $row) {
+												?>
+												<tr>
+													<td data-order="<?php echo $row['id']; ?>">HOAADMIN <?php echo $row['id']; ?></td>
+													<td><?php echo $row['username']; ?></td>
+													<td><?php echo $row['fullname']; ?></td>
+													<td><?php echo $row['email']; ?></td>
+													<td><?php echo $row['position']; ?></td>
+													<td>
+														<a href="#edit_<?php echo $row['id']; ?>" class="btn btn-primary btn-sm"
+															data-bs-toggle="modal">
+															Edit</a>
+														<a href="#delete_<?php echo $row['id']; ?>" class="btn btn-secondary btn-sm"
+															data-bs-toggle="modal"> Delete</a>
+													</td>
+													<?php include('edit_delete_modal.php'); ?>
+												</tr>
+												<?php
+													}
+												} catch (PDOException $e) {
+													echo "There is some problem in connection: " . $e->getMessage();
+												}
 
-							<div class="form-group d-flex justify-content-end align-items-center">
+												//close connection
+												$database->close();
 
-								<div class="d-flex input-daterange mr-2">
-									<input type="text" id="min-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
-										placeholder="From:">
-									<input type="text" id="max-date" class="form-control date-range-filter" data-date-format="yyyy-mm-dd"
-										placeholder="To:">
+												?>
+											</tbody>
+										</table>
+									</div>
 								</div>
-								<button class="btn btn-primary" onclick="generatePdf()">Generate
-									Report</button>
-
 							</div>
-							<div class="table-responsive">
-								<table class="table" id="table-data" style="margin-top:2%;">
-									<thead>
-										<th scope="col">MemberID</th>
-										<th scope="col">Lastname</th>
-										<th scope="col">Firstname</th>
-										<th scope="col">M.I</th>
-										<th scope="col">Date created</th>
-										<th scope="col">Attachments</th>
-									</thead>
-									<tbody>
-										<?php
-										while ($row = $user_results->fetch_assoc()) {
-										?>
-										<tr>
-											<td><?php echo str_pad($row['id'], 5, "0", STR_PAD_LEFT); ?></td>
-											<td><?php echo $row['last_name']; ?></td>
-											<td><?php echo $row['first_name']; ?></td>
-											<td><?php echo $row['middle_initial']; ?></td>
-											<th><?php echo date("M d, Y", strtotime($row["created_at"])); ?></th>
-											<th>
-												<div class="btn-group d-flex">
-													<?php if (($row["id_img"] != "")) { ?>
-													<a target="_blank" href="./api/<?php echo $row["id_img"]; ?>"
-														class="flex-fill btn btn-outline-primary btn-sm mr-1" style="width: 5em;">VIEW ID</a>
-													<br />
-													<?php } ?>
-													<?php if (($row["land_reg_img"] != "")) { ?>
-													<a target="_blank" href="./api/<?php echo $row["land_reg_img"]; ?>"
-														class="flex-fill btn btn-outline-primary btn-sm" style="width: 5em;">VIEW LAND TITLE</a>
-													<?php } ?>
-												</div>
+						</div>
+						<div class="tab-pane fade" id="member-table-tab" role="tabpanel">
+							<!-- Members Table -->
+							<div class="card shadow mb-4">
 
-											</th>
-										</tr>
-										<?php }
-										?>
-									</tbody>
-								</table>
+								<div class="card-body">
+									<div class="form-group d-flex justify-content-end align-items-center">
+										<div class="d-flex input-daterange mr-2">
+											<input type="text" id="min-date" class="form-control date-range-filter"
+												data-date-format="yyyy-mm-dd" placeholder="From:">
+											<input type="text" id="max-date" class="form-control date-range-filter"
+												data-date-format="yyyy-mm-dd" placeholder="To:">
+										</div>
+										<button class="btn btn-primary" onclick="generatePdfMember()">Generate
+											Report</button>
+									</div>
+									<div class="table-responsive">
+										<table class="table" id="member-table">
+											<thead>
+												<th>MemberID</th>
+												<th>Last Name</th>
+												<th>First Name</th>
+												<th>M.I</th>
+												<th>Date Joined</th>
+												<th class="not-this">Attachments</th>
+											</thead>
+											<tbody>
+												<?php
+												while ($row = $user_results->fetch_assoc()) {
+												?>
+												<tr>
+													<td><?php echo str_pad($row['id'], 5, "0", STR_PAD_LEFT); ?></td>
+													<td><?php echo $row['last_name']; ?></td>
+													<td><?php echo $row['first_name']; ?></td>
+													<td><?php echo $row['middle_initial']; ?></td>
+													<td><?php echo date("M d, Y", strtotime($row["created_at"])); ?></td>
+													<td>
+														<div class="btn-group d-flex">
+															<?php if (($row["id_img"] != "")) { ?>
+															<a target="_blank" href="./api/<?php echo $row["id_img"]; ?>"
+																class="flex-fill btn btn-outline-primary btn-sm mr-1" style="width: 5em;">VIEW ID</a>
+															<br />
+															<?php } ?>
+															<?php if (($row["land_reg_img"] != "")) { ?>
+															<a target="_blank" href="./api/<?php echo $row["land_reg_img"]; ?>"
+																class="flex-fill btn btn-outline-primary btn-sm" style="width: 5em;">VIEW LAND TITLE</a>
+															<?php } ?>
+														</div>
+													</td>
+												</tr>
+												<?php }
+												?>
+											</tbody>
+										</table>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
+
 					<!-- /.container-fluid -->
 				</div>
 				<!-- End of Main Content -->
@@ -371,6 +446,9 @@ $user_results = $con->query($user_sql);
 
 		<!-- Scroll to Top Button-->
 		<?php require_once("./layout/admin_logout.php") ?>
+
+		<?php include('add_modal.php'); ?>
+
 
 		<script>
 		var a = 1;
@@ -494,20 +572,67 @@ $user_results = $con->query($user_sql);
 		<script>
 		const loggedUser = '<?php echo $_SESSION["logged_user"]["username"] ?>';
 
+		// admin date filter
 		$('.input-daterange input').each(function() {
 			$(this).datepicker('clearDates');
 		});
 
-		var table = $('#table-data').DataTable({
-			// lengthChange: true,
-			// dom: 'lBfrtip',
-			// responsive: true,
+		// admin table
+		var adminTable = $('#admin-table').DataTable({
 			"dom": '<"top"<"left-col"l><"center-col"B><"right-col">>frt<"bottom"<"left-col"i><p>>',
-
+			"columnDefs": [{
+				"type": "num",
+				"targets": 0
+			}],
 			buttons: [{
 				extend: 'pdf',
 				text: 'Generate Report',
-				className: "btn btn-primary invisible pdf-generate-btn",
+				className: "btn btn-primary invisible pdf-generate-btn-admin",
+				exportOptions: {
+					columns: 'th:not(.not-this)',
+					columnGap: 1
+				},
+				customize: function(doc) {
+					const date = moment().format("MMMM Do YYYY, h:mm:ss a");
+					// doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+					doc.styles.tableBodyEven.alignment = 'center';
+					doc.styles.tableBodyOdd.alignment = 'center';
+					doc.content.splice(0, 1, {
+						text: [{
+							text: 'HOA+ USER ACCOUNTS REPORT - HOA ADMINS \n',
+							bold: true,
+							fontSize: 16
+						}, {
+							text: ` As of ${date} \n`,
+							bold: false,
+							fontSize: 9
+						}, {
+							text: `Generated By: ${loggedUser}`,
+							bold: false,
+							fontSize: 9
+						}],
+						margin: [0, 0, 0, 12],
+						alignment: 'center'
+					});
+				},
+			}],
+			'lengthMenu': [
+				[10, 25, 50, -1],
+				[10, 25, 50, "All"]
+			]
+		});
+
+		// member table
+		var memberTable = $('#member-table').DataTable({
+			"dom": '<"top"<"left-col"l><"center-col"B><"right-col">>frt<"bottom"<"left-col"i><p>>',
+			buttons: [{
+				extend: 'pdf',
+				text: 'Generate Report',
+				className: "btn btn-primary invisible pdf-generate-btn-member",
+				exportOptions: {
+					columns: 'th:not(.not-this)',
+					columnGap: 1
+				},
 				customize: function(doc) {
 					const date = moment().format("MMMM Do YYYY, h:mm:ss a");
 					doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -557,7 +682,7 @@ $user_results = $con->query($user_sql);
 
 		// Re-draw the table when the a date range filter changes
 		$('.date-range-filter').change(function() {
-			table.draw();
+			memberTable.draw();
 		});
 		</script>
 		<script>
@@ -703,8 +828,11 @@ $user_results = $con->query($user_sql);
 		const onlyLetters = (evt) => evt.value = evt.value.replace(/[^A-Z a-z]/ig, '')
 		const onlyNumber = (evt) => evt.value = evt.value.replace(/[^0-9]/ig, '')
 
-		const generatePdf = () => {
-			document.querySelector('.pdf-generate-btn').click()
+		const generatePdfAdmin = () => {
+			document.querySelector('.pdf-generate-btn-admin').click()
+		}
+		const generatePdfMember = () => {
+			document.querySelector('.pdf-generate-btn-member').click()
 		}
 		</script>
 	</div>

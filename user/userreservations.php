@@ -10,11 +10,13 @@ $model = new Model();
 
 $amenetyList = [];
 foreach ($model->displayAment() as $amt) {
-	$amenety = [
-		"id" => $amt["id"],
-		"name" => $amt["amename"],
-	];
-	array_push($amenetyList, $amenety);
+	if ($amt["isAvailable"] == true) {
+		$amenety = [
+			"id" => $amt["id"],
+			"name" => $amt["amename"],
+		];
+		array_push($amenetyList, $amenety);
+	}
 }
 
 if (isset($_POST["amenity"])) {
@@ -340,6 +342,9 @@ if (isset($_POST["amenity"])) {
 										<div id="reservedateuser" style="margin-top:2%;">
 											<label for="reservedateuser" class="form-label">Reservation Date</label>
 											<input id="date-input" type="date" class="form-control" name="date" required>
+											<span id="closed-message" class="d-none text-danger">The amenities today are now closed, pick
+												another
+												date</span>
 										</div>
 
 
@@ -347,14 +352,14 @@ if (isset($_POST["amenity"])) {
 											<label for="reservedateuser" class="form-label">Reservation Time Start</label>
 											<input type="hidden" name="time-start" id="time-start-input">
 											<input id="time-start-input-picker" type="input" class="form-control" class="inputfieldtime"
-												placeholder="Starting Hour" required>
+												placeholder="Starting Hour" readonly required>
 										</div>
 
 										<div id="reserveendtimeuser" style="margin-top:2%;">
 											<label for="reservedateuser" class="form-label">Reservation Time End</label>
 											<input type="hidden" name="time-end" id="time-end-input">
 											<input id="time-end-input-picker" type="input" class="form-control" class="inputfieldtime"
-												placeholder="Ending Hour" required>
+												placeholder="Ending Hour" readonly required>
 										</div>
 
 										<div class="d-flex justify-content-end mt-2">
@@ -475,9 +480,25 @@ if (isset($_POST["amenity"])) {
 							hour: 'numeric',
 							hour12: true
 						}).split(" ")[1];
+
+						document.querySelector("#reservestarttimeuser").classList.remove("d-none");
+						document.querySelector("#reserveendtimeuser").classList.remove("d-none");
+						document.querySelector("#closed-message").classList.add("d-none");
+
 						if (moment(document.querySelector("#date-input").value).isSame(new Date(), "day")) {
-							$('#time-start-input-picker').timepicker('option', 'minTime',
-								`${parseInt(new Date().getHours()) + 1}${ext}`);
+
+							console.log(new Date().getHours() + 1)
+							if (new Date().getHours() + 1 >= 19) {
+								document.querySelector("#reservestarttimeuser").classList.add("d-none");
+								document.querySelector("#reserveendtimeuser").classList.add("d-none");
+								document.querySelector("#closed-message").classList.remove("d-none");
+							}
+
+							let minTime = '8AM';
+							if (new Date().getHours() + 1 > 8) {
+								minTime = String(8 + ((new Date().getHours() + 1) - 8)) + ext;
+							}
+							$('#time-start-input-picker').timepicker('option', 'minTime', minTime);
 						} else {
 							$('#time-start-input-picker').timepicker('option', 'minTime', `8AM`);
 						}
