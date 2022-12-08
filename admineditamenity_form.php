@@ -66,7 +66,7 @@ if (isset($_POST['insert'])) {
 	if ($count > 0) {
 		redirect("./admin_addamenities.php?amenityupdated");
 	}
-	redirect("./admineditamenity_form.php?errCode=105");
+	redirect("./admineditamenity_form.php?q=$_GET[q]&errCode=105");
 }
 ?>
 
@@ -189,13 +189,14 @@ if (isset($_POST['insert'])) {
 									<div class="mb-3" style="margin-top:2%; margin-left:10%; ">
 										<p class="form-label">Amenity Availability</p>
 										<div class="custom-control custom-radio custom-control-inline">
-											<input type="radio" id="ame-available" name="is_available" class="custom-control-input"
+											<input type="radio" id="ame-available" name="is_available" value="1" class="custom-control-input"
 												<?php if ($amenity["isAvailable"] == true) echo "checked"; ?> required>
 											<label class="custom-control-label" for="ame-available">Available</label>
 										</div>
 										<div class="custom-control custom-radio custom-control-inline">
-											<input type="radio" id="ame-notavailable" name="is_available" class="custom-control-input"
-												<?php if ($amenity["isAvailable"] == false) echo "checked"; ?> required>
+											<input type="radio" id="ame-notavailable" name="is_available" value="0"
+												class="custom-control-input" <?php if ($amenity["isAvailable"] == false) echo "checked"; ?>
+												required>
 											<label class="custom-control-label" for="ame-notavailable">Not Available</label>
 										</div>
 									</div>
