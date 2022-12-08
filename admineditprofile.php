@@ -1,4 +1,3 @@
-<!--------------------------- config here  ----------------------------->
 <?php
 session_start();
 require_once "./helpers/auth.php";
@@ -9,6 +8,11 @@ $con = new mysqli("localhost", "root", "", "pdocrud");
 
 $result = $con->query("SELECT * FROM `admins` WHERE id = " . $_SESSION['userid']);
 $row = $result->fetch_assoc();
+
+if (empty($row)) {
+	$result = $con->query("SELECT * FROM `tbladmin` WHERE id = " . $_SESSION['userid']);
+	$row = $result->fetch_assoc();
+}
 
 require_once './dbconfig.php';
 

@@ -1,9 +1,12 @@
-<!--------------------------- config here  ----------------------------->
 <?php
 session_start();
 require_once "./helpers/auth.php";
 require_once "./helpers/redirect.php";
 adminOnlyMiddleware();
+
+if (!in_array(strtolower($_SESSION["logged_position"]), ["admin", "president"])) {
+	redirect("./index.php");
+}
 
 require_once 'dbconfig.php';
 include('./global/model.php');
