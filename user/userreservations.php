@@ -352,14 +352,14 @@ if (isset($_POST["amenity"])) {
 											<label for="reservedateuser" class="form-label">Reservation Time Start</label>
 											<input type="hidden" name="time-start" id="time-start-input">
 											<input id="time-start-input-picker" type="input" class="form-control" class="inputfieldtime"
-												placeholder="Starting Hour" required>
+												placeholder="Starting Hour" readonly required>
 										</div>
 
 										<div id="reserveendtimeuser" style="margin-top:2%;">
 											<label for="reservedateuser" class="form-label">Reservation Time End</label>
 											<input type="hidden" name="time-end" id="time-end-input">
 											<input id="time-end-input-picker" type="input" class="form-control" class="inputfieldtime"
-												placeholder="Ending Hour" required>
+												placeholder="Ending Hour" readonly required>
 										</div>
 
 										<div class="d-flex justify-content-end mt-2">
