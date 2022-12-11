@@ -146,7 +146,7 @@ if (isset($_POST['add'])) {
 			} else {
 				echo "0";
 			}
-		} catch (PDOException $e) {
+		} catch (\Exception $e) {
 			$_SESSION['message'] = $e->getMessage();
 		}
 	}

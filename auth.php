@@ -11,7 +11,7 @@ if (isset($_POST["login"])) {
 	}
 
 	// Check if default admin
-	$sql = "SELECT * FROM tbladmin WHERE email =:email AND password=:password";
+	$sql = "SELECT * FROM tbladmin WHERE username =:email AND password=:password";
 	$userrow = $dbh->prepare($sql);
 	$userrow->execute(
 		[
