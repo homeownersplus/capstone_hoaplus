@@ -6,16 +6,16 @@ require_once "./helpers/redirect.php";
 guestOnlyMiddleware();
 
 if (isset($_POST["login"])) {
-	if (empty($_POST['username']) || empty($_POST['password'])) {
+	if (empty($_POST['email']) || empty($_POST['password'])) {
 		redirect("auth.php?err=missing");
 	}
 
 	// Check if default admin
-	$sql = "SELECT * FROM tbladmin WHERE username =:username AND password=:password";
+	$sql = "SELECT * FROM tbladmin WHERE email =:email AND password=:password";
 	$userrow = $dbh->prepare($sql);
 	$userrow->execute(
 		[
-			'username' => $_POST['username'],
+			'email' => $_POST['email'],
 			'password' => $_POST['password']
 		]
 	);
@@ -32,11 +32,11 @@ if (isset($_POST["login"])) {
 	}
 
 	// Check if admin
-	$sql = "SELECT * FROM admins WHERE username =:username AND password=:password";
+	$sql = "SELECT * FROM admins WHERE email =:email AND password=:password";
 	$userrow = $dbh->prepare($sql);
 	$userrow->execute(
 		[
-			'username' => $_POST['username'],
+			'email' => $_POST['email'],
 			'password' => $_POST['password']
 		]
 	);
@@ -53,11 +53,11 @@ if (isset($_POST["login"])) {
 	}
 
 	// check if user
-	$sql = "SELECT * FROM user WHERE username =:username AND password=:password";
+	$sql = "SELECT * FROM user WHERE email =:email AND password=:password";
 	$userrow = $dbh->prepare($sql);
 	$userrow->execute(
 		[
-			'username' => $_POST['username'],
+			'email' => $_POST['email'],
 			'password' => $_POST['password']
 		]
 	);
@@ -94,13 +94,32 @@ if (isset($_POST["login"])) {
 	<link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
 	<!-- Theme style -->
 	<link rel="stylesheet" href="dist/css/adminlte.min.css">
+
+	<style>
+	.main-custom-bg {
+		background-image: url("./img/login-bg.png");
+		background-size: cover;
+		position: relative;
+		isolation: isolate;
+	}
+
+	.main-custom-bg::after {
+		content: "";
+		z-index: -1;
+		inset: 0;
+		position: absolute;
+		background: black;
+		opacity: 0.1;
+	}
+	</style>
 </head>
 
 
 
-<body class="hold-transition login-page">
+<body class="hold-transition login-page main-custom-bg">
 	<div class="login-box">
 		<!-- /.login-logo -->
+		<img class="img-fluid" src="./img/roofline.png" style="scale: 1.26; margin-bottom: 0.6rem;">
 		<div class="card card-outline card-primary">
 			<div class="card-header text-center">
 				<a href="#" class="h1">Login</a>
@@ -111,7 +130,7 @@ if (isset($_POST["login"])) {
 				<form method="POST">
 					<input type="hidden" name="auth_action" value="login">
 					<div class="input-group mb-3">
-						<input type="text" class="form-control" name="username" placeholder="Username">
+						<input type="text" class="form-control" name="email" placeholder="Email">
 						<div class="input-group-append">
 							<div class="input-group-text">
 								<span class="fas fa-envelope"></span>

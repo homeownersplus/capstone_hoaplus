@@ -74,7 +74,7 @@ if (isset($_POST['cancel-reservation-id'])) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title> HOA+ Member </title>
+	<title> Reservation History </title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
@@ -227,7 +227,7 @@ if (isset($_POST['cancel-reservation-id'])) {
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
 					<!-- Page Heading -->
-					<h1 class="h3 mb-4 text-gray-800">Reservations History</h1>
+					<h1 class="font-weight-bold">Reservations History</h1>
 
 					<?php if (isset($_GET['code'])) : ?>
 					<div class="alert alert-warning alert-dismissible fade show" role="alert">

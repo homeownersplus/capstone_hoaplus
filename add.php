@@ -107,22 +107,27 @@ if (isset($_POST['add'])) {
 
 			//Content
 			$mail->isHTML(true);                                  //Set email format to HTML
-			$mail->Subject = 'Email and Password';
+			$mail->Subject = 'Homeowners Association Plus Account Details';
 			$mail->Body    =  ' 
-				<html> 
-				<head> 
+					<html> 
+					<head> 
 			
-				</head> 
-				<body> 
-					<h2>Home Owners Association</h2> 
-					<h4>To login in your account here is your email and password</h4>
-					<br>
-					<h4>Email: <b>' . $email . '</b></h4>
-					<h4>Password: <b>' . $password . '</b></h4>
-					<br>
-					<h4>Thankyou</h4>
-				</body> 
-				</html>';
+					</head> 
+					<body> 
+							<h2>Home Owners Association</h2> 
+							<h4>Hi! You have successfully registered to Homeowners Association Plus! To login to your account and navigate the features that awaits, here is your account email and password.</h4>
+							<br>
+							<h4>Email: <b>' . $email . '</b></h4>
+							<h4>Password: <b>' . $password . '</b></h4>
+							<br>
+							<h4>You can now login by using this link: https://homeownersplus.000webhostapp.com</h4>
+							<br>
+							<h4>Note: For security purposes, it is advised to keep your credentials only to yourself. </h4>
+							<br>
+							<h4>Regards, </h4>
+							<h4>HOA+ Team</h4>
+					</body> 
+					</html>';
 
 
 			$mail->send();

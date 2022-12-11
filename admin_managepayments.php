@@ -101,8 +101,25 @@ if (isset($_POST['confirmPwd'])) {
 	if ($query->execute()) {
 		// log as paid
 
+		$adminId = "Admin_" . $_SESSION["logged_user"]["username"];
+		$memberId = "HOAM" . str_pad($payment["m_id"], 4, "0", STR_PAD_LEFT);
+
 		if ($_POST["btn_action"] == "pay") {
 			logAction($dbh, "$adminId marked Member $memberId as paid.");
+
+			// check if there is already a record for the next date
+			$existingSql = "SELECT * FROM payments WHERE member_id =:member_id AND date_due=:date_due";
+			$existingStmt = $dbh->prepare($existingSql);
+			$existingStmt->execute(
+				array(
+					'member_id' => $payment["m_id"],
+					'date_due' => $payment["next_due"]
+				)
+			);
+
+			if ($existingStmt->rowCount() > 0) {
+				redirect("admin_managepayments.php?code=200");
+			}
 		} else {
 			logAction($dbh, "$adminId marked Member $memberId as Unpaid.");
 			redirect("admin_managepayments.php?code=205");
@@ -151,7 +168,7 @@ if (isset($_POST['confirmPwd'])) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title> HOA+ PAYMENT REPORT </title>
+	<title>Payments</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
@@ -350,8 +367,8 @@ if (isset($_POST['confirmPwd'])) {
 											<th>
 												<?php
 													echo $row["date_paid"] != null
-														? '<button onclick="undoPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-dark btn-sm" style="width: 9em;">Mark as Unpaid</button>'
-														: '<button onclick="markPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-primary btn-sm" style="width: 9em;">Mark as Paid</button>'
+														? '<button onclick="undoPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-dark btn-sm btn-block">Mark as Unpaid</button>'
+														: '<button onclick="markPaid(' . $row["p_id"] . ')" data-toggle="modal" data-target="#confirm-modal" class="btn btn-outline-primary btn-sm btn-block">Mark as Paid</button>'
 													?>
 											</th>
 										</tr>

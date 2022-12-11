@@ -19,7 +19,7 @@ $model = new Model();
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title> HOA+ Member </title>
+	<title> Announcements </title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
@@ -201,7 +201,7 @@ $model = new Model();
           <div class="card-tools"> -->
 					<!-- Page Heading -->
 
-					<h1 class="h3 mb-4 text-gray-800">HOA Announcements</h1>
+					<h1 class="font-weight-bold">HOA Announcements</h1>
 					<!---alert messages--->
 					<?php
 

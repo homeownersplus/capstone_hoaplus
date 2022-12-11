@@ -8,9 +8,9 @@ userOnlyMiddleware("../index.php");
 $sql = "SELECT * FROM user WHERE id =:id";
 $userrow = $dbh->prepare($sql);
 $userrow->execute(
-    [
-        'id' => $_SESSION['userid']
-    ]
+	[
+		'id' => $_SESSION['userid']
+	]
 );
 
 $result = $userrow->fetch(PDO::FETCH_ASSOC);
@@ -21,7 +21,7 @@ $result = $userrow->fetch(PDO::FETCH_ASSOC);
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title> HOA+ Member </title>
+	<title> Report a Concern </title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
@@ -185,7 +185,7 @@ $result = $userrow->fetch(PDO::FETCH_ASSOC);
 					<!-- Page Heading -->
 
 
-					<h1 class="h3 mb-4 text-gray-800">Send a message</h1>
+					<h1 class="font-weight-bold">Send a message</h1>
 					<!-- <input class="btn btn-outline-primary" type="submit" value="Generate E-Pass" name="reserveamenityusr" style="margin-top:-10%; margin-left:85%;"  > -->
 
 					<div class="card shadow mb-4" style="margin-top:2%;">
@@ -200,13 +200,14 @@ $result = $userrow->fetch(PDO::FETCH_ASSOC);
 										<div class="mb-3" style="width:100%;">
 											<label for="disabledTextInput" class="form-label">Member Email</label>
 											<input type="text" id="disabledTextInput" class="form-control"
-												placeholder="fetch logged in user email here" value="<?php echo $result['email'];?>" disabled>
+												placeholder="fetch logged in user email here" value="<?php echo $result['email']; ?>" disabled>
 										</div>
 
 										<div class="mb-3" style="width:100%;">
 											<label for="disabledTextInput" class="form-label">Member Fullname</label>
 											<input type="text" id="disabledTextInput" class="form-control"
-												placeholder="fetch logged in full name here" disabled  value="<?php echo $result['first_name']." ".$result['middle_initial']." ".$result['last_name'];?>">
+												placeholder="fetch logged in full name here" disabled
+												value="<?php echo $result['first_name'] . " " . $result['middle_initial'] . " " . $result['last_name']; ?>">
 										</div>
 
 
@@ -226,7 +227,8 @@ $result = $userrow->fetch(PDO::FETCH_ASSOC);
 
 
 											<div class="d-flex justify-content-end mt-2">
-												<input class="btn btn-primary mr-2" type="button" value="Send message" name="userreportconcern" onClick="handleSubmitConcern()">
+												<input class="btn btn-primary mr-2" type="button" value="Send message" name="userreportconcern"
+													onClick="handleSubmitConcern()">
 												<a href="userlandingpage.php" class="btn btn-secondary">Back</a>
 
 											</div>
@@ -245,68 +247,68 @@ $result = $userrow->fetch(PDO::FETCH_ASSOC);
 										</footer>
 										<!-- End of Footer -->
 
-							</div>
-							<!-- End of Content Wrapper -->
-
-						</div>
-						<!-- End of Page Wrapper -->
-
-						<!-- Scroll to Top Button-->
-						<a class="scroll-to-top rounded" href="#page-top">
-							<i class="fas fa-angle-up"></i>
-						</a>
-
-						<!-- Logout Modal-->
-						<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-							aria-hidden="true">
-							<div class="modal-dialog" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-										<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">×</span>
-										</button>
 									</div>
-									<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-									<div class="modal-footer">
-										<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-										<a class="btn btn-primary" href="../logout.php">Logout</a>
+									<!-- End of Content Wrapper -->
+
+							</div>
+							<!-- End of Page Wrapper -->
+
+							<!-- Scroll to Top Button-->
+							<a class="scroll-to-top rounded" href="#page-top">
+								<i class="fas fa-angle-up"></i>
+							</a>
+
+							<!-- Logout Modal-->
+							<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+								aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+											<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">×</span>
+											</button>
+										</div>
+										<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+										<div class="modal-footer">
+											<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+											<a class="btn btn-primary" href="../logout.php">Logout</a>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
 
-						<!-- Bootstrap core JavaScript-->
-						<script src="../vendor/jquery/jquery.min.js"></script>
-						<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+							<!-- Bootstrap core JavaScript-->
+							<script src="../vendor/jquery/jquery.min.js"></script>
+							<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-						<!-- Core plugin JavaScript-->
-						<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+							<!-- Core plugin JavaScript-->
+							<script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
-						<!-- Custom scripts for all pages-->
-						<script src="../js/sb-admin-2.min.js"></script>
+							<!-- Custom scripts for all pages-->
+							<script src="../js/sb-admin-2.min.js"></script>
 
-						<!-- Page level plugins -->
-						<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-						<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+							<!-- Page level plugins -->
+							<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+							<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-						<!-- Page level custom scripts -->
-						<script src="../js/demo/datatables-demo.js"></script>
-						<link rel="stylesheet"
-							href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+							<!-- Page level custom scripts -->
+							<script src="../js/demo/datatables-demo.js"></script>
+							<link rel="stylesheet"
+								href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 
-						<script>
+							<script>
 							const handleSubmitConcern = async () => {
 								const report = document.querySelector("#report")
 
-								if(!report.value) return alert("Concern field is required")
+								if (!report.value) return alert("Concern field is required")
 
-								const url = await fetch('../api/send_report.php?report='+report.value)
+								const url = await fetch('../api/send_report.php?report=' + report.value)
 
 								const res = await url.json()
 
 								alert(res.message)
 							}
-						</script>
+							</script>
 
 </body>
