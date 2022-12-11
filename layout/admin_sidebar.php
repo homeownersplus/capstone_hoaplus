@@ -29,7 +29,7 @@
 	<li class="nav-item">
 		<a class="nav-link" href="admin_manageaccounts.php">
 			<i class="fa fa-user" aria-hidden="true"></i>
-			<span>Manage Accounts</span></a>
+			<span>User Accounts</span></a>
 	</li>
 	<?php endif; ?>
 	<li class="nav-item">

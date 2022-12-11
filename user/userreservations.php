@@ -121,7 +121,7 @@ if (isset($_POST["amenity"])) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title> HOA+ Member </title>
+	<title> Reserve Amenity </title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
@@ -277,7 +277,7 @@ if (isset($_POST["amenity"])) {
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
 
-					<h1 class="h3 mb-4 text-gray-800">Reserve an Amenity</h1>
+					<h1 class="font-weight-bold">Reserve an Amenity</h1>
 					<!-- <input class="btn btn-outline-primary" type="submit" value="Generate E-Pass" name="reserveamenityusr" style="margin-top:-10%; margin-left:85%;"  > -->
 
 					<!-- DataTales Example -->

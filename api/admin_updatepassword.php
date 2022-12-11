@@ -11,12 +11,17 @@ header("Acess-Control-Allow-Headers: Acess-Control-Alllow-Headers, Content-Type,
 
 $con = new mysqli("localhost", "root", "", "pdocrud");
 
-$old = $_GET['old'];
-$newp = $_GET['new'];
+$json = file_get_contents('php://input');
+$data = json_decode($json);
+
+$old = $data->old;
+$newp = $data->newp;
+
 
 $sql = "SELECT `password` FROM `admins` WHERE `password` = ? AND `id` = ". $_SESSION['userid'];
 $stmt = $con->prepare($sql); 
 $stmt->bind_param("s", $old);
+
 $stmt->execute();
 $result = $stmt->get_result(); 
 $row = $result->fetch_assoc();
@@ -45,5 +50,3 @@ else{
         )
     );
 }
-
-?>

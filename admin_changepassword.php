@@ -69,7 +69,8 @@ adminOnlyMiddleware();
 											</div>
 										</div>
 										<div class="col-md-6">
-											<button class="btn btn-warning" onClick="handleChangePassword()">Update password</button>
+											<button class="btn btn-primary float-right" onClick="handleChangePassword()">Update
+												password</button>
 										</div>
 									</div>
 								</div>
@@ -116,7 +117,18 @@ adminOnlyMiddleware();
 
 		if (!old || !newp) return alert("Please fill up the fields")
 
-		const url = await fetch('./api/admin_updatepassword.php?old=' + old.value + '&new=' + newp.value)
+		// const url = await fetch('./api/admin_updatepassword.php?old=' + old.value + '&new=' + newp.value)
+		const url = await fetch('./api/admin_updatepassword.php', {
+			method: "POST",
+			headers: {
+				"Content-type": "application/json",
+				"Accepts": "application/json"
+			},
+			body: JSON.stringify({
+				old: old.value,
+				newp: newp.value
+			})
+		})
 		const res = await url.json()
 
 		alert(res?.message || "Error occured.")
