@@ -281,7 +281,8 @@ if ($stmt->rowCount() > 0) {
 														echo "&#8369; " . $initial * $multiplier;
 														?></th>
 											<th><?php echo date("M d, Y", strtotime($row["date_due"])); ?></th>
-											<th><?php echo $row["date_paid"] != null ? date("M d, Y", strtotime($row["date_paid"])) : ""  ?>
+											<th>
+												<?php echo $row["date_paid"] != null ? date("M d, Y", strtotime($row["date_paid"])) : "N/A"  ?>
 											</th>
 											<th><?php echo date("M d, Y", strtotime($row["next_due"])); ?></th>
 											<th><?php echo $row["date_paid"] != null ? "Paid" : "Unpaid" ?></th>
