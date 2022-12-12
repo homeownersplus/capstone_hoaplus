@@ -109,7 +109,7 @@ if (isset($_POST["login"])) {
 		inset: 0;
 		position: absolute;
 		background: black;
-		opacity: 0.1;
+		opacity: 0.6;
 	}
 	</style>
 </head>
