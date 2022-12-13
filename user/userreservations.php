@@ -29,6 +29,7 @@ if (isset($_POST["amenity"])) {
 		'status' => 2,
 	];
 
+
 	// die(var_dump($data));
 	//  Add check for uppaid payments
 	// get latest payment record
@@ -65,14 +66,31 @@ if (isset($_POST["amenity"])) {
 	}
 
 	//  check for similar time
+	// doesn't work
+	// $checkSql = "
+	// 	SELECT * 
+	// 	FROM reservations
+	// 	WHERE amenity_id = :amenity_id
+	// 	AND (start_date BETWEEN :from AND :to)
+	// 	AND (end_date BETWEEN :from AND :to)
+	// 	AND status = 2
+	// ";
+
+	// Works but doesnt detect if given dates are inside
+	// $checkSql = "
+	// 	SELECT * FROM reservations
+	// 	WHERE ((start_date BETWEEN :from AND :to) OR (end_date BETWEEN :from AND :to))
+	// 	AND amenity_id = :amenity_id
+	// 	AND status = 2
+	// ";
+
+	// Works
 	$checkSql = "
-		SELECT * 
-		FROM reservations
-		WHERE amenity_id = :amenity_id
-		AND (start_date BETWEEN :from AND :to)
-		AND (end_date BETWEEN :from AND :to)
-		AND status = 2
-	";
+	SELECT * FROM reservations
+	WHERE (start_date < :to AND end_date > :from)
+	AND amenity_id = :amenity_id
+	AND status = 2
+";
 	$checkStmt = $dbh->prepare($checkSql);
 	$checkStmt->execute(
 		[
@@ -82,6 +100,8 @@ if (isset($_POST["amenity"])) {
 		]
 	);
 	$count = $checkStmt->rowCount();
+
+	// die($checkStmt->debugDumpParams());
 	if ($count > 0) {
 		redirect("./userreservations.php?code=101");
 	}
