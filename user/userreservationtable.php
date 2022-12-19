@@ -108,6 +108,7 @@ if (isset($_POST['cancel-reservation-id'])) {
 
 	<!-- Page Wrapper -->
 	<div id="wrapper">
+	<?php require 'notif-modal.php'; ?> 
 
 		<!-- Sidebar -->
 		<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -204,6 +205,8 @@ if (isset($_POST['cancel-reservation-id'])) {
 									class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION["logged_user"]["username"] ?></span>
 								<img class="img-profile rounded-circle"
 									src="<?php echo $_SESSION["logged_user"]["avatar"] ? "../photos/" . $_SESSION["logged_user"]["avatar"] : '../photos/profile.png' ?>">
+								<span class="position-absolute bottom-50 start-100 translate-middle badge rounded-pill bg-danger notif-count">
+								</span>
 							</a>
 							<!-- Dropdown - User Information -->
 							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -211,7 +214,9 @@ if (isset($_POST['cancel-reservation-id'])) {
 									<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
 									Profile
 								</a>
+								<div class="dropdown-divider"></div>
 
+								<?php require 'notification_bell.php'; ?>
 
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">

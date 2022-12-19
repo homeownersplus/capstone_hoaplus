@@ -204,25 +204,25 @@ $user_results = $con->query($user_sql);
 
 												<div class="row">
 													<div class="form-group col-md-2">
-														<label class="col-sm-2 col-form-label">Phase: </label>
+														<label class="col-sm-2 col-form-label">Phase: <span style="color:red">*</span></label>
 														<input type="text" name="phase" class="form-control">
 													</div>
 													<div class="form-group col-md-2">
-														<label class="col-sm-2 col-form-label">Block: </label>
+														<label class="col-sm-2 col-form-label">Block: <span style="color:red">*</span></label>
 														<input type="text" name="block" class="form-control">
 													</div>
 													<div class="form-group col-md-2">
-														<label class="col-sm-2 col-form-label">Lot: </label>
+														<label class="col-sm-2 col-form-label">Lot: <span style="color:red">*</span></label>
 														<input type="text" name="lot" class="form-control">
 													</div>
 													<div class="form-group col-md-2">
-														<label class="col-sm-2 col-form-label">Street: </label>
+														<label class="col-sm-2 col-form-label">Street: <span style="color:red">*</span></label>
 														<input type="text" name="street" class="form-control">
 													</div>
 												</div>
 
 												<div>
-													<label class="col-sm-2 col-form-label"> Barangay: </label>
+													<label class="col-sm-2 col-form-label"> Barangay: <span style="color:red">*</span></label>
 													<input type="text" name="brgy" class="form-control" onInput="onlyLetters(this)">
 												</div>
 												<br>
@@ -256,11 +256,11 @@ $user_results = $con->query($user_sql);
 
 											<div class="col">
 												<div class="col">
-													<label class="form-label">Copy of Valid ID</label>
+													<label class="form-label">Copy of Valid ID <span style="color:red">*</span></label>
 													<input class="form-control" name="validid" type="file" id="formFile">
 												</div>
 												<div class="col">
-													<label class="form-label">Copy of Land Registration</label>
+													<label class="form-label">Copy of Land Registration <span style="color:red">*</span></label>
 													<input class="form-control" name="htitle" type="file" id="formFile">
 												</div>
 

@@ -50,7 +50,7 @@ $result = $userrow->fetch(PDO::FETCH_ASSOC);
 <!--------------------------- left navigation  ----------------------------->
 
 <body id="page-top">
-
+	<?php require 'notif-modal.php'; ?> 
 	<!-- Page Wrapper -->
 	<div id="wrapper">
 
@@ -147,12 +147,14 @@ $result = $userrow->fetch(PDO::FETCH_ASSOC);
 
 						<!-- Nav Item - User Information -->
 						<li class="nav-item dropdown no-arrow">
-							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+							<a class="nav-link dropdown-toggle position-relative" href="#" id="userDropdown" role="button" data-toggle="dropdown"
 								aria-haspopup="true" aria-expanded="false">
 								<span
 									class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION["logged_user"]["username"] ?></span>
 								<img class="img-profile rounded-circle"
 									src="<?php echo $_SESSION["logged_user"]["avatar"] ? "../photos/" . $_SESSION["logged_user"]["avatar"] : '../photos/profile.png' ?>">
+								<span class="position-absolute bottom-50 start-100 translate-middle badge rounded-pill bg-danger notif-count">
+								</span>
 							</a>
 							<!-- Dropdown - User Information -->
 							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -161,6 +163,10 @@ $result = $userrow->fetch(PDO::FETCH_ASSOC);
 									Profile
 								</a>
 
+
+								<div class="dropdown-divider"></div>
+
+								<?php require 'notification_bell.php'; ?>
 
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">

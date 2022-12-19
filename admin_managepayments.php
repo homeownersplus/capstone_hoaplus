@@ -107,6 +107,14 @@ if (isset($_POST['confirmPwd'])) {
 		if ($_POST["btn_action"] == "pay") {
 			logAction($dbh, "$adminId marked Member $memberId as paid.");
 
+			$month = date('F', strtotime($payment['date_due']));
+			$notifSql = $dbh->prepare("INSERT INTO `notif`(`description`, `receiver`, `isread`) VALUES ('Your membership fee for the Month of [$month] is successfully paid.', :member_id,0)");
+			$notifSql->execute(
+				array(
+					'member_id' => $payment['m_id'],
+				)
+			);
+
 			// check if there is already a record for the next date
 			$existingSql = "SELECT * FROM payments WHERE member_id =:member_id AND date_due=:date_due";
 			$existingStmt = $dbh->prepare($existingSql);
@@ -122,6 +130,15 @@ if (isset($_POST['confirmPwd'])) {
 			}
 		} else {
 			logAction($dbh, "$adminId marked Member $memberId as Unpaid.");
+
+			$month = date('F', strtotime($payment['date_due']));
+			$notifSql = $dbh->prepare("INSERT INTO `notif`(`description`, `receiver`, `isread`) VALUES ('Your membership fee for the Month of [$month] is marked as unpaid. If this happens by accident, contact your administrator.', :member_id,0)");
+			$notifSql->execute(
+				array(
+					'member_id' => $payment['m_id'],
+				)
+			);
+
 			redirect("admin_managepayments.php?code=205");
 		}
 

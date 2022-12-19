@@ -32,9 +32,9 @@ if (isset($_POST["cancel_id"])) {
 
 $statusList = [
 	1 => "Declined",
-	2 => "Confirmed",
+	2 => "Pending",
 	3 => "Approved",
-	4 => "Cancel Request",
+	4 => "Cancel Requests",
 ];
 $rows = [];
 
@@ -179,7 +179,7 @@ if ($stmt->rowCount() > 0) {
 										<button type="button" onclick="filterStatus(0)" class="nav-link active">All</button>
 									</li> -->
 									<li class="nav-item">
-										<button type="button" onclick="filterStatus(1)" class="nav-link active">Confirmed</button>
+										<button type="button" onclick="filterStatus(1)" class="nav-link active">Pending</button>
 									</li>
 									<li class="nav-item">
 										<button type="button" onclick="filterStatus(2)" class="nav-link">Declined</button>
@@ -188,7 +188,7 @@ if ($stmt->rowCount() > 0) {
 										<button type="button" onclick="filterStatus(3)" class="nav-link">Approved</button>
 									</li>
 									<li class="nav-item">
-										<button type="button" onclick="filterStatus(4)" class="nav-link">Cancel Request</button>
+										<button type="button" onclick="filterStatus(4)" class="nav-link">Cancel Requests</button>
 									</li>
 								</ul>
 							</div>
@@ -235,11 +235,11 @@ if ($stmt->rowCount() > 0) {
 													<?php if ($row["status"] == 2) : ?>
 													<form method="POST">
 														<input type="hidden" name="cancel_id" value="<?php echo $row["id"]; ?>">
-														<button type="submit" class="btn btn-outline-dark btn-sm mr-1">DECLINED</button>
+														<button type="submit" class="btn btn-outline-dark btn-sm mr-1">DECLINE</button>
 													</form>
 													<form method="POST">
 														<input type="hidden" name="complete_id" value="<?php echo $row["id"]; ?>">
-														<button type="submit" class="btn btn-outline-primary btn-sm">APPROVED</button>
+														<button type="submit" class="btn btn-outline-primary btn-sm">APPROVE</button>
 													</form>
 													<?php endif; ?>
 													<?php 
@@ -339,10 +339,10 @@ if ($stmt->rowCount() > 0) {
 					const loggedUser = '<?php echo $_SESSION["logged_user"]["username"] ?>';
 					let statusFilterValue = 1;
 					const statusFilter = {
-						1: "Confirmed",
+						1: "Pending",
 						2: "Declined",
 						3: "Approved",
-						4: "Cancel Request"
+						4: "Cancel Requests"
 					};
 
 					$('.input-daterange input').each(function() {
@@ -395,6 +395,8 @@ if ($stmt->rowCount() > 0) {
 					const cardNav = document.querySelector("#card-nav");
 					const filterStatus = (status) => {
 						// update active status
+						if(status === 3 || status === 2) document.querySelector('.not-this').classList.add('d-none')
+						else document.querySelector('.not-this').classList.remove('d-none')
 						const cardNavItems = cardNav.querySelectorAll("button");
 						cardNavItems.forEach((item, index) => {
 							if (item.classList.contains('active')) item.classList.remove("active");

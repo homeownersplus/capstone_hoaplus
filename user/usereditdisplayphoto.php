@@ -39,6 +39,7 @@ userOnlyMiddleware("../index.php");
 <!--------------------------- left navigation  ----------------------------->
 
 <body id="page-top">
+<?php require 'notif-modal.php'; ?> 
 
 	<!-- Page Wrapper -->
 	<div id="wrapper">
@@ -161,6 +162,8 @@ userOnlyMiddleware("../index.php");
 									class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION["logged_user"]["username"] ?></span>
 								<img class="img-profile rounded-circle"
 									src="<?php echo $_SESSION["logged_user"]["avatar"] ? "../photos/" . $_SESSION["logged_user"]["avatar"] : '../photos/profile.png' ?>">
+								<span class="position-absolute bottom-50 start-100 translate-middle badge rounded-pill bg-danger notif-count">
+								</span>
 							</a>
 							<!-- Dropdown - User Information -->
 							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -168,7 +171,9 @@ userOnlyMiddleware("../index.php");
 									<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
 									Profile
 								</a>
+								<div class="dropdown-divider"></div>
 
+								<?php require 'notification_bell.php'; ?>
 
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
