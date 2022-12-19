@@ -638,7 +638,6 @@ $user_results = $con->query($user_sql);
 			crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script>
 		const loggedUser = '<?php echo $_SESSION["logged_user"]["username"] ?>';
-
 		// admin date filter
 		$('.input-daterange input').each(function() {
 			$(this).datepicker('clearDates');

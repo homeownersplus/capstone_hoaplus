@@ -448,6 +448,7 @@ if ($stmt->rowCount() > 0) {
 					}
 
 					document.querySelector(".nav-link.active").click();
+
 					</script>
 
 </body>

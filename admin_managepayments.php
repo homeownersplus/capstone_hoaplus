@@ -323,6 +323,21 @@ if (isset($_POST['confirmPwd'])) {
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4" style="margin-top:2%;">
 
+						<div class="card text-center">
+							<div class="card-header">
+								<ul id="card-nav" class="nav nav-tabs card-header-tabs">
+									<!-- <li class="nav-item">
+										<button type="button" onclick="filterStatus(0)" class="nav-link active">All</button>
+									</li> -->
+									<li class="nav-item">
+										<button type="button" onclick="filterStatus(1)" class="nav-link active">Paid</button>
+									</li>
+									<li class="nav-item">
+										<button type="button" onclick="filterStatus(2)" class="nav-link">Unpaid</button>
+									</li>
+								</ul>
+							</div>
+						</div>
 						<div class="card-body">
 							<div class="form-group d-flex justify-content-end align-items-center">
 
@@ -491,6 +506,12 @@ if (isset($_POST['confirmPwd'])) {
 		<script>
 		const loggedUser = '<?php echo $_SESSION["logged_user"]["username"] ?>';
 
+		let statusFilterValue = 1;
+		const statusFilter = {
+			1: "Paid",
+			2: "Unpaid"
+		};
+		
 		$('.input-daterange input').each(function() {
 			$(this).datepicker('clearDates');
 		});
@@ -547,18 +568,32 @@ if (isset($_POST['confirmPwd'])) {
 				[10, 25, 50, "All"]
 			]
 		});
+		const cardNav = document.querySelector("#card-nav");
 
+		const filterStatus = (status) => {
+			// update active status
+			const cardNavItems = cardNav.querySelectorAll("button");
+			cardNavItems.forEach((item, index) => {
+				if (item.classList.contains('active')) item.classList.remove("active");
+				if (index + 1 == status) item.classList.add("active");
+			})
+			statusFilterValue = status;
+			table.draw();
+		}
 		// Extend dataTables search
 		$.fn.dataTable.ext.search.push(
 			function(settings, data, dataIndex) {
 				var min = $('#min-date').val();
 				var max = $('#max-date').val();
 				var createdAt = data[3] || 0; // due date column in the table
+				const filter = statusFilter[statusFilterValue];
 
 				if (
 					(min == "" || max == "") ||
 					(moment(createdAt).isSameOrAfter(min) && moment(createdAt).isSameOrBefore(max))
 				) {
+					if (data[6] != filter) return false
+
 					return true;
 				}
 				return false;
@@ -585,6 +620,8 @@ if (isset($_POST['confirmPwd'])) {
 			document.querySelector("#payment-id").value = id;
 			document.querySelector("#btn_action").value = "unpay";
 		}
+		filterStatus(1)
+
 		</script>
 	</div>
 </body>
