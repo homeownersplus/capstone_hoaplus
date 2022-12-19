@@ -8,11 +8,14 @@
         try{
             $id = $_GET['id'];
             $username = $_POST['username'];
-            $fullname = $_POST['fullname'];
+            $firstname = $_POST['firstname'];
+            $lastname = $_POST['lastname'];
+            $middle = $_POST['mi'];
+            $fullname=$firstname. " " .$middle." ".$lastname;
             // $email = $_POST['email'];
             // $password = $_POST['password'];
  
-            $sql = "UPDATE admins SET username = '$username', fullname = '$fullname' WHERE id = '$id'";
+            $sql = "UPDATE admins SET username = '$username',firstname = '$lastname',lastname = '$firstname',middle = '$middle', fullname = '$fullname' WHERE id = '$id'";
             //if-else statement in executing our query
             $_SESSION['message'] = ( $db->exec($sql) ) ? 'Admin updated successfully!' : 'Something went wrong. No data were replaced.';
  

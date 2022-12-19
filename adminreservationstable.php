@@ -31,9 +31,10 @@ if (isset($_POST["cancel_id"])) {
 }
 
 $statusList = [
-	1 => "Cancelled",
+	1 => "Declined",
 	2 => "Confirmed",
-	3 => "Completed",
+	3 => "Approved",
+	4 => "Cancel Request",
 ];
 $rows = [];
 
@@ -106,6 +107,8 @@ if ($stmt->rowCount() > 0) {
 		width: 25%;
 	}
 	</style>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.0.0/index.global.min.js"></script>
 </head>
 
 <!--------------------------- left navigation  ----------------------------->
@@ -139,7 +142,33 @@ if ($stmt->rowCount() > 0) {
 						<h1 class="font-weight-bold">Reservations</h1>
 						<!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
 								class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+						<button class="btn btn-outline-primary" onClick="hideCalendar()">View Reservation Calendar</button>
+
 					</div>
+
+					<div class="card mt-3 calendar-con d-none" >
+						<div class="card-body">
+							<div id='calendar'></div>
+						</div>
+					</div>
+					<script>
+						const hideCalendar = () => {
+							$('.calendar-con').toggleClass('d-none')
+
+							if(document.querySelector('.calendar-con').classList.contains('d-none')) return
+
+							var calendarEl = document.getElementById('calendar');
+
+							var calendar = new FullCalendar.Calendar(calendarEl, {
+								headerToolbar: { center: 'dayGridMonth,timeGridWeek' },
+								initialView: 'dayGridMonth',
+								height : 650,
+								events : './api/usercalendar.php'
+							});
+
+							calendar.render();
+						}
+					</script>
 
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4" style="margin-top:2%;">
@@ -153,10 +182,13 @@ if ($stmt->rowCount() > 0) {
 										<button type="button" onclick="filterStatus(1)" class="nav-link active">Confirmed</button>
 									</li>
 									<li class="nav-item">
-										<button type="button" onclick="filterStatus(2)" class="nav-link">Cancelled</button>
+										<button type="button" onclick="filterStatus(2)" class="nav-link">Declined</button>
 									</li>
 									<li class="nav-item">
-										<button type="button" onclick="filterStatus(3)" class="nav-link">Completed</button>
+										<button type="button" onclick="filterStatus(3)" class="nav-link">Approved</button>
+									</li>
+									<li class="nav-item">
+										<button type="button" onclick="filterStatus(4)" class="nav-link">Cancel Request</button>
 									</li>
 								</ul>
 							</div>
@@ -203,13 +235,22 @@ if ($stmt->rowCount() > 0) {
 													<?php if ($row["status"] == 2) : ?>
 													<form method="POST">
 														<input type="hidden" name="cancel_id" value="<?php echo $row["id"]; ?>">
-														<button type="submit" class="btn btn-outline-dark btn-sm mr-1">CANCEL</button>
+														<button type="submit" class="btn btn-outline-dark btn-sm mr-1">DECLINED</button>
 													</form>
 													<form method="POST">
 														<input type="hidden" name="complete_id" value="<?php echo $row["id"]; ?>">
-														<button type="submit" class="btn btn-outline-primary btn-sm">COMPLETE</button>
+														<button type="submit" class="btn btn-outline-primary btn-sm">APPROVED</button>
 													</form>
 													<?php endif; ?>
+													<?php 
+														if ($row["status"] == 4) : 
+													?>
+														<button class="btn btn-outline-dark btn-sm mr-1" onClick="viewReason(<?php echo $row["id"]; ?>)">View Reason</button>
+														<form method="POST">
+															<input type="hidden" name="cancel_id" value="<?php echo $row["id"]; ?>">
+															<button type="submit" class="btn btn-outline-dark btn-sm mr-1">APPROVE REQUEST</button>
+														</form>
+													<?php endif;?>
 												</div>
 											</th>
 										</tr>
@@ -217,6 +258,32 @@ if ($stmt->rowCount() > 0) {
 									</tbody>
 								</table>
 
+								<div class="modal fade" id="reason-modal" tabindex="-1" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h1 class="modal-title fs-5" id="exampleModalLabel">Reason</h1>
+												<button type="button" class="btn-close" onClick="closeViewReason()" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<p id="reason-con"></p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<script>
+									const viewReason = async(id) => {
+										const url = await fetch("./api/view_reason.php?id="+id)
+										const res = await url.json()
+
+										console.log(res)
+										document.querySelector("#reason-con").textContent = res.message
+
+										$('#reason-modal').modal('show')
+									}
+
+									const closeViewReason = () => $('#reason-modal').modal('hide')
+								</script>
 								<!-- /.container-fluid -->
 							</div>
 							<!-- End of Main Content -->
@@ -273,8 +340,9 @@ if ($stmt->rowCount() > 0) {
 					let statusFilterValue = 1;
 					const statusFilter = {
 						1: "Confirmed",
-						2: "Cancelled",
-						3: "Completed"
+						2: "Declined",
+						3: "Approved",
+						4: "Cancel Request"
 					};
 
 					$('.input-daterange input').each(function() {

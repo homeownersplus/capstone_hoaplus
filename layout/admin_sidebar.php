@@ -13,6 +13,11 @@
 
 	<!-- Nav Item - Dashboard -->
 	<li class="nav-item">
+		<a class="nav-link" href="admin_dashboard.php">
+			<i class="fa fa-bullhorn" aria-hidden="true"></i>
+			<span>Dashboard</span></a>
+	</li>
+	<li class="nav-item">
 		<a class="nav-link" href="adminlandingpage.php">
 			<i class="fa fa-bullhorn" aria-hidden="true"></i>
 			<span>Announcements</span></a>

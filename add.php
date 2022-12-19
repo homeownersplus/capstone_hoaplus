@@ -29,7 +29,10 @@ if (isset($_POST['add'])) {
 
 	$id = $_POST['id'];
 	$username = $_POST['username'];
-	$fullname = $_POST['fullname'];
+	$fname = $_POST['firstname'];
+	$lname = $_POST['lastname'];
+	$mname = $_POST['mi'];
+	$fullname = $fname. " ".$mname." ". $lname;
 	$email = $_POST['email'];
 	$position = $_POST['position'];
 	$password = $_POST['password'];
@@ -63,7 +66,7 @@ if (isset($_POST['add'])) {
 
 
 
-
+	
 	$stmtpassword = $con->prepare("SELECT 1 FROM admins where password=?");
 	$stmtpassword->bind_param("s", $password);
 	$stmtpassword->execute();
@@ -135,7 +138,7 @@ if (isset($_POST['add'])) {
 
 
 			//use prepared statement to prevent sql injection
-			$query = ("INSERT INTO `admins` (`id`,`username`, `fullname`, `email`, `position`, `password`) VALUES ('" . $id . "','" . $username . "', '" . $fullname . "', '" . $email . "','" . $position . "', '" . $password . "')");
+			$query = ("INSERT INTO `admins` (`id`,`username`, `fullname`, `email`, `position`, `password`, `firstname`, `lastname`, `middle`) VALUES ('" . $id . "','" . $username . "', '" . $fullname . "', '" . $email . "','" . $position . "', '" . $password . "', '" . $fname . "', '" . $lname . "', '" . $mname . "')");
 			//if-else statement in executing our prepared statement
 			$_SESSION['message'] = 'Admin record added successfully';
 

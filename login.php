@@ -49,7 +49,7 @@ if (isset($_POST["login"])) {
 		$_SESSION['logged_user'] = $result;
 		$_SESSION['logged_role'] = "admin";
 		$_SESSION['logged_position'] = strtolower($result['position']);
-		redirect("./adminlandingpage.php?msg=logged");
+		redirect("./admin_dashboard.php?msg=logged");
 	}
 
 	// check if user

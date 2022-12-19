@@ -34,6 +34,7 @@ try {
     $password = $_POST['password'];
     $validid = $_FILES['validid'];
     $htitle = $_FILES['htitle'];
+    $street = $_POST['street'];
     $isShared = 0;
 
     if (isset($_POST['shared_accounts'])) {
@@ -50,8 +51,8 @@ try {
     $newfilename_htitle = round(microtime(true) * 3) . '.' . end($temp_htitle);
     move_uploaded_file($htitle["tmp_name"], "./" . $newfilename_htitle);
 
-    $stmt = $con->prepare("INSERT INTO `user`(`username`, `password`, `email`, `first_name`, `last_name`, `middle_initial`, `contact_number`, `phase`, `block`, `lot`, `barangay`, `isSharedAccount`, `id_img`, `land_reg_img`) VALUES (? , ? ,? ,? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssssssssssss", $email, $password, $email, $fname, $lname, $mi, $number, $phase, $block, $lot, $brgy, $isShared, $newfilename_valid_id, $newfilename_htitle);
+    $stmt = $con->prepare("INSERT INTO `user`(`username`, `password`, `email`, `first_name`, `last_name`, `middle_initial`, `contact_number`, `phase`, `block`, `lot`, `barangay`, `isSharedAccount`, `id_img`, `land_reg_img`, street) VALUES (?, ? , ? ,? ,? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssssssssssss", $email, $password, $email, $fname, $lname, $mi, $number, $phase, $block, $lot, $brgy, $isShared, $newfilename_valid_id, $newfilename_htitle, $street);
     $stmt->execute();
 
     $user_id = $stmt->insert_id;

@@ -53,7 +53,8 @@ $user_results = $con->query($user_sql);
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
-
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
 		integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -127,6 +128,18 @@ $user_results = $con->query($user_sql);
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="font-weight-bold">Manage Accounts</h1>
 						<div class="btn-group" role="group" aria-label="Add new accounts">
+							<?php 
+								if(isset($_GET['archive'])){
+									?>
+										<a href="admin_manageaccounts.php" class="btn btn-outline-primary mr-2">Unarchived</a>
+									<?php
+								}
+								else{
+									?>
+										<a href="admin_manageaccounts.php?archive=1" class="btn btn-outline-primary mr-2">Archived</a>
+									<?php
+								}
+							?>
 							<button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#registermember"
 								onclick="increase();">
 								New Member
@@ -165,11 +178,11 @@ $user_results = $con->query($user_sql);
 
 												<div class="row">
 													<div class="col">
-														<label>First Name: </label>
+														<label>First Name: <span style="color:red">*</span> </label>
 														<input type="text" name="fname" class="form-control" onInput="onlyLetters(this)">
 													</div>
 													<div class="col">
-														<label>Last Name: </label>
+														<label>Last Name: <span style="color:red">*</span> </label>
 														<input type="text" name="lname" class="form-control" onInput="onlyLetters(this)">
 													</div>
 													<div class="form-group col-md-2">
@@ -185,10 +198,9 @@ $user_results = $con->query($user_sql);
 												</div>
 
 												<div class="mb-3">
-													<label>Email Address:</label>
+													<label>Email Address: <span style="color:red">*</span></label>
 													<input type="email" class="form-control" name="email">
 												</div>
-
 
 												<div class="row">
 													<div class="form-group col-md-2">
@@ -203,15 +215,25 @@ $user_results = $con->query($user_sql);
 														<label class="col-sm-2 col-form-label">Lot: </label>
 														<input type="text" name="lot" class="form-control">
 													</div>
-													<div class="col">
-														<label class="col-sm-2 col-form-label"> Barangay: </label>
-														<input type="text" name="brgy" class="form-control" onInput="onlyLetters(this)">
+													<div class="form-group col-md-2">
+														<label class="col-sm-2 col-form-label">Street: </label>
+														<input type="text" name="street" class="form-control">
 													</div>
 												</div>
 
+												<div>
+													<label class="col-sm-2 col-form-label"> Barangay: </label>
+													<input type="text" name="brgy" class="form-control" onInput="onlyLetters(this)">
+												</div>
 												<br>
+												<p>Password
+												<small data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Your password must contain 8 characters in total with the combination of 1 Uppercase letter, lowercase letter, symbols, and numbers.">
+												<i class="fa-regular fa-circle-question"></i>
+												<span style="color:red">*</span>
+												</small></p>
 												<div class="input-group mb-3">
-													<input type="text" name="password" class="form-control" aria-label="Recipient's username"
+													<span class="input-group-text" style="cursor:pointer" onClick="showPassUser()"><i class="fa-solid fa-eye"></i></span>
+													<input type="password" name="password" class="form-control"
 														id="pass" aria-describedby="basic-addon2" placeholder="Generate Password">
 
 													<div class="input-group-append">
@@ -220,6 +242,16 @@ $user_results = $con->query($user_sql);
 													</div>
 												</div>
 											</div>
+											<script>
+												function showPassUser() {
+													var x = document.getElementById("pass");
+													if (x.type === "password") {
+														x.type = "text";
+													} else {
+														x.type = "password";
+												}
+												}
+											</script>
 
 
 											<div class="col">
@@ -324,6 +356,7 @@ $user_results = $con->query($user_sql);
 												<th>Fullname</th>
 												<th>Email</th>
 												<th>Position</th>
+												<th>Status</th>
 												<th class="not-this">Action</th>
 											</thead>
 											<tbody>
@@ -334,7 +367,12 @@ $user_results = $con->query($user_sql);
 												$database = new Connection();
 												$db = $database->open();
 												try {
-													$sql = 'SELECT * FROM admins';
+													if(isset($_GET['archive'])){
+														$sql = 'SELECT * FROM admins WHERE isArchive=1';
+													}
+													else{
+														$sql = 'SELECT * FROM admins WHERE isArchive=0';
+													}
 													foreach ($db->query($sql) as $row) {
 												?>
 												<tr>
@@ -344,11 +382,37 @@ $user_results = $con->query($user_sql);
 													<td><?php echo $row['email']; ?></td>
 													<td><?php echo $row['position']; ?></td>
 													<td>
-														<a href="#edit_<?php echo $row['id']; ?>" class="btn btn-primary btn-sm"
-															data-bs-toggle="modal">
-															Edit</a>
-														<a href="#delete_<?php echo $row['id']; ?>" class="btn btn-secondary btn-sm"
-															data-bs-toggle="modal"> Delete</a>
+														<?php
+															if(isset($_GET['archive'])){
+																?>
+																<span class="badge text-bg-danger">Term ended</span>
+																<?php
+															}
+															else{
+																?>
+																<span class="badge text-bg-success">Active</span>
+																<?php
+															}
+															?>
+													</td>
+													<td>
+														<?php
+														if(isset($_GET['archive'])){
+															?>
+																<a href="#revert_<?php echo $row['id']; ?>" class="btn btn-secondary btn-sm"
+																data-bs-toggle="modal"> Revert</a>
+															<?php
+														}
+														else{
+															?>
+															<a href="#edit_<?php echo $row['id']; ?>" class="btn btn-primary btn-sm"
+																data-bs-toggle="modal">
+																Edit</a>
+															<a href="#delete_<?php echo $row['id']; ?>" class="btn btn-secondary btn-sm"
+																data-bs-toggle="modal"> Archive</a>
+															<?php
+														}
+														?>
 													</td>
 													<?php include('edit_delete_modal.php'); ?>
 												</tr>
@@ -402,7 +466,7 @@ $user_results = $con->query($user_sql);
 													<td><?php echo $row['last_name']; ?></td>
 													<td><?php echo $row['first_name']; ?></td>
 													<td><?php echo $row['middle_initial']; ?></td>
-													<td><?php echo date("M d, Y", strtotime($row["created_at"])); ?></td>
+													<td data-sort="<?php echo strtotime($row["created_at"]);?>"><?php echo date("M d, Y", strtotime($row["created_at"])); ?></td>
 													<td>
 														<div class="btn-group d-flex">
 															<?php if (($row["id_img"] != "")) { ?>
@@ -761,6 +825,7 @@ $user_results = $con->query($user_sql);
 				form.append('phase', DQ('[name=phase').value)
 				form.append('block', DQ('[name=block').value)
 				form.append('lot', DQ('[name=lot').value)
+				form.append('street', DQ('[name=street').value)
 				form.append('brgy', DQ('[name=brgy').value)
 				form.append('password', DQ('[name=password').value)
 				form.append('validid', DQ('[name=validid').files[0])
@@ -778,6 +843,8 @@ $user_results = $con->query($user_sql);
 				if (!allowedImageTypes.includes(DQ('[name=validid').files[0].type)) {
 					throw "Allowed file type's for the copy of valid id are: [ .jpg .png .jpeg ]"
 				}
+				if(!(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(DQ('[name=password').value))) 
+					throw "Password must be at least 8 characters in length and must contain at least one number, one upper case letter, one lower case letter and one special character."
 
 				if (DQ('#chk2').checked) {
 					const shared = []

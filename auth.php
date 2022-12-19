@@ -11,7 +11,7 @@ if (isset($_POST["login"])) {
 	}
 
 	// Check if default admin
-	$sql = "SELECT * FROM tbladmin WHERE username =:email AND password=:password";
+	$sql = "SELECT * FROM tbladmin WHERE username =:email AND password=:password AND isArchived=0";
 	$userrow = $dbh->prepare($sql);
 	$userrow->execute(
 		[
@@ -28,11 +28,11 @@ if (isset($_POST["login"])) {
 		$_SESSION['logged_user'] = $result;
 		$_SESSION['logged_role'] = "admin";
 		$_SESSION['logged_position'] = "admin";
-		redirect("./adminlandingpage.php?msg=logged");
+		redirect("./admin_dashboard.php?msg=logged");
 	}
 
 	// Check if admin
-	$sql = "SELECT * FROM admins WHERE email =:email AND password=:password";
+	$sql = "SELECT * FROM admins WHERE email =:email AND password=:password AND isArchived=0";
 	$userrow = $dbh->prepare($sql);
 	$userrow->execute(
 		[
@@ -49,7 +49,7 @@ if (isset($_POST["login"])) {
 		$_SESSION['logged_user'] = $result;
 		$_SESSION['logged_role'] = "admin";
 		$_SESSION['logged_position'] = $result['position'];
-		redirect("./adminlandingpage.php?msg=logged");
+		redirect("./admin_dashboard.php?msg=logged");
 	}
 
 	// check if user

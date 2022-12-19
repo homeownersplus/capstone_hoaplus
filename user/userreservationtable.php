@@ -11,6 +11,7 @@ $statusList = [
 	1 => "Cancelled",
 	2 => "Confirmed",
 	3 => "Completed",
+	4 => "Pending Cancellation"
 ];
 $rows = [];
 
@@ -41,6 +42,7 @@ if (isset($_POST['cancel-reservation-id'])) {
 
 	// prepare data
 	$id = intval($_POST['cancel-reservation-id']);
+	$reason = $_POST['cancel-reservation-reason'];
 	// get payment record
 	$payment = null;
 	foreach ($rows as $row) {
@@ -55,10 +57,10 @@ if (isset($_POST['cancel-reservation-id'])) {
 	}
 
 	// update reservation status
-	$sql = "UPDATE reservations SET status = 1 WHERE id=:id";
+	$sql = "UPDATE reservations SET status = 4,`cancel_reason`= :reason WHERE id=$id";
 	$query = $dbh->prepare($sql);
 
-	$query->bindParam(':id', $id, PDO::PARAM_STR);
+	$query->bindParam(':reason', $reason, PDO::PARAM_STR);
 
 	if ($query->execute()) {
 		redirect("./userreservationtable.php?code=200");
@@ -238,7 +240,7 @@ if (isset($_POST['cancel-reservation-id'])) {
 							$errMsg = "";
 							switch ($_GET["code"]) {
 								case "200":
-									$errMsg = "Reservation Cancelled!";
+									$errMsg = "Status changed to Pending Cancellation!";
 									break;
 								case "404":
 									$errMsg = "Error finding booking.";
@@ -362,7 +364,8 @@ if (isset($_POST['cancel-reservation-id'])) {
 									</div>
 									<div class="modal-body">
 										<input id="cancel-reservation-id" type="hidden" name="cancel-reservation-id">
-										Are you sure you want to cancel this reservation?
+										State why you want to cancel this reservation <br/>
+										<textarea style="min-height : 150px" id="cancel-reservation-reason" name="cancel-reservation-reason" class="d-block form-control" required></textarea>
 									</div>
 									<div class="modal-footer">
 										<button class="btn btn-secondary" type="button" data-dismiss="modal">Back</button>

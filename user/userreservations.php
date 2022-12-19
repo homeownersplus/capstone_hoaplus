@@ -164,7 +164,7 @@ if (isset($_POST["amenity"])) {
 
 	<!-- <link href="style_postboard.css" rel="stylesheet"> -->
 
-
+	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.0.0/index.global.min.js"></script>
 </head>
 
 <!--------------------------- left navigation  ----------------------------->
@@ -297,8 +297,34 @@ if (isset($_POST["amenity"])) {
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
 
-					<h1 class="font-weight-bold">Reserve an Amenity</h1>
+					<div class="d-flex justify-content-between">
+						<h1 class="font-weight-bold">Reserve an Amenity</h1>
+						<button class="btn btn-outline-primary" onClick="hideCalendar()">View Reservation Calendar</button>
+					</div>
 					<!-- <input class="btn btn-outline-primary" type="submit" value="Generate E-Pass" name="reserveamenityusr" style="margin-top:-10%; margin-left:85%;"  > -->
+					<div class="card mt-3 calendar-con d-none" >
+						<div class="card-body">
+							<div id='calendar'></div>
+						</div>
+					</div>
+					<script>
+						const hideCalendar = () => {
+							$('.calendar-con').toggleClass('d-none')
+
+							if(document.querySelector('.calendar-con').classList.contains('d-none')) return
+
+							var calendarEl = document.getElementById('calendar');
+
+							var calendar = new FullCalendar.Calendar(calendarEl, {
+								headerToolbar: { center: 'dayGridMonth,timeGridWeek' },
+								initialView: 'dayGridMonth',
+								height : 650,
+								events : '../api/usercalendar.php'
+							});
+
+							calendar.render();
+						}
+					</script>
 
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4" style="margin-top:2%;">
@@ -336,13 +362,13 @@ if (isset($_POST["amenity"])) {
 
 									<?php endif; ?>
 									<form method="POST">
-										<div class="mb-3" style="width:100%;">
+										<div class="mb-3 d-none" style="width:100%;">
 											<label for="disabledTextInput" class="form-label">Member Email</label>
 											<input type="text" id="disabledTextInput" class="form-control"
 												value="<?php echo $_SESSION["logged_user"]["email"] ?>" readonly>
 										</div>
 
-										<div class="mb-3" style="width:100%;">
+										<div class="mb-3 d-none" style="width:100%;">
 											<label for="disabledTextInput" class="form-label">Member Fullname</label>
 											<input type="text" id="disabledTextInput" class="form-control"
 												value="<?php echo $_SESSION["logged_user"]["first_name"] . " " . $_SESSION["logged_user"]["middle_initial"] . " " . $_SESSION["logged_user"]["last_name"] ?>"
