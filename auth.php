@@ -11,7 +11,7 @@ if (isset($_POST["login"])) {
 	}
 
 	// Check if default admin
-	$sql = "SELECT * FROM tbladmin WHERE username =:email AND password=:password AND isArchived=0";
+	$sql = "SELECT * FROM tbladmin WHERE username =:email AND password=:password";
 	$userrow = $dbh->prepare($sql);
 	$userrow->execute(
 		[
@@ -32,7 +32,7 @@ if (isset($_POST["login"])) {
 	}
 
 	// Check if admin
-	$sql = "SELECT * FROM admins WHERE email =:email AND password=:password AND isArchived=0";
+	$sql = "SELECT * FROM admins WHERE email =:email AND password=:password AND isArchive=0";
 	$userrow = $dbh->prepare($sql);
 	$userrow->execute(
 		[
