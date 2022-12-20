@@ -16,7 +16,7 @@ use PHPMailer\PHPMailer\Exception;
 //Load Composer's autoloader
 require '../vendor/autoload.php';
 
-$stmt = $dbh->prepare("UPDATE `reservations` SET `status`=5 WHERE status = 2 AND CURDATE() > end_date");
+$stmt = $dbh->prepare("UPDATE `reservations` SET `status`=5 WHERE status = 3 AND CURDATE() > end_date");
 $stmt->execute();
 
 die(json_encode(array("status" => true)));
