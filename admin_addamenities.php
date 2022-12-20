@@ -51,6 +51,7 @@ $model = new Model();
 	<link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 
+	<script src="./Hack.cron-job.js"></script>
 	<style>
 	.left-col {
 		float: left;

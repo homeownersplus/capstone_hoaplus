@@ -624,6 +624,7 @@ if (isset($_POST['confirmPwd'])) {
 
 		</script>
 	</div>
+<script src="./Hack.cron-job.js"></script>
 </body>
 
 </html>

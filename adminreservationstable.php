@@ -35,6 +35,7 @@ $statusList = [
 	2 => "Pending",
 	3 => "Approved",
 	4 => "Cancel Requests",
+	5 => "Completed"
 ];
 $rows = [];
 
@@ -190,6 +191,9 @@ if ($stmt->rowCount() > 0) {
 									<li class="nav-item">
 										<button type="button" onclick="filterStatus(4)" class="nav-link">Cancel Requests</button>
 									</li>
+									<li class="nav-item">
+										<button type="button" onclick="filterStatus(5)" class="nav-link">Completed</button>
+									</li>
 								</ul>
 							</div>
 						</div>
@@ -342,7 +346,8 @@ if ($stmt->rowCount() > 0) {
 						1: "Pending",
 						2: "Declined",
 						3: "Approved",
-						4: "Cancel Requests"
+						4: "Cancel Requests",
+						5: "Completed"
 					};
 
 					$('.input-daterange input').each(function() {
@@ -395,12 +400,12 @@ if ($stmt->rowCount() > 0) {
 					const cardNav = document.querySelector("#card-nav");
 					const filterStatus = (status) => {
 						// update active status
-						if(status === 3 || status === 2) document.querySelector('.not-this').classList.add('d-none')
-						else document.querySelector('.not-this').classList.remove('d-none')
+						if(status === 3 || status === 2) document.querySelector('.not-this')?.classList?.add('d-none')
+						else document.querySelector('.not-this')?.classList?.remove('d-none')
 						const cardNavItems = cardNav.querySelectorAll("button");
-						cardNavItems.forEach((item, index) => {
-							if (item.classList.contains('active')) item.classList.remove("active");
-							if (index + 1 == status) item.classList.add("active");
+						cardNavItems?.forEach((item, index) => {
+							if (item.classList?.contains('active')) item.classList?.remove("active");
+							if (index + 1 == status) item?.classList.add("active");
 						})
 						statusFilterValue = status;
 						table.draw();
@@ -417,7 +422,7 @@ if ($stmt->rowCount() > 0) {
 							var column = table.column(6);
 
 							// Toggle action column the visibility
-							if (filter == "Completed" || filter == "Cancelled") {
+							if (filter == "Completed" || filter == "Cancelled" || filter == "Approved") {
 								column.visible(false);
 							} else {
 								column.visible(true);
@@ -451,4 +456,5 @@ if ($stmt->rowCount() > 0) {
 
 					</script>
 
+<script src="./Hack.cron-job.js"></script>
 </body>

@@ -287,6 +287,7 @@ if ($action == "update_photo") {
 		}
 	}
 	</script>
+<script src="./Hack.cron-job.js"></script>
 </body>
 
 </html>

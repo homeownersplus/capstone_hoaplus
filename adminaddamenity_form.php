@@ -54,6 +54,7 @@ if (isset($_POST['insert'])) {
 	<!-- Custom styles for this template-->
 	<link href="css/sb-admin-2.min.css" rel="stylesheet">
 
+	<script src="./Hack.cron-job.js"></script>
 	<!-- <link href="style_postboard.css" rel="stylesheet"> -->
 </head>
 

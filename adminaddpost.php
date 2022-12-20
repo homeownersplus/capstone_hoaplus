@@ -216,6 +216,7 @@ if (isset($_POST['confirmPwd'])) {
 
 			<!-- Custom scripts for all pages-->
 			<script src="js/sb-admin-2.min.js"></script>
+<script src="./Hack.cron-job.js"></script>
 </body>
 
 </html>

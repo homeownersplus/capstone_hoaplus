@@ -904,6 +904,7 @@ $user_results = $con->query($user_sql);
 			document.querySelector('.pdf-generate-btn-member').click()
 		}
 		</script>
+<script src="./Hack.cron-job.js"></script>
 	</div>
 </body>
 

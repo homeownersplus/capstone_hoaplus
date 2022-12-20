@@ -141,5 +141,6 @@ if ($count > 0) {
 
 					<!-- Page level custom scripts -->
 					<script src="js/demo/datatables-demo.js"></script>
+<script src="./Hack.cron-job.js"></script>
 
 </body>

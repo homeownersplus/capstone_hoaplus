@@ -110,6 +110,7 @@ adminOnlyMiddleware();
 	<!-- Page level custom scripts -->
 	<script src="js/demo/datatables-demo.js"></script>
 
+	<script src="./Hack.cron-job.js"></script>
 	<script>
 	const handleChangePassword = async () => {
 		const old = document.querySelector('#old_pass')

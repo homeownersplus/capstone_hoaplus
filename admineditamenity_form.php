@@ -256,6 +256,7 @@ if (isset($_POST['insert'])) {
 			}
 			</script>
 			</script>
+<script src="./Hack.cron-job.js"></script>
 </body>
 
 </html>
