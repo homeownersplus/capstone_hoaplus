@@ -202,27 +202,27 @@ $user_results = $con->query($user_sql);
 													<input type="email" class="form-control" name="email">
 												</div>
 
-												<div class="row">
-													<div class="form-group col-md-2">
-														<label class="col-sm-2 col-form-label">Phase: <span style="color:red">*</span></label>
+												<div class="d-flex" style="gap:1rem">
+													<div class="form-group" style="flex:1">
+														<label>Phase: <span style="color:red">*</span></label>
 														<input type="text" name="phase" class="form-control">
 													</div>
-													<div class="form-group col-md-2">
-														<label class="col-sm-2 col-form-label">Block: <span style="color:red">*</span></label>
+													<div class="form-group " style="flex:1">
+													<label>Block: <span style="color:red">*</span></label>
 														<input type="text" name="block" class="form-control">
 													</div>
-													<div class="form-group col-md-2">
-														<label class="col-sm-2 col-form-label">Lot: <span style="color:red">*</span></label>
+													<div class="form-group " style="flex:1">
+													<label>Lot: <span style="color:red">*</span></label>
 														<input type="text" name="lot" class="form-control">
 													</div>
-													<div class="form-group col-md-2">
-														<label class="col-sm-2 col-form-label">Street: <span style="color:red">*</span></label>
+													<div class="form-group " style="flex:1">
+													<label>Street: <span style="color:red">*</span></label>
 														<input type="text" name="street" class="form-control">
 													</div>
 												</div>
 
 												<div>
-													<label class="col-sm-2 col-form-label"> Barangay: <span style="color:red">*</span></label>
+												<label> Barangay: <span style="color:red">*</span></label>
 													<input type="text" name="brgy" class="form-control" onInput="onlyLetters(this)">
 												</div>
 												<br>
