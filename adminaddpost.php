@@ -52,6 +52,22 @@ if (isset($_POST['confirmPwd'])) {
 
 	$model->addEquipment($unique, $ptitle, $pcontent);
 	$_SESSION['message'] = 'Cheers! Post added successfully';
+
+	// send notifs
+	$stmt1 = $dbh->query("SELECT * FROM user");
+	$stmt1->execute();
+	if ($stmt1->rowCount() > 0) {
+		$rows = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	foreach ($rows as $row) :
+		$notifSql = $dbh->prepare("INSERT INTO `notif`(`description`, `receiver`, `isread`) VALUES ('New announcement has been added. Check it out now!', :member_id,0)");
+		$notifSql->execute(
+			array(
+				'member_id' => $row['id'],
+			)
+		);
+	endforeach;
 	echo "<script>window.location.href='adminlandingpage.php?postadded'</script>";
 }
 ?>
