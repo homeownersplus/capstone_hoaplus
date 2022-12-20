@@ -11,7 +11,8 @@ $statusList = [
 	1 => "Cancelled",
 	2 => "Confirmed",
 	3 => "Completed",
-	4 => "Pending Cancellation"
+	4 => "Pending Cancellation",
+	5 => "Completed"
 ];
 $rows = [];
 
